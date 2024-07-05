@@ -1,5 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import MainPage from './views/MainPage.vue';
+</script>
 
 <template>
-  <div>测试</div>
+  <h1>Annotate Tree</h1>
+  <MainPage />
 </template>

@@ -1,20 +1,39 @@
-import { resolve } from 'path'
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import vue from '@vitejs/plugin-vue'
+/*
+ * @Version    : v1.00
+ * @Author     : itchaox
+ * @Date       : 2024-05-04 19:35
+ * @LastAuthor : itchaox
+ * @LastTime   : 2024-05-04 20:30
+ * @desc       :
+ */
+import { resolve } from 'path';
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
+import vue from '@vitejs/plugin-vue';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
   },
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
-      }
+        '@renderer': resolve('src/renderer/src'),
+      },
     },
-    plugins: [vue()]
-  }
-})
+    plugins: [
+      vue(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+      }),
+    ],
+  },
+});
