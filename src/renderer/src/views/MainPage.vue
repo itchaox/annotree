@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-05-04 20:32
  * @LastAuthor : itchaox
- * @LastTime   : 2024-05-05 13:26
+ * @LastTime   : 2024-07-05 10:47
  * @desc       : 
 -->
 <script setup lang="ts">
@@ -25,7 +25,7 @@
   >
   <el-button>设置</el-button>
 
-  <div>{{ scanStore.scanResult }}</div>
+  <div>{{ scanStore.scanResult.length > 0 ? scanStore.scanResult : '无结果' }}</div>
 </template>
 
 <style scoped></style>
