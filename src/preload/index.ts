@@ -1,52 +1,32 @@
 /*
  * @Version    : v1.00
  * @Author     : itchaox
- * @Date       : 2024-05-04 19:35
+ * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-05-05 13:26
+ * @LastTime   : 2024-07-06 11:39
  * @desc       :
  */
-import { contextBridge, ipcRenderer } from 'electron';
-import { electronAPI } from '@electron-toolkit/preload';
-import scan from '../utils/scan';
 
-import { useScanStore } from '@/renderer/src/stores/scan';
+// @ts-nocheck
 
-const scanStore = useScanStore();
+import { contextBridge } from 'electron'
+import { electronAPI } from '@electron-toolkit/preload'
 
-// Custom APIs for renderer
+// 自定义 api 用于渲染
 const api = {
-  fileSelect: (title) => ipcRenderer.send('file-select', title),
-  fileSelectReply: () =>
-    ipcRenderer.on('file-select-reply', async (event, folderPath) => {
-      let res = await scan({
-        folderPath,
-        ignorePath: [],
-        ignoreExt: [],
-        ignoreFile: false,
-        ignoreDotStartFile: false,
-        ignoreDotStartFolder: false,
-        deep: 0,
-      });
+  name: 'wangchao'
+}
 
-      scanStore.scanResult = res;
-      console.log('Selected folder:', res);
-    }),
-};
-
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
+// 仅当启用上下文隔离时使用 `contextBridge` API 将 Electron API 暴露给渲染进程，否则直接添加到 DOM 全局对象。
 if (process.contextIsolated) {
+  // FIXME 现在走这里
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI);
-    contextBridge.exposeInMainWorld('api', api);
+    contextBridge.exposeInMainWorld('electron', electronAPI)
+    contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
 } else {
-  // @ts-ignore (define in dts)
-  window.electron = electronAPI;
-  // @ts-ignore (define in dts)
-  window.api = api;
+  window.electron = electronAPI
+  window.api = api
 }
