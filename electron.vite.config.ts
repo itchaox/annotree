@@ -1,6 +1,17 @@
+/*
+ * @Version    : v1.00
+ * @Author     : itchaox
+ * @Date       : 2024-07-06 11:28
+ * @LastAuthor : itchaox
+ * @LastTime   : 2024-07-06 13:55
+ * @desc       :
+ */
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import vue from '@vitejs/plugin-vue'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
   main: {
@@ -15,6 +26,14 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    plugins: [vue()]
+    plugins: [
+      vue(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()]
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()]
+      })
+    ]
   }
 })

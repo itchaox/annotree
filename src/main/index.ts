@@ -3,13 +3,14 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-06 11:44
+ * @LastTime   : 2024-07-06 18:06
  * @desc       :
  */
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import fs from 'fs'
 
 function createWindow(): void {
   // FIXME 创建窗口
@@ -41,6 +42,11 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  // 仅在开发环境下默认打开控制台
+  if (process.env.NODE_ENV !== 'production') {
+    mainWindow.webContents.openDevTools()
+  }
 }
 
 // 当 Electron 初始化完成并准备好创建浏览器窗口时将调用此方法。
@@ -58,6 +64,56 @@ app.whenReady().then(() => {
 
   // IPC 测试
   ipcMain.on('ping', () => console.log('pong'))
+
+  // FIXME 主进程，所以在终端打印信息
+  // 渲染进程请求选择扫描的文件夹
+  ipcMain.on('IPC_FOLDER_SELECT', async (event, arg) => {
+    const window = BrowserWindow.getFocusedWindow()
+    const result = await dialog.showOpenDialog(window, {
+      // 'openDirectory'：允许用户选择文件夹
+      // 'createDirectory'：允许用户在对话框中创建新文件夹
+
+      properties: ['openDirectory', 'createDirectory']
+    })
+
+    // 检查用户是否点击了确认按钮
+    const isDialogConfirmed = !result.canceled
+
+    // 如果用户点击了确认按钮，发送选中的文件夹路径
+    if (isDialogConfirmed) {
+      const selectedFolderPath = result.filePaths[0]
+      event.reply('IPC_FOLDER_SELECT_REPLY', selectedFolderPath)
+    }
+  })
+
+  /**
+   * 渲染进程请求选择保存结果的目录
+   */
+  ipcMain.on(
+    'IPC_EXPORT',
+    async (event, { name, value, openAfterExport, openFolderAfterExport }) => {
+      const window = BrowserWindow.getFocusedWindow()
+      const result = await dialog.showSaveDialog(window, {
+        defaultPath: name
+      })
+
+      if (result.canceled === false) {
+        await fs.writeFileSync(result.filePath, new Uint8Array(Buffer.from(value)))
+        if (openAfterExport) {
+          // shell.openItem(result.filePath)
+
+          shell.openPath(result.filePath).then((result) => {
+            if (result) {
+              console.error('Error opening URL:', result)
+            }
+          })
+        } else if (openFolderAfterExport) {
+          shell.showItemInFolder(result.filePath)
+        }
+        event.reply('IPC_EXPORT_REPLY')
+      }
+    }
+  )
 
   createWindow()
 

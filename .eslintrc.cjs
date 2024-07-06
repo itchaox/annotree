@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-06 11:51
+ * @LastTime   : 2024-07-06 15:07
  * @desc       :
  */
 /* eslint-env node */
@@ -27,6 +27,8 @@ module.exports = {
         'ts-ignore': 'allow-with-description',
         'ts-nocheck': 'allow-with-description'
       }
-    ]
+    ],
+    '@typescript-eslint/no-unused-vars': 'off'
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 }
