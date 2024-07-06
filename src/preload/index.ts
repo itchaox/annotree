@@ -3,11 +3,11 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-06 11:39
+ * @LastTime   : 2024-07-06 11:52
  * @desc       :
  */
 
-// @ts-nocheck
+// @ts-nocheck 全局属性
 
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'

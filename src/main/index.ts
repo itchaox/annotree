@@ -1,10 +1,18 @@
+/*
+ * @Version    : v1.00
+ * @Author     : itchaox
+ * @Date       : 2024-07-06 11:28
+ * @LastAuthor : itchaox
+ * @LastTime   : 2024-07-06 11:44
+ * @desc       :
+ */
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow(): void {
-  // Create the browser window.
+  // FIXME 创建窗口
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -26,8 +34,8 @@ function createWindow(): void {
     return { action: 'deny' }
   })
 
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // 根据 electron-vite cli 进行渲染器的 HMR。
+  // 在开发模式下加载远程 URL，生产模式下加载本地 HTML 文件。
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
@@ -35,40 +43,38 @@ function createWindow(): void {
   }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+// 当 Electron 初始化完成并准备好创建浏览器窗口时将调用此方法。
+// 某些 API 只能在此事件发生后使用。
 app.whenReady().then(() => {
-  // Set app user model id for windows
+  // 为 Windows 设置应用程序用户模型 ID
   electronApp.setAppUserModelId('com.electron')
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+  // 在开发环境下默认通过 F12 打开或关闭开发者工具，
+  // 在生产环境下忽略 CommandOrControl + R 的刷新命令。
+  // 参见 https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
+  // IPC 测试
   ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
 
   app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
+    // 在 macOS 上，当单击 dock 图标并且没有其他窗口打开时，
+    // 重新创建一个窗口是常见的行为。
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// 当所有窗口关闭时退出应用程序，但在 macOS 上除外。
+// 在 macOS 上，应用程序及其菜单栏通常会保持活动状态，直到用户使用 Cmd + Q 显式退出。
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
+// 在这个文件中，您可以包含其余应用程序特定主进程代码。
+// 您也可以将它们放在单独的文件中，并在此处引入它们。
