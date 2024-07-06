@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-06 23:52
+ * @LastTime   : 2024-07-06 23:56
  * @desc       :
  */
 
@@ -66,7 +66,7 @@ const api = {
     ipcRenderer.on('IPC_FOLDER_SELECT_REPLY', async (event, arg) => {
       const res = await scan({
         folderPath: arg,
-        ignorePath: ['node_modules', 'dist', '.git', '.DS_Store '].map((e) => path.sep + e),
+        ignorePath: ['node_modules', 'dist', '.git', '.DS_Store'].map((e) => path.sep + e),
         ignoreExt: [],
         ignoreFile: false,
         ignoreDotStartFile: false,
