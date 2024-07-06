@@ -7,7 +7,7 @@
  * @desc       :
 -->
 <script setup lang="ts">
-import { reactive,ref } from 'vue'
+import { reactive, ref } from 'vue'
 
 const versions = reactive({ ...window.electron.process.versions })
 
@@ -19,6 +19,6 @@ const name = ref(window.api)
     <li class="electron-version">Electron v{{ versions.electron }}</li>
     <li class="chrome-version">Chromium v{{ versions.chrome }}</li>
     <li class="node-version">Node v{{ versions.node }}</li>
-    <li>名字 {{  name }}</li>
+    <li>名字 {{ name }}</li>
   </ul>
 </template>
