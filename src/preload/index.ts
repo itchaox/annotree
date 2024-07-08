@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-06 23:56
+ * @LastTime   : 2024-07-08 21:44
  * @desc       :
  */
 
@@ -66,7 +66,7 @@ const api = {
     ipcRenderer.on('IPC_FOLDER_SELECT_REPLY', async (event, arg) => {
       const res = await scan({
         folderPath: arg,
-        ignorePath: ['node_modules', 'dist', '.git', '.DS_Store'].map((e) => path.sep + e),
+        ignorePath: ['node_modules', 'dist', '.git'].map((e) => path.sep + e),
         ignoreExt: [],
         ignoreFile: false,
         ignoreDotStartFile: false,
@@ -94,14 +94,15 @@ const api = {
       // )
 
       // // 这里用 pinia 存储数据
-      // console.log('scan result', data)
 
-      EXPORT_TREE_TEXT(
-        translateFlat({
-          data: showFilter(data),
-          notes: []
-        })
-      )
+      const flatData = translateFlat({
+        data: showFilter(data),
+        notes: []
+      })
+
+      console.log('scan result', flatData)
+
+      EXPORT_TREE_TEXT(flatData)
 
       // store.commit('SCAN_FOLDER_PATH_UPDATE', arg)
       // store.commit('IPC_FOLDER_SCAN')
