@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-06 12:04
+ * @LastTime   : 2024-07-09 00:10
  * @desc       :
  */
 //全局初始化样式
@@ -12,5 +12,9 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
+import { store } from './store'
 
-createApp(App).mount('#app')
+const app = createApp(App)
+
+app.use(store)
+app.mount('#app')

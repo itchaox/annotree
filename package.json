@@ -26,6 +26,8 @@
     "dayjs": "^1.11.11",
     "electron-updater": "^6.1.7",
     "element-plus": "^2.7.6",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "string-width": "^4.2.3"
   },
   "devDependencies": {

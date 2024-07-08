@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-08 21:44
+ * @LastTime   : 2024-07-09 00:17
  * @desc       :
  */
 
@@ -20,6 +20,9 @@ import translateFlat from '../renderer/src/utils/translate.flat.js'
 import { replace as elementReplace } from '../renderer/src/utils/replace.element.js'
 import { replace as noteReplace } from '../renderer/src/utils/replace.note.js'
 import { replace as nameReplace } from '../renderer/src/utils/replace.fileName.js'
+import { useTreeStoreHook } from '../renderer/src/store/modules/tree-store.ts'
+
+const treeStore = useTreeStoreHook()
 
 /**
  * 根据 isShow 和 isShowElements 过滤数据
@@ -94,13 +97,18 @@ const api = {
       // )
 
       // // 这里用 pinia 存储数据
+      console.log('前：', treeStore.data)
 
       const flatData = translateFlat({
         data: showFilter(data),
         notes: []
       })
 
-      console.log('scan result', flatData)
+      treeStore.setData(flatData)
+      // console.log('scan result', flatData)
+
+      // 存储处理后的数据
+      console.log('后：', treeStore.data)
 
       EXPORT_TREE_TEXT(flatData)
 
