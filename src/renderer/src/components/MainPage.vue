@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 12:48
+ * @LastTime   : 2024-07-09 12:50
  * @desc       :
 -->
 <script setup lang="ts">
@@ -33,6 +33,7 @@ function set() {
 // 导出
 function exportFile() {
   console.log('导出操作')
+  // ipc 通信需要序列化
   EXPORT_TREE_TEXT(JSON.stringify(treeData.value))
 }
 
