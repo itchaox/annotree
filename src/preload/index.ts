@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 00:17
+ * @LastTime   : 2024-07-09 10:10
  * @desc       :
  */
 
@@ -61,61 +61,62 @@ const api = {
   name: 'wangchao',
   // 扫描函数
   IPC_FOLDER_SELECT: () => {
-    ipcRenderer.send('IPC_FOLDER_SELECT')
-  },
+    return new Promise((resolve) => {
+      ipcRenderer.send('IPC_FOLDER_SELECT')
 
-  // 扫描结果回调
-  IPC_FOLDER_SELECT_REPLY: () => {
-    ipcRenderer.on('IPC_FOLDER_SELECT_REPLY', async (event, arg) => {
-      const res = await scan({
-        folderPath: arg,
-        ignorePath: ['node_modules', 'dist', '.git'].map((e) => path.sep + e),
-        ignoreExt: [],
-        ignoreFile: false,
-        ignoreDotStartFile: false,
-        ignoreDotStartFolder: false,
-        deep: 0
+      // IPC_FOLDER_SELECT_REPLY: () => {
+      ipcRenderer.once('IPC_FOLDER_SELECT_REPLY', async (event, arg) => {
+        const res = await scan({
+          folderPath: arg,
+          ignorePath: ['node_modules', 'dist', '.git'].map((e) => path.sep + e),
+          ignoreExt: [],
+          ignoreFile: false,
+          ignoreDotStartFile: false,
+          ignoreDotStartFolder: false,
+          deep: 0
+        })
+
+        // 为扫描结果的每一项增加固定索引
+        function addIndex(elements) {
+          return elements.map((e, index) => ({
+            index,
+            ...e,
+            elements: addIndex(e.elements)
+          }))
+        }
+
+        const data = addIndex(res)
+
+        // console.log(
+        //   'flag-data',
+        //   translateFlat({
+        //     data: showFilter(data),
+        //     notes: []
+        //   })
+        // )
+
+        // // 这里用 pinia 存储数据
+        console.log('前：', treeStore.data)
+
+        const flatData = translateFlat({
+          data: showFilter(data),
+          notes: []
+        })
+
+        resolve(flatData)
+
+        // 存储处理后的数据
+
+        // EXPORT_TREE_TEXT(flatData)
+
+        // store.commit('SCAN_FOLDER_PATH_UPDATE', arg)
+        // store.commit('IPC_FOLDER_SCAN')
       })
-
-      // 为扫描结果的每一项增加固定索引
-      function addIndex(elements) {
-        return elements.map((e, index) => ({
-          index,
-          ...e,
-          elements: addIndex(e.elements)
-        }))
-      }
-
-      const data = addIndex(res)
-
-      // console.log(
-      //   'flag-data',
-      //   translateFlat({
-      //     data: showFilter(data),
-      //     notes: []
-      //   })
-      // )
-
-      // // 这里用 pinia 存储数据
-      console.log('前：', treeStore.data)
-
-      const flatData = translateFlat({
-        data: showFilter(data),
-        notes: []
-      })
-
-      treeStore.setData(flatData)
-      // console.log('scan result', flatData)
-
-      // 存储处理后的数据
-      console.log('后：', treeStore.data)
-
-      EXPORT_TREE_TEXT(flatData)
-
-      // store.commit('SCAN_FOLDER_PATH_UPDATE', arg)
-      // store.commit('IPC_FOLDER_SCAN')
+      // }
     })
   }
+
+  // 扫描结果回调
 }
 
 /**

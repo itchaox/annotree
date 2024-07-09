@@ -28,7 +28,8 @@
     "element-plus": "^2.7.6",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
-    "string-width": "^4.2.3"
+    "string-width": "^4.2.3",
+    "vue-virtual-scroller": "2.0.0-beta.8"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",
