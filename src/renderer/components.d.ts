@@ -13,6 +13,7 @@ declare module 'vue' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElRadio: typeof import('element-plus/es')['ElRadio']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     MainPage: typeof import('./src/components/MainPage.vue')['default']
     Versions: typeof import('./src/components/Versions.vue')['default']
   }

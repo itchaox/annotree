@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 23:51
+ * @LastTime   : 2024-07-10 00:06
  * @desc       :
 -->
 <script setup lang="ts">
@@ -60,6 +60,13 @@ document.addEventListener('keydown', function (event) {
 // 预览设置
 function previewSet() {
   isPreview.value = true
+
+  // 保存一个副本
+  _bridgeChar.value = bridgeChar.value
+  _minBridge.value = minBridge.value
+  _previewFormat.value = previewFormat.value
+  _showBridge.value = showBridge.value
+  _isRight.value = isRight.value
 }
 
 // 显示预览配置
@@ -68,20 +75,39 @@ const isPreview = ref(false)
 // 预览取消按钮
 function cancelPreview() {
   isPreview.value = false
+
+  bridgeChar.value = _bridgeChar.value
+  minBridge.value = _minBridge.value
+  previewFormat.value = _previewFormat.value
+  showBridge.value = _showBridge.value
+  isRight.value = _isRight.value
 }
 
 // 预览确定按钮
 function confirmPreview() {
+  console.log('previewFormat', previewFormat)
   isPreview.value = false
 }
 
 // 备注格式化
-const previewFormat = ref('')
+const previewFormat = ref('// {note}')
+const _previewFormat = ref()
 
 // 桥梁最短字符数
 const minBridge = ref(0)
+const _minBridge = ref()
 
+// 桥梁字符
 const bridgeChar = ref('-')
+const _bridgeChar = ref('')
+
+// 始终显示桥梁
+const showBridge = ref(false)
+const _showBridge = ref()
+
+// 右侧对齐
+const isRight = ref(false)
+const _isRight = ref()
 </script>
 
 <template>
@@ -180,6 +206,7 @@ const bridgeChar = ref('-')
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :modal="false"
+        @close="cancelPreview"
       >
         <template #header>
           <h4>预览配置</h4>
@@ -213,14 +240,14 @@ const bridgeChar = ref('-')
             <div class="preview-item">
               <div class="preview-label">始终显示桥梁</div>
               <div class="preview-value">
-                <el-input v-model="bridgeChar" placeholder="请输入桥梁填充字符"></el-input>
+                <el-switch size="large" v-model="showBridge"></el-switch>
               </div>
             </div>
 
             <div class="preview-item">
               <div class="preview-label">右侧对齐</div>
               <div class="preview-value">
-                <el-input v-model="bridgeChar" placeholder="请输入桥梁填充字符"></el-input>
+                <el-switch size="large" v-model="isRight"></el-switch>
               </div>
             </div>
           </div>
@@ -272,6 +299,18 @@ const bridgeChar = ref('-')
     .tree-scroller {
       height: calc(100% - 100px);
       overflow: auto;
+    }
+
+    .preview-config {
+      .preview-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .preview-label {
+          width: 125px;
+        }
+      }
     }
   }
 }
