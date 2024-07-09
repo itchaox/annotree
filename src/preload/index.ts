@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 12:28
+ * @LastTime   : 2024-07-09 12:46
  * @desc       :
  */
 
@@ -114,6 +114,11 @@ const api = {
       })
       // }
     })
+  },
+
+  // 导出文本
+  EXPORT_TREE_TEXT: (data) => {
+    EXPORT_TREE_TEXT(JSON.parse(data))
   }
 
   // 扫描结果回调
@@ -123,6 +128,8 @@ const api = {
  * 导出 [ 树形文本 ]
  */
 function EXPORT_TREE_TEXT(data) {
+  console.log('测试')
+
   // 设置
   const setting = TREE_TEXT
   // 开始处理

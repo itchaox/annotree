@@ -3,11 +3,11 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 12:35
+ * @LastTime   : 2024-07-09 12:48
  * @desc       :
 -->
 <script setup lang="ts">
-const { IPC_FOLDER_SELECT } = window.api as any
+const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
 
 import { ref } from 'vue'
 
@@ -33,6 +33,7 @@ function set() {
 // 导出
 function exportFile() {
   console.log('导出操作')
+  EXPORT_TREE_TEXT(JSON.stringify(treeData.value))
 }
 
 function check() {
