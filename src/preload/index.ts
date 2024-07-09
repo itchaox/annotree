@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 10:10
+ * @LastTime   : 2024-07-09 12:28
  * @desc       :
  */
 
@@ -96,7 +96,7 @@ const api = {
         // )
 
         // // 这里用 pinia 存储数据
-        console.log('前：', treeStore.data)
+        // console.log('前：', treeStore.data)
 
         const flatData = translateFlat({
           data: showFilter(data),

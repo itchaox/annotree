@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 11:29
+ * @LastTime   : 2024-07-09 12:35
  * @desc       :
 -->
 <script setup lang="ts">
@@ -36,7 +36,7 @@ function exportFile() {
 }
 
 function check() {
-  // console.log('Current tree data:', treeData.value)
+  console.log('Current tree data:', treeData.value)
 }
 
 // 删除
@@ -63,7 +63,6 @@ document.addEventListener('keydown', function (event) {
         <el-button type="primary" @click="scan">扫描</el-button>
         <el-button type="warning" @click="set">设置</el-button>
       </div>
-      <div><el-button type="primary" @click="exportFile">导出</el-button></div>
     </div>
     <el-divider />
 
@@ -71,9 +70,14 @@ document.addEventListener('keydown', function (event) {
       <div class="left" @click="check">
         <h1>编辑区</h1>
 
-        <!-- <div>{{ treeData }}</div> -->
-
-        <recycle-scroller :items="treeData" :item-size="18" key-field="id" v-slot="{ item, index }">
+        <recycle-scroller
+          class="tree-scroller"
+          :items="treeData"
+          :item-size="18"
+          key-field="id"
+          v-slot="{ item, index }"
+          v-if="treeData"
+        >
           <div style="display: flex">
             <!-- 树枝 -->
             <span class="row-tree">
@@ -104,8 +108,21 @@ document.addEventListener('keydown', function (event) {
         </recycle-scroller>
       </div>
       <div class="right">
-        <h1>预览区</h1>
-        <recycle-scroller :items="treeData" :item-size="18" key-field="id" v-slot="{ item, index }">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <h1>预览区</h1>
+          <div>
+            <el-button type="primary" @click="exportFile">导出</el-button>
+            <el-button>复制</el-button>
+          </div>
+        </div>
+        <recycle-scroller
+          class="tree-scroller"
+          :items="treeData"
+          :item-size="18"
+          key-field="id"
+          v-slot="{ item }"
+          v-if="treeData"
+        >
           <div style="display: flex">
             <!-- 树枝 -->
             <span class="row-tree">
@@ -143,7 +160,7 @@ document.addEventListener('keydown', function (event) {
       padding: 10px;
       flex: 1;
       background-color: #1ff;
-      height: 85vh;
+      height: 82vh;
       margin-right: 20px;
       border-radius: 4px;
 
@@ -156,8 +173,13 @@ document.addEventListener('keydown', function (event) {
       padding: 10px;
       flex: 1;
       background-color: #88f;
-      height: 85vh;
+      height: 82vh;
       border-radius: 4px;
+    }
+
+    .tree-scroller {
+      height: calc(100% - 100px);
+      overflow: auto;
     }
   }
 }
