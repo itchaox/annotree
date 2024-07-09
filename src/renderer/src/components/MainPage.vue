@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 12:50
+ * @LastTime   : 2024-07-09 23:51
  * @desc       :
 -->
 <script setup lang="ts">
@@ -56,6 +56,32 @@ document.addEventListener('keydown', function (event) {
     }
   }
 })
+
+// 预览设置
+function previewSet() {
+  isPreview.value = true
+}
+
+// 显示预览配置
+const isPreview = ref(false)
+
+// 预览取消按钮
+function cancelPreview() {
+  isPreview.value = false
+}
+
+// 预览确定按钮
+function confirmPreview() {
+  isPreview.value = false
+}
+
+// 备注格式化
+const previewFormat = ref('')
+
+// 桥梁最短字符数
+const minBridge = ref(0)
+
+const bridgeChar = ref('-')
 </script>
 
 <template>
@@ -111,7 +137,12 @@ document.addEventListener('keydown', function (event) {
       </div>
       <div class="right">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <h1>预览区</h1>
+          <div style="display: flex; align-items: center">
+            <h1>预览区</h1>
+            <div>
+              <el-button type="warning" @click="previewSet">预览配置</el-button>
+            </div>
+          </div>
           <div>
             <el-button type="primary" @click="exportFile">导出</el-button>
             <el-button>复制</el-button>
@@ -142,6 +173,65 @@ document.addEventListener('keydown', function (event) {
           </div>
         </recycle-scroller>
       </div>
+
+      <el-drawer
+        v-model="isPreview"
+        direction="ltr"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+        :modal="false"
+      >
+        <template #header>
+          <h4>预览配置</h4>
+        </template>
+        <template #default>
+          <div class="preview-config">
+            <div class="preview-item">
+              <div class="preview-label">备注格式化</div>
+              <div class="preview-value">
+                <el-input v-model="previewFormat" placeholder="请输入格式化字符串"></el-input>
+              </div>
+            </div>
+
+            <div class="preview-item">
+              <div class="preview-label">桥梁最短字符数</div>
+              <div class="preview-value">
+                <el-input-number
+                  v-model="minBridge"
+                  placeholder="请输入桥梁最短字符数"
+                ></el-input-number>
+              </div>
+            </div>
+
+            <div class="preview-item">
+              <div class="preview-label">桥梁填充字符</div>
+              <div class="preview-value">
+                <el-input v-model="bridgeChar" placeholder="请输入桥梁填充字符"></el-input>
+              </div>
+            </div>
+
+            <div class="preview-item">
+              <div class="preview-label">始终显示桥梁</div>
+              <div class="preview-value">
+                <el-input v-model="bridgeChar" placeholder="请输入桥梁填充字符"></el-input>
+              </div>
+            </div>
+
+            <div class="preview-item">
+              <div class="preview-label">右侧对齐</div>
+              <div class="preview-value">
+                <el-input v-model="bridgeChar" placeholder="请输入桥梁填充字符"></el-input>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #footer>
+          <div style="flex: auto">
+            <el-button @click="cancelPreview">取消</el-button>
+            <el-button type="primary" @click="confirmPreview">确定</el-button>
+          </div>
+        </template>
+      </el-drawer>
     </div>
   </div>
 </template>
