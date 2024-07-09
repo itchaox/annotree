@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 11:13
+ * @LastTime   : 2024-07-09 11:29
  * @desc       :
 -->
 <script setup lang="ts">
@@ -118,7 +118,7 @@ document.addEventListener('keydown', function (event) {
               <!-- 扩展名 -->
               <pre v-if="item.ext">{{ item.ext }}</pre>
               <!-- 备注 -->
-              <pre v-if="item.note"> // {{ item.note }}</pre>
+              <pre v-if="item.note" style="color: rgba(255, 94, 94, 0.8)"> // {{ item.note }}</pre>
             </span>
           </div>
         </recycle-scroller>
@@ -155,7 +155,7 @@ document.addEventListener('keydown', function (event) {
     .right {
       padding: 10px;
       flex: 1;
-      background-color: pink;
+      background-color: #88f;
       height: 85vh;
       border-radius: 4px;
     }
