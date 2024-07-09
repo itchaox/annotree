@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 11:00
+ * @LastTime   : 2024-07-09 11:10
  * @desc       :
 -->
 <script setup lang="ts">
@@ -36,13 +36,24 @@ function exportFile() {
 }
 
 function check() {
-  console.log('Current tree data:', treeData.value)
+  // console.log('Current tree data:', treeData.value)
 }
 
 // 删除
 function deleteItem(index) {
   console.log(index)
 }
+
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Tab') {
+    const inputs = document.getElementsByTagName('input')
+    const lastInput = inputs[inputs.length - 1]
+    if (document.activeElement === lastInput) {
+      event.preventDefault() // 阻止默认行为，避免切换到下一个元素
+      inputs[0].focus() // 将焦点移到第一个输入框
+    }
+  }
+})
 </script>
 
 <template>
@@ -85,11 +96,12 @@ function deleteItem(index) {
 
               <!-- <input type="text" /> -->
               <el-input
-                style="margin-left: 5px"
+                style="margin-left: 5px; height: 20px; width: 120px"
                 v-model="item.note"
                 size="small"
                 placeholder="请输入备注"
                 clearable
+                :tabindex="index + 1"
               ></el-input>
 
               <el-button link type="danger" @click="deleteItem(index)">删除</el-button>
@@ -97,7 +109,9 @@ function deleteItem(index) {
           </div>
         </recycle-scroller>
       </div>
-      <div class="right">预览区</div>
+      <div class="right">
+        <h1>预览区</h1>
+      </div>
     </div>
   </div>
 </template>
