@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 10:24
+ * @LastTime   : 2024-07-09 11:00
  * @desc       :
 -->
 <script setup lang="ts">
@@ -38,6 +38,11 @@ function exportFile() {
 function check() {
   console.log('Current tree data:', treeData.value)
 }
+
+// 删除
+function deleteItem(index) {
+  console.log(index)
+}
 </script>
 
 <template>
@@ -53,7 +58,7 @@ function check() {
 
     <div class="content">
       <div class="left" @click="check">
-        <div>编辑区</div>
+        <h1>编辑区</h1>
 
         <!-- <div>{{ treeData }}</div> -->
 
@@ -64,21 +69,30 @@ function check() {
           v-slot="{ item, index }"
           class="list"
         >
-          <div class="display: flex">
+          <div style="display: flex">
             <!-- 树枝 -->
-            <span>
-              <pre style="width: 100px">{{ item.tree }}</pre>
+            <span class="row-tree">
+              <pre>{{ item.tree }}</pre>
             </span>
             <!-- 文件信息 -->
-            <span style="display: inline-flex">
+            <span style="display: inline-flex; margin-left: 2px">
               <!-- 文件名 -->
               <pre>{{ item.name }}</pre>
               <!-- 扩展名 -->
               <pre v-if="item.ext">{{ item.ext }}</pre>
               <!-- 备注 -->
-              <pre v-if="item.note"> // {{ item.note }}</pre>
+              <!-- <pre v-if="item.note"> // {{ item.note }}</pre> -->
 
-              <input type="text" />
+              <!-- <input type="text" /> -->
+              <el-input
+                style="margin-left: 5px"
+                v-model="item.note"
+                size="small"
+                placeholder="请输入备注"
+                clearable
+              ></el-input>
+
+              <el-button link type="danger" @click="deleteItem(index)">删除</el-button>
             </span>
           </div>
         </recycle-scroller>
@@ -107,6 +121,10 @@ function check() {
       height: 85vh;
       margin-right: 20px;
       border-radius: 4px;
+
+      .row-tree {
+        height: 18px !important;
+      }
     }
 
     .right {
