@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 11:10
+ * @LastTime   : 2024-07-09 11:13
  * @desc       :
 -->
 <script setup lang="ts">
@@ -73,13 +73,7 @@ document.addEventListener('keydown', function (event) {
 
         <!-- <div>{{ treeData }}</div> -->
 
-        <recycle-scroller
-          :items="treeData"
-          :item-size="18"
-          key-field="id"
-          v-slot="{ item, index }"
-          class="list"
-        >
+        <recycle-scroller :items="treeData" :item-size="18" key-field="id" v-slot="{ item, index }">
           <div style="display: flex">
             <!-- 树枝 -->
             <span class="row-tree">
@@ -111,6 +105,23 @@ document.addEventListener('keydown', function (event) {
       </div>
       <div class="right">
         <h1>预览区</h1>
+        <recycle-scroller :items="treeData" :item-size="18" key-field="id" v-slot="{ item, index }">
+          <div style="display: flex">
+            <!-- 树枝 -->
+            <span class="row-tree">
+              <pre>{{ item.tree }}</pre>
+            </span>
+            <!-- 文件信息 -->
+            <span style="display: inline-flex; margin-left: 2px">
+              <!-- 文件名 -->
+              <pre>{{ item.name }}</pre>
+              <!-- 扩展名 -->
+              <pre v-if="item.ext">{{ item.ext }}</pre>
+              <!-- 备注 -->
+              <pre v-if="item.note"> // {{ item.note }}</pre>
+            </span>
+          </div>
+        </recycle-scroller>
       </div>
     </div>
   </div>
