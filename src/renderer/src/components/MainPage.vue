@@ -3,11 +3,14 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 10:19
+ * @LastTime   : 2024-07-10 11:53
  * @desc       :
 -->
 <script setup lang="ts">
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
+import { replace as elementReplace } from '../utils/replace.element.js'
+import { replace as noteReplace } from '../utils/replace.note.js'
+
 import width from 'string-width'
 
 import { ref } from 'vue'
@@ -45,8 +48,22 @@ function deleteItem(index) {
 }
 
 // 获取最大宽度
-function getMaxWidth(result) {
-  console.log('🚀  result:', result)
+function getMaxWidth(data) {
+  // 第一步 转换 element 和 note
+  const result = data.map((item) => {
+    const element = elementReplace('{tree}{name}{ext}', {
+      data: item
+    })
+    const bridge = ''
+
+    const note = item.note
+      ? noteReplace(noteFormat.value, {
+          data: item
+        })
+      : ''
+    return { element, bridge, note }
+  })
+
   // 右边对齐
   if (isRight.value) {
     // 计算result中每个对象的element属性的最大宽度
@@ -91,7 +108,7 @@ function previewSet() {
   // 保存一个副本
   _bridgeChar.value = bridgeChar.value
   _minBridge.value = minBridge.value
-  _previewFormat.value = previewFormat.value
+  _noteFormat.value = noteFormat.value
   _showBridge.value = showBridge.value
   _isRight.value = isRight.value
 }
@@ -105,20 +122,20 @@ function cancelPreview() {
 
   bridgeChar.value = _bridgeChar.value
   minBridge.value = _minBridge.value
-  previewFormat.value = _previewFormat.value
+  noteFormat.value = _noteFormat.value
   showBridge.value = _showBridge.value
   isRight.value = _isRight.value
 }
 
 // 预览确定按钮
 function confirmPreview() {
-  console.log('previewFormat', previewFormat)
+  console.log('noteFormat', noteFormat)
   isPreview.value = false
 }
 
 // 备注格式化
-const previewFormat = ref('// {note}')
-const _previewFormat = ref()
+const noteFormat = ref('// {note}')
+const _noteFormat = ref()
 
 // 桥梁最短字符数
 const minBridge = ref(0)
@@ -243,7 +260,7 @@ const _isRight = ref()
             <div class="preview-item">
               <div class="preview-label">备注格式化</div>
               <div class="preview-value">
-                <el-input v-model="previewFormat" placeholder="请输入格式化字符串"></el-input>
+                <el-input v-model="noteFormat" placeholder="请输入格式化字符串"></el-input>
               </div>
             </div>
 

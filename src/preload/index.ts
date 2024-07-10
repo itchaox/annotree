@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 10:19
+ * @LastTime   : 2024-07-10 11:52
  * @desc       :
  */
 
@@ -41,9 +41,9 @@ const TREE_TEXT = {
   // 文件名
   FILE_NAME: 'FolderExplorer [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]',
   // 元素格式化
-  ELEMENT_FORMAT: '{tree}{name}{ext} ',
+  ELEMENT_FORMAT: '{tree}{name}{ext}',
   // 备注格式化
-  NOTE_FORMAT: ' // {note}',
+  NOTE_FORMAT: '// {note}',
   // 桥梁最短
   BRIDGE_MIN: 4,
   // 桥梁填充
@@ -133,6 +133,8 @@ function EXPORT_TREE_TEXT(data) {
 
   // 获取最大宽度
   function getMaxWidth(result) {
+    console.log('🚀  result:', result)
+
     // 右边对齐
     if (setting.FLOAT_RIGHT) {
       // 计算result中每个对象的element属性的最大宽度
