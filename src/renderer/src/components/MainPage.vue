@@ -302,9 +302,7 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
           v-slot="{ item }"
           v-if="previewList.length > 0"
         >
-          <pre style="height: 18px; text-align: left">
-            {{ item.value }}
-          </pre>
+          <pre style="height: 18px; text-align: left">{{ item.value }}</pre>
         </recycle-scroller>
       </div>
 
