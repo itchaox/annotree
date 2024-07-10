@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 23:42
+ * @LastTime   : 2024-07-10 23:48
  * @desc       :
 -->
 <script setup lang="ts">
@@ -294,7 +294,7 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
             <el-button>复制</el-button>
           </div>
         </div>
-        <recycle-scroller
+        <!-- <recycle-scroller
           class="tree-scroller"
           :items="previewList"
           :item-size="18"
@@ -303,7 +303,11 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
           v-if="previewList.length > 0"
         >
           <pre style="height: 18px; text-align: left">{{ item.value }}</pre>
-        </recycle-scroller>
+        </recycle-scroller> -->
+
+        <div class="tree-scroller">
+          <pre v-for="item in previewList" :key="item.id">{{ item.value }}</pre>
+        </div>
       </div>
 
       <el-drawer
