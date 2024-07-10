@@ -3,11 +3,12 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 23:48
+ * @LastTime   : 2024-07-10 23:53
  * @desc       :
 -->
 <script setup lang="ts">
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
+import { ElMessage } from 'element-plus'
 import { replace as elementReplace } from '../utils/replace.element.js'
 import { replace as noteReplace } from '../utils/replace.note.js'
 
@@ -196,6 +197,11 @@ function confirmPreview() {
   isPreview.value = false
 
   isConfirm.value = true
+
+  ElMessage({
+    message: '预览配置修改成功',
+    type: 'success'
+  })
 }
 
 // 备注格式化
