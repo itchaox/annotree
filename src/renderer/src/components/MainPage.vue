@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 11:53
+ * @LastTime   : 2024-07-10 23:42
  * @desc       :
 -->
 <script setup lang="ts">
@@ -13,7 +13,7 @@ import { replace as noteReplace } from '../utils/replace.note.js'
 
 import width from 'string-width'
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 const treeData = ref(null)
 
@@ -23,8 +23,7 @@ async function scan() {
     // 更新数据
     const result = await IPC_FOLDER_SELECT()
     treeData.value = result
-    console.log('Scan completed, data:', treeData.value)
-    console.log('最大宽度', getMaxWidth(treeData.value))
+    getPreviewData()
   } catch (error) {
     console.error('Scan failed:', error)
   }
@@ -37,9 +36,15 @@ function set() {
 
 // 导出
 function exportFile() {
-  console.log('导出操作')
+  const params = {
+    bridgeChar: bridgeChar.value,
+    minBridge: minBridge.value,
+    noteFormat: noteFormat.value,
+    showBridge: showBridge.value,
+    isRight: isRight.value
+  }
   // ipc 通信需要序列化
-  EXPORT_TREE_TEXT(JSON.stringify(treeData.value))
+  EXPORT_TREE_TEXT(JSON.stringify(treeData.value), JSON.stringify(params))
 }
 
 // 删除
@@ -47,22 +52,38 @@ function deleteItem(index) {
   console.log(index)
 }
 
-// 获取最大宽度
-function getMaxWidth(data) {
-  // 第一步 转换 element 和 note
-  const result = data.map((item) => {
-    const element = elementReplace('{tree}{name}{ext}', {
-      data: item
-    })
-    const bridge = ''
+// 生成合适的桥梁
+function bridgeAuto({ element, note }, max) {
+  if (note !== '' || showBridge.value) {
+    let length = minBridge.value
+    if (isRight.value) {
+      length += max - width(`${element}${note}`)
+    } else {
+      length += max - width(element)
+    }
 
-    const note = item.note
-      ? noteReplace(noteFormat.value, {
-          data: item
-        })
-      : ''
-    return { element, bridge, note }
-  })
+    return bridgeChar.value.repeat(length)
+  }
+
+  return ''
+}
+
+// 获取最大宽度
+function getMaxWidth(result) {
+  // 第一步 转换 element 和 note
+  // const result = data.map((item) => {
+  //   const element = elementReplace('{tree}{name}{ext}', {
+  //     data: item
+  //   })
+  //   const bridge = ''
+
+  //   const note = item.note
+  //     ? noteReplace(noteFormat.value, {
+  //         data: item
+  //       })
+  //     : ''
+  //   return { element, bridge, note }
+  // })
 
   // 右边对齐
   if (isRight.value) {
@@ -113,24 +134,68 @@ function previewSet() {
   _isRight.value = isRight.value
 }
 
+// 预览数据
+const previewList = ref([])
+
+// 处理预览区域展示
+function getPreviewData() {
+  let result = treeData.value
+
+  // 第一步 转换 element 和 note
+  result = result?.map((item) => {
+    const element = elementReplace('{tree}{name}{ext}', {
+      data: item
+    })
+    const bridge = ''
+
+    const note = item.note
+      ? noteReplace(noteFormat.value, {
+          data: item
+        })
+      : ''
+    return { element, bridge, note }
+  })
+
+  const max = getMaxWidth(result)
+
+  // 补齐桥梁
+  result = result.map((item) => ({ ...item, bridge: bridgeAuto(item, max) }))
+
+  // 转换为字符串
+  // result = result.map((e) => `${e.element}${e.bridge}${e.note}`)
+  result = result.map((e) => ({
+    value: `${e.element}${e.bridge}${e.note}`,
+    id: Math.random()
+  }))
+
+  previewList.value = result
+}
+
 // 显示预览配置
 const isPreview = ref(false)
 
 // 预览取消按钮
 function cancelPreview() {
-  isPreview.value = false
+  // 确定时不重置数据
+  if (!isConfirm.value) {
+    bridgeChar.value = _bridgeChar.value
+    minBridge.value = _minBridge.value
+    noteFormat.value = _noteFormat.value
+    showBridge.value = _showBridge.value
+    isRight.value = _isRight.value
+  }
 
-  bridgeChar.value = _bridgeChar.value
-  minBridge.value = _minBridge.value
-  noteFormat.value = _noteFormat.value
-  showBridge.value = _showBridge.value
-  isRight.value = _isRight.value
+  isPreview.value = false
+  isConfirm.value = false
 }
+
+const isConfirm = ref(false)
 
 // 预览确定按钮
 function confirmPreview() {
-  console.log('noteFormat', noteFormat)
   isPreview.value = false
+
+  isConfirm.value = true
 }
 
 // 备注格式化
@@ -138,7 +203,7 @@ const noteFormat = ref('// {note}')
 const _noteFormat = ref()
 
 // 桥梁最短字符数
-const minBridge = ref(0)
+const minBridge = ref(4)
 const _minBridge = ref()
 
 // 桥梁字符
@@ -152,6 +217,16 @@ const _showBridge = ref()
 // 右侧对齐
 const isRight = ref(false)
 const _isRight = ref()
+
+function inputChange() {
+  getPreviewData()
+}
+
+watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
+  console.log(previewList.value)
+
+  getPreviewData()
+})
 </script>
 
 <template>
@@ -198,6 +273,7 @@ const _isRight = ref()
                 placeholder="请输入备注"
                 clearable
                 :tabindex="index + 1"
+                @change="inputChange"
               ></el-input>
 
               <el-button link type="danger" @click="deleteItem(index)">删除</el-button>
@@ -220,27 +296,15 @@ const _isRight = ref()
         </div>
         <recycle-scroller
           class="tree-scroller"
-          :items="treeData"
+          :items="previewList"
           :item-size="18"
           key-field="id"
           v-slot="{ item }"
-          v-if="treeData"
+          v-if="previewList.length > 0"
         >
-          <div style="display: flex">
-            <!-- 树枝 -->
-            <span class="row-tree">
-              <pre>{{ item.tree }}</pre>
-            </span>
-            <!-- 文件信息 -->
-            <span style="display: inline-flex; margin-left: 2px">
-              <!-- 文件名 -->
-              <pre>{{ item.name }}</pre>
-              <!-- 扩展名 -->
-              <pre v-if="item.ext">{{ item.ext }}</pre>
-              <!-- 备注 -->
-              <pre v-if="item.note" style="color: rgba(255, 94, 94, 0.8)"> // {{ item.note }}</pre>
-            </span>
-          </div>
+          <pre style="height: 18px; text-align: left">
+            {{ item.value }}
+          </pre>
         </recycle-scroller>
       </div>
 
@@ -270,6 +334,7 @@ const _isRight = ref()
                 <el-input-number
                   v-model="minBridge"
                   placeholder="请输入桥梁最短字符数"
+                  :min="0"
                 ></el-input-number>
               </div>
             </div>

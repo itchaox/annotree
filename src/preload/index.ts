@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 11:52
+ * @LastTime   : 2024-07-10 23:36
  * @desc       :
  */
 
@@ -39,7 +39,7 @@ function showFilter(els) {
 
 const TREE_TEXT = {
   // 文件名
-  FILE_NAME: 'FolderExplorer [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]',
+  FILE_NAME: 'Annotate-Tree [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]',
   // 元素格式化
   ELEMENT_FORMAT: '{tree}{name}{ext}',
   // 备注格式化
@@ -49,7 +49,7 @@ const TREE_TEXT = {
   // 桥梁填充
   BRIDGE_CELL: '-',
   // 始终显示桥梁
-  BRIDGE_ALWAYS: true,
+  BRIDGE_ALWAYS: false,
   // 右侧对齐
   FLOAT_RIGHT: false
 }
@@ -115,8 +115,8 @@ const api = {
   },
 
   // 导出文本
-  EXPORT_TREE_TEXT: (data) => {
-    EXPORT_TREE_TEXT(JSON.parse(data))
+  EXPORT_TREE_TEXT: (data, params) => {
+    EXPORT_TREE_TEXT(JSON.parse(data), JSON.parse(params))
   }
 
   // 扫描结果回调
@@ -125,7 +125,7 @@ const api = {
 /**
  * 导出 [ 树形文本 ]
  */
-function EXPORT_TREE_TEXT(data) {
+function EXPORT_TREE_TEXT(data, params) {
   // 设置
   const setting = TREE_TEXT
   // 开始处理
@@ -133,10 +133,8 @@ function EXPORT_TREE_TEXT(data) {
 
   // 获取最大宽度
   function getMaxWidth(result) {
-    console.log('🚀  result:', result)
-
     // 右边对齐
-    if (setting.FLOAT_RIGHT) {
+    if (params?.isRight) {
       // 计算result中每个对象的element属性的最大宽度
       const elementLengthMax = result.reduce(
         (max, { element }) => (width(element) > max ? width(element) : max),
@@ -163,15 +161,15 @@ function EXPORT_TREE_TEXT(data) {
 
   // 生成合适的桥梁
   function bridgeAuto({ element, note }, max) {
-    if (note !== '' || setting.BRIDGE_ALWAYS) {
-      let length = setting.BRIDGE_MIN
-      if (setting.FLOAT_RIGHT) {
+    if (note !== '' || params?.showBridge) {
+      let length = params?.minBridge
+      if (params?.isRight) {
         length += max - width(`${element}${note}`)
       } else {
         length += max - width(element)
       }
 
-      return setting.BRIDGE_CELL.repeat(length)
+      return params?.bridgeChar.repeat(length)
     }
 
     return ''
@@ -179,13 +177,13 @@ function EXPORT_TREE_TEXT(data) {
 
   // 第一步 转换 element 和 note
   result = result.map((item) => {
-    const element = elementReplace(setting.ELEMENT_FORMAT, {
+    const element = elementReplace('{tree}{name}{ext}', {
       data: item
     })
     const bridge = ''
 
     const note = item.note
-      ? noteReplace(setting.NOTE_FORMAT, {
+      ? noteReplace(params.noteFormat, {
           data: item
         })
       : ''
@@ -194,7 +192,6 @@ function EXPORT_TREE_TEXT(data) {
 
   // 计算最大宽度
   const max = getMaxWidth(result)
-  console.log('🚀  max:', max)
 
   // 补齐桥梁
   result = result.map((item) => ({ ...item, bridge: bridgeAuto(item, max) }))
@@ -210,11 +207,6 @@ function EXPORT_TREE_TEXT(data) {
     value: result.join('\n'),
     openAfterExport: true
   })
-
-  // this.commit('IPC_EXPORT', {
-  //   name: `${require('@/util/replace.fileName.js').replace(setting.FILE_NAME)}.txt`,
-  //   value: result.join('\n')
-  // })
 }
 
 // 仅当启用上下文隔离时使用 `contextBridge` API 将 Electron API 暴露给渲染进程，否则直接添加到 DOM 全局对象。
