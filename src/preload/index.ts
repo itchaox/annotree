@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-09 12:46
+ * @LastTime   : 2024-07-10 10:19
  * @desc       :
  */
 
@@ -49,11 +49,9 @@ const TREE_TEXT = {
   // 桥梁填充
   BRIDGE_CELL: '-',
   // 始终显示桥梁
-  BRIDGE_ALWAYS: false,
+  BRIDGE_ALWAYS: true,
   // 右侧对齐
-  FLOAT_RIGHT: false,
-  // 显示边框
-  BORDER: false
+  FLOAT_RIGHT: false
 }
 
 // 自定义 api 用于渲染
@@ -128,8 +126,6 @@ const api = {
  * 导出 [ 树形文本 ]
  */
 function EXPORT_TREE_TEXT(data) {
-  console.log('测试')
-
   // 设置
   const setting = TREE_TEXT
   // 开始处理
@@ -137,31 +133,45 @@ function EXPORT_TREE_TEXT(data) {
 
   // 获取最大宽度
   function getMaxWidth(result) {
+    // 右边对齐
     if (setting.FLOAT_RIGHT) {
+      // 计算result中每个对象的element属性的最大宽度
       const elementLengthMax = result.reduce(
         (max, { element }) => (width(element) > max ? width(element) : max),
         0
       )
+
+      // 计算result中每个对象的note属性的最大宽度
       const noteLengthMax = result.reduce(
         (max, { note }) => (width(note) > max ? width(note) : max),
         0
       )
+
+      // 返回element和note最大宽度之和
       return elementLengthMax + noteLengthMax
     } else {
+      // 左对齐
+      // 计算result中每个对象的element属性的最大宽度
       return result.reduce((max, { element }) => {
         const length = width(element)
         return length > max ? length : max
       }, 0)
     }
   }
+
   // 生成合适的桥梁
   function bridgeAuto({ element, note }, max) {
     if (note !== '' || setting.BRIDGE_ALWAYS) {
       let length = setting.BRIDGE_MIN
-      if (setting.FLOAT_RIGHT) length += max - width(`${element}${note}`)
-      else length += max - width(element)
+      if (setting.FLOAT_RIGHT) {
+        length += max - width(`${element}${note}`)
+      } else {
+        length += max - width(element)
+      }
+
       return setting.BRIDGE_CELL.repeat(length)
     }
+
     return ''
   }
 
@@ -171,6 +181,7 @@ function EXPORT_TREE_TEXT(data) {
       data: item
     })
     const bridge = ''
+
     const note = item.note
       ? noteReplace(setting.NOTE_FORMAT, {
           data: item
@@ -178,20 +189,24 @@ function EXPORT_TREE_TEXT(data) {
       : ''
     return { element, bridge, note }
   })
+
   // 计算最大宽度
   const max = getMaxWidth(result)
-  // 补齐
+  console.log('🚀  max:', max)
+
+  // 补齐桥梁
   result = result.map((item) => ({ ...item, bridge: bridgeAuto(item, max) }))
+
   // 转换为字符串
   result = result.map((e) => `${e.element}${e.bridge}${e.note}`)
-  // 边框
-  if (setting.BORDER) result = asciiBorder(result)
+
+  console.log('查看处理后数据：', result)
+
   // 导出
   ipcRenderer.send('IPC_EXPORT', {
     name: `${nameReplace(setting.FILE_NAME)}.txt`,
     value: result.join('\n'),
-    openAfterExport: true,
-    openFolderAfterExport: true
+    openAfterExport: true
   })
 
   // this.commit('IPC_EXPORT', {

@@ -3,11 +3,12 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 00:06
+ * @LastTime   : 2024-07-10 10:19
  * @desc       :
 -->
 <script setup lang="ts">
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
+import width from 'string-width'
 
 import { ref } from 'vue'
 
@@ -20,6 +21,7 @@ async function scan() {
     const result = await IPC_FOLDER_SELECT()
     treeData.value = result
     console.log('Scan completed, data:', treeData.value)
+    console.log('最大宽度', getMaxWidth(treeData.value))
   } catch (error) {
     console.error('Scan failed:', error)
   }
@@ -37,13 +39,38 @@ function exportFile() {
   EXPORT_TREE_TEXT(JSON.stringify(treeData.value))
 }
 
-function check() {
-  console.log('Current tree data:', treeData.value)
-}
-
 // 删除
 function deleteItem(index) {
   console.log(index)
+}
+
+// 获取最大宽度
+function getMaxWidth(result) {
+  console.log('🚀  result:', result)
+  // 右边对齐
+  if (isRight.value) {
+    // 计算result中每个对象的element属性的最大宽度
+    const elementLengthMax = result.reduce(
+      (max, { element }) => (width(element) > max ? width(element) : max),
+      0
+    )
+
+    // 计算result中每个对象的note属性的最大宽度
+    const noteLengthMax = result.reduce(
+      (max, { note }) => (width(note) > max ? width(note) : max),
+      0
+    )
+
+    // 返回element和note最大宽度之和
+    return elementLengthMax + noteLengthMax
+  } else {
+    // 左对齐
+    // 计算result中每个对象的element属性的最大宽度
+    return result.reduce((max, { element }) => {
+      const length = width(element)
+      return length > max ? length : max
+    }, 0)
+  }
 }
 
 document.addEventListener('keydown', function (event) {
@@ -121,7 +148,7 @@ const _isRight = ref()
     <el-divider />
 
     <div class="content">
-      <div class="left" @click="check">
+      <div class="left">
         <h1>编辑区</h1>
 
         <recycle-scroller

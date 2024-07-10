@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-06 18:06
+ * @LastTime   : 2024-07-10 09:30
  * @desc       :
  */
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
@@ -89,31 +89,26 @@ app.whenReady().then(() => {
   /**
    * 渲染进程请求选择保存结果的目录
    */
-  ipcMain.on(
-    'IPC_EXPORT',
-    async (event, { name, value, openAfterExport, openFolderAfterExport }) => {
-      const window = BrowserWindow.getFocusedWindow()
-      const result = await dialog.showSaveDialog(window, {
-        defaultPath: name
-      })
+  ipcMain.on('IPC_EXPORT', async (event, { name, value, openAfterExport }) => {
+    const window = BrowserWindow.getFocusedWindow()
+    const result = await dialog.showSaveDialog(window, {
+      defaultPath: name
+    })
 
-      if (result.canceled === false) {
-        await fs.writeFileSync(result.filePath, new Uint8Array(Buffer.from(value)))
-        if (openAfterExport) {
-          // shell.openItem(result.filePath)
-
-          shell.openPath(result.filePath).then((result) => {
-            if (result) {
-              console.error('Error opening URL:', result)
-            }
-          })
-        } else if (openFolderAfterExport) {
-          shell.showItemInFolder(result.filePath)
-        }
-        event.reply('IPC_EXPORT_REPLY')
+    if (result.canceled === false) {
+      await fs.writeFileSync(result.filePath, new Uint8Array(Buffer.from(value)))
+      if (openAfterExport) {
+        // 导出后直接打开文件
+        shell.openPath(result.filePath).then((result) => {
+          if (result) {
+            console.error('Error opening URL:', result)
+          }
+        })
       }
+
+      // event.reply('IPC_EXPORT_REPLY')
     }
-  )
+  })
 
   createWindow()
 
