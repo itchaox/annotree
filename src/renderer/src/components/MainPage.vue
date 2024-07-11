@@ -576,7 +576,10 @@ const ignoreDotFolder = ref(false)
                   <div class="tab-item-value">
                     开源
 
-                    <el-link type="primary" href="https://github.com/itchaox" target="_blank"
+                    <el-link
+                      type="primary"
+                      href="https://github.com/itchaox/annotate-tree"
+                      target="_blank"
                       >GitHub 地址</el-link
                     >
                     ，感谢 Star ⭐️
