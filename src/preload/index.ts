@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 23:36
+ * @LastTime   : 2024-07-11 10:17
  * @desc       :
  */
 
@@ -62,8 +62,8 @@ const api = {
     return new Promise((resolve) => {
       ipcRenderer.send('IPC_FOLDER_SELECT')
 
-      // IPC_FOLDER_SELECT_REPLY: () => {
       ipcRenderer.once('IPC_FOLDER_SELECT_REPLY', async (event, arg) => {
+        // FIXME 此处配置扫描相关的参数
         const res = await scan({
           folderPath: arg,
           ignorePath: ['node_modules', 'dist', '.git'].map((e) => path.sep + e),
@@ -110,7 +110,6 @@ const api = {
         // store.commit('SCAN_FOLDER_PATH_UPDATE', arg)
         // store.commit('IPC_FOLDER_SCAN')
       })
-      // }
     })
   },
 
