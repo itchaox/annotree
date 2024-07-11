@@ -85,17 +85,6 @@ const api = {
 
         const data = addIndex(res)
 
-        // console.log(
-        //   'flag-data',
-        //   translateFlat({
-        //     data: showFilter(data),
-        //     notes: []
-        //   })
-        // )
-
-        // // 这里用 pinia 存储数据
-        // console.log('前：', treeStore.data)
-
         const flatData = translateFlat({
           data: showFilter(data),
           notes: []
@@ -104,8 +93,6 @@ const api = {
         resolve(flatData)
 
         // 存储处理后的数据
-
-        // EXPORT_TREE_TEXT(flatData)
 
         // store.commit('SCAN_FOLDER_PATH_UPDATE', arg)
         // store.commit('IPC_FOLDER_SCAN')
