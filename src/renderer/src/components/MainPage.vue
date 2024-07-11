@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 01:52
+ * @LastTime   : 2024-07-12 07:56
  * @desc       :
 -->
 <script setup lang="ts">
@@ -490,6 +490,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                       multiple
                       collapse-tags
                       :max-collapse-tags="3"
+                      filterable
                     >
                       <el-option
                         v-for="item in folderList.filter((i) => i)"
@@ -523,6 +524,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                     <el-select
                       v-model="ignoreFileList"
                       placeholder="请选择需要忽略的文件类型"
+                      filterable
                       style="width: 325px"
                       multiple
                       collapse-tags
