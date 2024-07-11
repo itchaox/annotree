@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 23:53
+ * @LastTime   : 2024-07-11 09:35
  * @desc       :
 -->
 <script setup lang="ts">
@@ -31,8 +31,9 @@ async function scan() {
 }
 
 // 设置
-function set() {
+function setCommon() {
   // 设置弄成一个弹窗操作
+  isCommon.value = true
 }
 
 // 导出
@@ -233,6 +234,66 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
 
   getPreviewData()
 })
+
+// 全局配置
+const isCommon = ref(false)
+
+// 通用取消
+function cancelCommon() {
+  isCommon.value = false
+}
+
+// 通用保存
+function saveCommon() {
+  isCommon.value = false
+}
+
+// 导出后自动打开文件
+const autoOpenFile = ref(false)
+
+// 导出文件后自动打开所在目录
+const autoOpenFolder = ref(false)
+
+// 忽略文件夹
+const ignoreFolderList = ref([])
+
+const options = [
+  {
+    value: 'Option1',
+    label: 'Option1'
+  },
+  {
+    value: 'Option2',
+    label: 'Option2'
+  },
+  {
+    value: 'Option3',
+    label: 'Option3'
+  },
+  {
+    value: 'Option4',
+    label: 'Option4'
+  },
+  {
+    value: 'Option5',
+    label: 'Option5'
+  }
+]
+
+// 忽略文件
+const ignoreFileList = ref([])
+
+// 扫描深度
+const scanDeep = ref(0)
+
+// 只扫描文件夹
+const onlyScanFolder = ref(false)
+
+// 忽略以 . 开头的文件
+const ignoreDotFile = ref(false)
+
+//  忽略以 . 开头的文件夹
+const ignoreDotFolder = ref(false)
 </script>
 
 <template>
@@ -240,7 +301,7 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
     <div class="operation">
       <div>
         <el-button type="primary" @click="scan">扫描</el-button>
-        <el-button type="warning" @click="set">设置</el-button>
+        <el-button type="warning" @click="setCommon">全局配置</el-button>
       </div>
     </div>
     <el-divider />
@@ -316,6 +377,7 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
         </div>
       </div>
 
+      <!-- 预览配置 -->
       <el-drawer
         v-model="isPreview"
         direction="ltr"
@@ -372,10 +434,198 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
         <template #footer>
           <div style="flex: auto">
             <el-button @click="cancelPreview">取消</el-button>
-            <el-button type="primary" @click="confirmPreview">确定</el-button>
+            <el-button type="primary" @click="confirmPreview">保存</el-button>
           </div>
         </template>
       </el-drawer>
+
+      <!-- 全局配置 -->
+      <el-dialog
+        v-model="isCommon"
+        title="全局配置"
+        width="30vw"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+      >
+        <div class="dialog-body">
+          <el-tabs type="border-card" class="demo-tabs">
+            <!-- 通用 -->
+            <el-tab-pane>
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><calendar /></el-icon>
+                  <span>通用</span>
+                </span>
+              </template>
+              <div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件夹</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <!-- 扫描 -->
+            <el-tab-pane>
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><calendar /></el-icon>
+                  <span>扫描</span>
+                </span>
+              </template>
+              <div>
+                <div class="tab-item">
+                  <div class="tab-item-label">忽略文件夹</div>
+                  <div class="tab-item-value">
+                    <el-select
+                      v-model="ignoreFolderList"
+                      placeholder="请选择需要忽略的文件夹"
+                      style="width: 250px"
+                    >
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-select>
+                  </div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">忽略以 "." 开头的文件夹</div>
+                  <div class="tab-item-value">
+                    <el-switch v-model="ignoreDotFolder"></el-switch>
+                  </div>
+                </div>
+
+                <div class="tab-item">
+                  <div class="tab-item-label">只扫描文件夹</div>
+                  <div class="tab-item-value"><el-switch v-model="onlyScanFolder"></el-switch></div>
+                </div>
+
+                <div class="tab-item">
+                  <div class="tab-item-label">忽略以 "." 开头的文件</div>
+                  <div class="tab-item-value"><el-switch v-model="ignoreDotFile"></el-switch></div>
+                </div>
+
+                <div class="tab-item">
+                  <div class="tab-item-label">忽略文件类型</div>
+                  <div class="tab-item-value">
+                    <el-select
+                      v-model="ignoreFileList"
+                      placeholder="请选择需要忽略的文件类型"
+                      style="width: 250px"
+                    >
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
+                    </el-select>
+                  </div>
+                </div>
+
+                <div class="tab-item">
+                  <div class="tab-item-label">扫描深度</div>
+                  <div class="tab-item-value">
+                    <el-input-number
+                      v-model="scanDeep"
+                      placeholder="请输入扫描深度"
+                      :min="0"
+                    ></el-input-number>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <!-- 导出文本 -->
+            <el-tab-pane>
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><calendar /></el-icon>
+                  <span>导出文本</span>
+                </span>
+              </template>
+              <div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件夹</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <!-- 备份和恢复 -->
+            <el-tab-pane>
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><calendar /></el-icon>
+                  <span>备份和恢复</span>
+                </span>
+              </template>
+              <div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件夹</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <!-- 重置 -->
+            <el-tab-pane>
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><calendar /></el-icon>
+                  <span>重置</span>
+                </span>
+              </template>
+              <div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件夹</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <!-- 关于 -->
+            <el-tab-pane>
+              <template #label>
+                <span class="custom-tabs-label">
+                  <el-icon><calendar /></el-icon>
+                  <span>关于</span>
+                </span>
+              </template>
+              <div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">自动打开文件夹</div>
+                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
+                </div>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <template #footer>
+          <div>
+            <el-button @click="cancelCommon">取消</el-button>
+            <el-button type="primary" @click="saveCommon">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -428,6 +678,19 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
           width: 125px;
         }
       }
+    }
+  }
+}
+
+.dialog-body {
+  .tab-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .tab-item-label {
+      margin-right: 10px;
+      min-width: 150px;
     }
   }
 }
