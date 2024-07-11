@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-11 13:03
+ * @LastTime   : 2024-07-11 23:18
  * @desc       :
 -->
 <script setup lang="ts">
@@ -134,18 +134,6 @@ document.addEventListener('keydown', function (event) {
   }
 })
 
-// 预览设置
-function previewSet() {
-  isPreview.value = true
-
-  // 保存一个副本
-  _bridgeChar.value = bridgeChar.value
-  _minBridge.value = minBridge.value
-  _noteFormat.value = noteFormat.value
-  _showBridge.value = showBridge.value
-  _isRight.value = isRight.value
-}
-
 // 预览数据
 const previewList = ref([])
 
@@ -186,54 +174,20 @@ function getPreviewData() {
 // 显示预览配置
 const isPreview = ref(false)
 
-// 预览取消按钮
-function cancelPreview() {
-  // 确定时不重置数据
-  if (!isConfirm.value) {
-    bridgeChar.value = _bridgeChar.value
-    minBridge.value = _minBridge.value
-    noteFormat.value = _noteFormat.value
-    showBridge.value = _showBridge.value
-    isRight.value = _isRight.value
-  }
-
-  isPreview.value = false
-  isConfirm.value = false
-}
-
-const isConfirm = ref(false)
-
-// 预览确定按钮
-function confirmPreview() {
-  isPreview.value = false
-
-  isConfirm.value = true
-
-  ElMessage({
-    message: '预览配置修改成功',
-    type: 'success'
-  })
-}
-
 // 备注格式化
 const noteFormat = ref('// {note}')
-const _noteFormat = ref()
 
 // 桥梁最短字符数
 const minBridge = ref(4)
-const _minBridge = ref()
 
 // 桥梁字符
 const bridgeChar = ref('-')
-const _bridgeChar = ref('')
 
 // 始终显示桥梁
 const showBridge = ref(false)
-const _showBridge = ref()
 
 // 右侧对齐
 const isRight = ref(false)
-const _isRight = ref()
 
 function inputChange() {
   getPreviewData()
@@ -245,16 +199,6 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
 
 // 全局配置
 const isCommon = ref(false)
-
-// 通用取消
-function cancelCommon() {
-  isCommon.value = false
-}
-
-// 通用保存
-function saveCommon() {
-  isCommon.value = false
-}
 
 // 导出后自动打开文件
 const autoOpenFile = ref(false)
@@ -308,8 +252,14 @@ const ignoreDotFolder = ref(false)
   <div class="main-page">
     <div class="operation">
       <div>
-        <el-button type="primary" @click="scan">扫描</el-button>
-        <el-button type="warning" @click="setCommon">全局配置</el-button>
+        <el-button type="primary" @click="scan">
+          <el-icon><Search /></el-icon>
+          <span> 扫描 </span>
+        </el-button>
+        <el-button type="warning" @click="setCommon">
+          <el-icon size="16"><Setting /></el-icon>
+          <span> 全局配置 </span>
+        </el-button>
       </div>
     </div>
     <el-divider />
@@ -351,7 +301,8 @@ const ignoreDotFolder = ref(false)
                 @change="inputChange"
               ></el-input>
 
-              <el-button link type="danger" @click="deleteItem(index)">删除</el-button>
+              <!-- 暂时不做 -->
+              <!-- <el-button link type="danger" @click="deleteItem(index)">删除</el-button> -->
             </span>
           </div>
         </recycle-scroller>
@@ -360,13 +311,26 @@ const ignoreDotFolder = ref(false)
         <div style="display: flex; align-items: center; justify-content: space-between">
           <div style="display: flex; align-items: center">
             <h1>预览区</h1>
-            <div>
-              <el-button type="warning" @click="previewSet">预览配置</el-button>
+            <el-icon
+              class="tools-icon"
+              style="margin-left: 2px"
+              size="26"
+              color="#5e89fb"
+              @click="isPreview = true"
+              ><Tools
+            /></el-icon>
+
+            <div style="margin-left: 5px">
+              <!-- <el-button type="warning" >预览配置</el-button> -->
             </div>
           </div>
           <div>
-            <el-button type="primary" @click="exportFile">导出</el-button>
-            <el-button>复制</el-button>
+            <el-button v-if="previewList.length > 0" type="primary" @click="exportFile">
+              <el-icon size="18"><Download /></el-icon>
+              <span>导出</span>
+            </el-button>
+            <!-- FIXME 暂时不做 -->
+            <!-- <el-button>复制</el-button> -->
           </div>
         </div>
         <!-- <recycle-scroller
@@ -386,14 +350,7 @@ const ignoreDotFolder = ref(false)
       </div>
 
       <!-- 预览配置 -->
-      <el-drawer
-        v-model="isPreview"
-        direction="ltr"
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-        :modal="false"
-        @close="cancelPreview"
-      >
+      <el-drawer v-model="isPreview" direction="ltr" :modal="true" @close="isPreview = false">
         <template #header>
           <h4>预览配置</h4>
         </template>
@@ -420,7 +377,7 @@ const ignoreDotFolder = ref(false)
             <div class="preview-item">
               <div class="preview-label">桥梁填充字符</div>
               <div class="preview-value">
-                <el-input v-model="bridgeChar" placeholder="请输入桥梁填充字符"></el-input>
+                <el-input v-model="bridgeChar" placeholder="请输入单字节填充字符"></el-input>
               </div>
             </div>
 
@@ -431,20 +388,21 @@ const ignoreDotFolder = ref(false)
               </div>
             </div>
 
-            <div class="preview-item">
+            <!-- FIXME 暂时注释 -->
+            <!-- <div class="preview-item">
               <div class="preview-label">右侧对齐</div>
               <div class="preview-value">
                 <el-switch size="large" v-model="isRight"></el-switch>
               </div>
-            </div>
+            </div> -->
           </div>
         </template>
-        <template #footer>
+        <!-- <template #footer>
           <div style="flex: auto">
             <el-button @click="cancelPreview">取消</el-button>
             <el-button type="primary" @click="confirmPreview">保存</el-button>
           </div>
-        </template>
+        </template> -->
       </el-drawer>
 
       <!-- 全局配置 -->
@@ -452,8 +410,9 @@ const ignoreDotFolder = ref(false)
         v-model="isCommon"
         title="全局配置"
         width="36vw"
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
+        :close-on-click-modal="true"
+        :close-on-press-escape="true"
+        @close="isCommon = false"
       >
         <div class="dialog-body">
           <el-tabs type="border-card" class="demo-tabs">
@@ -569,50 +528,28 @@ const ignoreDotFolder = ref(false)
                   <div class="tab-item-label">自动打开文件</div>
                   <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
                 </div>
-                <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件夹</div>
-                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
-                </div>
               </div>
             </el-tab-pane>
             <!-- 备份和恢复 -->
-            <el-tab-pane>
+            <!-- <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><CircleCheck /></el-icon>
                   <span>备份和恢复</span>
                 </span>
               </template>
-              <div>
-                <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件</div>
-                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
-                </div>
-                <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件夹</div>
-                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
-                </div>
-              </div>
-            </el-tab-pane>
+              <div>测试</div>
+            </el-tab-pane> -->
             <!-- 重置 -->
-            <el-tab-pane>
+            <!-- <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><Refresh /></el-icon>
                   <span>重置</span>
                 </span>
               </template>
-              <div>
-                <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件</div>
-                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
-                </div>
-                <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件夹</div>
-                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
-                </div>
-              </div>
-            </el-tab-pane>
+              <div>测试</div>
+            </el-tab-pane> -->
             <!-- 关于 -->
             <el-tab-pane>
               <template #label>
@@ -624,26 +561,31 @@ const ignoreDotFolder = ref(false)
               <div>
                 <div class="tab-item">
                   <div class="tab-item-label">当前版本</div>
-                  <div class="tab-item-value">v1.0.0</div>
+                  <div class="tab-item-value">v 0.1.0</div>
                 </div>
                 <div class="tab-item">
                   <div class="tab-item-label">开发者</div>
-                  <div class="tab-item-value">itchao</div>
+                  <div class="tab-item-value">
+                    <el-link type="primary" href="https://github.com/itchaox" target="_blank"
+                      >itchaox</el-link
+                    >
+                  </div>
                 </div>
                 <div class="tab-item">
-                  <div class="tab-item-label">备注</div>
-                  <div class="tab-item-value">欢迎 Star，有问题请联系作者</div>
+                  <div class="tab-item-label">其他信息</div>
+                  <div class="tab-item-value">
+                    开源
+
+                    <el-link type="primary" href="https://github.com/itchaox" target="_blank"
+                      >GitHub 地址</el-link
+                    >
+                    ，感谢 Star ⭐️
+                  </div>
                 </div>
               </div>
             </el-tab-pane>
           </el-tabs>
         </div>
-        <template #footer>
-          <div>
-            <el-button @click="cancelCommon">取消</el-button>
-            <el-button type="primary" @click="saveCommon">保存</el-button>
-          </div>
-        </template>
       </el-dialog>
     </div>
   </div>
@@ -661,25 +603,34 @@ const ignoreDotFolder = ref(false)
   .content {
     display: flex;
 
+    pre {
+      color: #333;
+    }
+
     .left {
       padding: 10px;
       flex: 1;
-      background-color: #1ff;
-      height: 82vh;
+      background-color: #f8f9fa;
+      height: 83vh;
       margin-right: 20px;
       border-radius: 4px;
-
-      .row-tree {
-        height: 18px !important;
-      }
+      border: 1px solid #dee2e6;
     }
 
     .right {
       padding: 10px;
       flex: 1;
-      background-color: #88f;
-      height: 82vh;
+      height: 83vh;
       border-radius: 4px;
+
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+
+      .tools-icon {
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
 
     .tree-scroller {
