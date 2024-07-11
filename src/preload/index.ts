@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 01:26
+ * @LastTime   : 2024-07-12 01:29
  * @desc       :
  */
 
@@ -68,7 +68,8 @@ const api = {
         // FIXME 此处配置扫描相关的参数
         const res = await scan({
           folderPath: arg,
-          ignorePath: ['node_modules', 'dist', '.git'].map((e) => path.sep + e),
+          // 默认自动忽略 node_modules 文件夹
+          ignorePath: ['node_modules'].map((e) => path.sep + e),
           ignoreExt: _params.ignoreFileList,
           ignoreFile: _params.onlyScanFolder,
           ignoreDotStartFile: _params.ignoreDotFile,

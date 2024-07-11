@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 01:23
+ * @LastTime   : 2024-07-12 01:36
  * @desc       :
 -->
 <script setup lang="ts">
@@ -42,9 +42,31 @@ async function scan() {
     extList.value = Object.keys(grouped)
 
     getPreviewData()
+    getIgnoreFolderList()
   } catch (error) {
     console.error('Scan failed:', error)
   }
+}
+
+// 获取忽略的目录
+function getIgnoreFolderList() {
+  let result = []
+  function isFolderAndPush(elements, level = 1) {
+    if (level > 2) return
+    for (const item of elements) {
+      if (item.isDirectory) {
+        result.push(item.filePath)
+        isFolderAndPush(item.elements, level + 1)
+      }
+    }
+  }
+  isFolderAndPush(treeData.value)
+
+  let uniquePaths = [...new Set(result)]
+
+  console.log('res', uniquePaths)
+
+  return result
 }
 
 // 设置
