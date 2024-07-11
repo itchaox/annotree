@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 01:36
+ * @LastTime   : 2024-07-12 01:52
  * @desc       :
 -->
 <script setup lang="ts">
@@ -21,6 +21,9 @@ const treeData = ref(null)
 
 // 忽略文件类型列表
 const extList: any = ref([])
+
+// 忽略文件夹列表
+const folderList: any = ref([])
 
 // 扫描
 async function scan() {
@@ -63,10 +66,7 @@ function getIgnoreFolderList() {
   isFolderAndPush(treeData.value)
 
   let uniquePaths = [...new Set(result)]
-
-  console.log('res', uniquePaths)
-
-  return result
+  folderList.value = uniquePaths
 }
 
 // 设置
@@ -492,10 +492,10 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                       :max-collapse-tags="3"
                     >
                       <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="item in folderList.filter((i) => i)"
+                        :key="item"
+                        :label="item"
+                        :value="item"
                       />
                     </el-select>
                   </div>
