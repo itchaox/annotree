@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-11 10:17
+ * @LastTime   : 2024-07-11 12:45
  * @desc       :
  */
 
@@ -58,7 +58,9 @@ const TREE_TEXT = {
 const api = {
   name: 'wangchao',
   // 扫描函数
-  IPC_FOLDER_SELECT: () => {
+  IPC_FOLDER_SELECT: (params) => {
+    const _params = JSON.parse(params)
+
     return new Promise((resolve) => {
       ipcRenderer.send('IPC_FOLDER_SELECT')
 
@@ -68,10 +70,11 @@ const api = {
           folderPath: arg,
           ignorePath: ['node_modules', 'dist', '.git'].map((e) => path.sep + e),
           ignoreExt: [],
-          ignoreFile: false,
-          ignoreDotStartFile: false,
-          ignoreDotStartFolder: false,
-          deep: 0
+
+          ignoreFile: _params.onlyScanFolder,
+          ignoreDotStartFile: _params.ignoreDotFile,
+          ignoreDotStartFolder: _params.ignoreDotFolder,
+          deep: _params.scanDeep
         })
 
         // 为扫描结果的每一项增加固定索引

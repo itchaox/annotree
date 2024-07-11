@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-11 10:12
+ * @LastTime   : 2024-07-11 12:49
  * @desc       :
 -->
 <script setup lang="ts">
@@ -20,9 +20,17 @@ const treeData = ref(null)
 
 // 扫描
 async function scan() {
+  const params = {
+    ignoreFolderList: ignoreFolderList.value,
+    ignoreFileList: ignoreFileList.value,
+    scanDeep: scanDeep.value,
+    onlyScanFolder: onlyScanFolder.value,
+    ignoreDotFile: ignoreDotFile.value,
+    ignoreDotFolder: ignoreDotFolder.value
+  }
   try {
     // 更新数据
-    const result = await IPC_FOLDER_SELECT()
+    const result = await IPC_FOLDER_SELECT(JSON.stringify(params))
     treeData.value = result
     getPreviewData()
   } catch (error) {
@@ -230,8 +238,6 @@ function inputChange() {
 }
 
 watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
-  console.log(previewList.value)
-
   getPreviewData()
 })
 
