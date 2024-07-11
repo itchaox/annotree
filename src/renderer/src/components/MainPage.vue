@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-11 23:18
+ * @LastTime   : 2024-07-11 23:53
  * @desc       :
 -->
 <script setup lang="ts">
@@ -246,6 +246,9 @@ const ignoreDotFile = ref(false)
 
 //  忽略以 . 开头的文件夹
 const ignoreDotFolder = ref(false)
+
+// 默认名称
+const defaultFileName = ref('FolderExplorer [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]')
 </script>
 
 <template>
@@ -525,8 +528,10 @@ const ignoreDotFolder = ref(false)
               </template>
               <div>
                 <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件</div>
-                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
+                  <div class="tab-item-label">默认名称</div>
+                  <div class="tab-item-value">
+                    <el-input v-model="defaultFileName" placeholder="请输入默认名称"></el-input>
+                  </div>
                 </div>
               </div>
             </el-tab-pane>
@@ -671,6 +676,10 @@ const ignoreDotFolder = ref(false)
     .tab-item-label {
       margin-right: 10px;
       min-width: 150px;
+    }
+
+    .tab-item-value {
+      width: 400px;
     }
   }
 }
