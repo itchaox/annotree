@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-11 12:56
+ * @LastTime   : 2024-07-11 13:03
  * @desc       :
 -->
 <script setup lang="ts">
@@ -51,7 +51,9 @@ function exportFile() {
     minBridge: minBridge.value,
     noteFormat: noteFormat.value,
     showBridge: showBridge.value,
-    isRight: isRight.value
+    isRight: isRight.value,
+    autoOpenFile: autoOpenFile.value,
+    autoOpenFolder: autoOpenFolder.value
   }
   // ipc 通信需要序列化
   EXPORT_TREE_TEXT(JSON.stringify(treeData.value), JSON.stringify(params))
@@ -468,10 +470,11 @@ const ignoreDotFolder = ref(false)
                   <div class="tab-item-label">自动打开文件</div>
                   <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
                 </div>
-                <div class="tab-item">
+                <!-- FIXME 不生效，暂时注释 -->
+                <!-- <div class="tab-item">
                   <div class="tab-item-label">自动打开文件夹</div>
                   <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
-                </div>
+                </div> -->
               </div>
             </el-tab-pane>
             <!-- 扫描 -->
