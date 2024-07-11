@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-11 23:53
+ * @LastTime   : 2024-07-12 00:43
  * @desc       :
 -->
 <script setup lang="ts">
@@ -175,7 +175,7 @@ function getPreviewData() {
 const isPreview = ref(false)
 
 // 备注格式化
-const noteFormat = ref('// {note}')
+const noteFormat = ref(' // {note}')
 
 // 桥梁最短字符数
 const minBridge = ref(4)
