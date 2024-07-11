@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-11 09:35
+ * @LastTime   : 2024-07-11 10:12
  * @desc       :
 -->
 <script setup lang="ts">
@@ -443,7 +443,7 @@ const ignoreDotFolder = ref(false)
       <el-dialog
         v-model="isCommon"
         title="全局配置"
-        width="30vw"
+        width="32vw"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
       >
@@ -453,7 +453,7 @@ const ignoreDotFolder = ref(false)
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
-                  <el-icon><calendar /></el-icon>
+                  <el-icon><house /></el-icon>
                   <span>通用</span>
                 </span>
               </template>
@@ -472,7 +472,7 @@ const ignoreDotFolder = ref(false)
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
-                  <el-icon><calendar /></el-icon>
+                  <el-icon><Search /></el-icon>
                   <span>扫描</span>
                 </span>
               </template>
@@ -545,7 +545,7 @@ const ignoreDotFolder = ref(false)
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
-                  <el-icon><calendar /></el-icon>
+                  <el-icon><Download /></el-icon>
                   <span>导出文本</span>
                 </span>
               </template>
@@ -564,7 +564,7 @@ const ignoreDotFolder = ref(false)
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
-                  <el-icon><calendar /></el-icon>
+                  <el-icon><CircleCheck /></el-icon>
                   <span>备份和恢复</span>
                 </span>
               </template>
@@ -583,7 +583,7 @@ const ignoreDotFolder = ref(false)
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
-                  <el-icon><calendar /></el-icon>
+                  <el-icon><Refresh /></el-icon>
                   <span>重置</span>
                 </span>
               </template>
@@ -602,18 +602,22 @@ const ignoreDotFolder = ref(false)
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
-                  <el-icon><calendar /></el-icon>
+                  <el-icon><WarningFilled /></el-icon>
                   <span>关于</span>
                 </span>
               </template>
               <div>
                 <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件</div>
-                  <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
+                  <div class="tab-item-label">当前版本</div>
+                  <div class="tab-item-value">v1.0.0</div>
                 </div>
                 <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件夹</div>
-                  <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
+                  <div class="tab-item-label">开发者</div>
+                  <div class="tab-item-value">itchao</div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">备注</div>
+                  <div class="tab-item-value">欢迎 Star，有问题请联系作者</div>
                 </div>
               </div>
             </el-tab-pane>
@@ -683,6 +687,13 @@ const ignoreDotFolder = ref(false)
 }
 
 .dialog-body {
+  .custom-tabs-label {
+    display: flex;
+    align-items: center;
+    span {
+      margin-left: 5px;
+    }
+  }
   .tab-item {
     display: flex;
     align-items: center;
