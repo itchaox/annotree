@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-11 13:02
+ * @LastTime   : 2024-07-12 00:49
  * @desc       :
  */
 
@@ -192,7 +192,7 @@ function EXPORT_TREE_TEXT(data, params) {
 
   // 导出
   ipcRenderer.send('IPC_EXPORT', {
-    name: `${nameReplace(setting.FILE_NAME)}.txt`,
+    name: `${nameReplace(params.defaultFileName)}.txt`,
     value: result.join('\n'),
     openAfterExport: params.autoOpenFile
     // openFolderAfterExport: params.autoOpenFolder

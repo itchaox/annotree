@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 00:43
+ * @LastTime   : 2024-07-12 01:05
  * @desc       :
 -->
 <script setup lang="ts">
@@ -53,7 +53,8 @@ function exportFile() {
     showBridge: showBridge.value,
     isRight: isRight.value,
     autoOpenFile: autoOpenFile.value,
-    autoOpenFolder: autoOpenFolder.value
+    autoOpenFolder: autoOpenFolder.value,
+    defaultFileName: defaultFileName.value
   }
   // ipc 通信需要序列化
   EXPORT_TREE_TEXT(JSON.stringify(treeData.value), JSON.stringify(params))
@@ -248,7 +249,7 @@ const ignoreDotFile = ref(false)
 const ignoreDotFolder = ref(false)
 
 // 默认名称
-const defaultFileName = ref('FolderExplorer [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]')
+const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
 </script>
 
 <template>
@@ -412,7 +413,7 @@ const defaultFileName = ref('FolderExplorer [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]'
       <el-dialog
         v-model="isCommon"
         title="全局配置"
-        width="36vw"
+        width="40vw"
         :close-on-click-modal="true"
         :close-on-press-escape="true"
         @close="isCommon = false"
@@ -528,11 +529,21 @@ const defaultFileName = ref('FolderExplorer [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]'
               </template>
               <div>
                 <div class="tab-item">
-                  <div class="tab-item-label">默认名称</div>
-                  <div class="tab-item-value">
-                    <el-input v-model="defaultFileName" placeholder="请输入默认名称"></el-input>
+                  <div style="width: 100px">默认名称</div>
+                  <div>
+                    <el-input
+                      style="width: 380px; font-size: 12px"
+                      v-model="defaultFileName"
+                      placeholder="请输入默认名称"
+                    >
+                      <template #append>.txt</template>
+                    </el-input>
                   </div>
                 </div>
+                <!-- <div class="tab-item">
+                  <div style="width: 100px">例子</div>
+                  <div>AnnoTate-Tree_2024-07-12_08-30-20.txt</div>
+                </div> -->
               </div>
             </el-tab-pane>
             <!-- 备份和恢复 -->

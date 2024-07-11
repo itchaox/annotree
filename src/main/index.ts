@@ -62,9 +62,6 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC 测试
-  ipcMain.on('ping', () => console.log('pong'))
-
   // FIXME 主进程，所以在终端打印信息
   // 渲染进程请求选择扫描的文件夹
   ipcMain.on('IPC_FOLDER_SELECT', async (event, arg) => {
