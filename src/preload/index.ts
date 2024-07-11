@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 00:49
+ * @LastTime   : 2024-07-12 01:26
  * @desc       :
  */
 
@@ -69,8 +69,7 @@ const api = {
         const res = await scan({
           folderPath: arg,
           ignorePath: ['node_modules', 'dist', '.git'].map((e) => path.sep + e),
-          ignoreExt: [],
-
+          ignoreExt: _params.ignoreFileList,
           ignoreFile: _params.onlyScanFolder,
           ignoreDotStartFile: _params.ignoreDotFile,
           ignoreDotStartFolder: _params.ignoreDotFolder,
@@ -187,8 +186,6 @@ function EXPORT_TREE_TEXT(data, params) {
 
   // 转换为字符串
   result = result.map((e) => `${e.element}${e.bridge}${e.note}`)
-
-  console.log('查看处理后数据：', result)
 
   // 导出
   ipcRenderer.send('IPC_EXPORT', {

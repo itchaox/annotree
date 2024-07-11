@@ -3,20 +3,24 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 01:05
+ * @LastTime   : 2024-07-12 01:23
  * @desc       :
 -->
 <script setup lang="ts">
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
-import { ElMessage } from 'element-plus'
 import { replace as elementReplace } from '../utils/replace.element.js'
 import { replace as noteReplace } from '../utils/replace.note.js'
+
+import { groupBy } from 'lodash'
 
 import width from 'string-width'
 
 import { ref, watch } from 'vue'
 
 const treeData = ref(null)
+
+// 忽略文件类型列表
+const extList: any = ref([])
 
 // 扫描
 async function scan() {
@@ -28,10 +32,15 @@ async function scan() {
     ignoreDotFile: ignoreDotFile.value,
     ignoreDotFolder: ignoreDotFolder.value
   }
+
   try {
     // 更新数据
     const result = await IPC_FOLDER_SELECT(JSON.stringify(params))
     treeData.value = result
+
+    const grouped = groupBy(result, 'ext')
+    extList.value = Object.keys(grouped)
+
     getPreviewData()
   } catch (error) {
     console.error('Scan failed:', error)
@@ -498,10 +507,10 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                       :max-collapse-tags="3"
                     >
                       <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="item in extList.filter((i) => i)"
+                        :key="item"
+                        :label="item"
+                        :value="item"
                       />
                     </el-select>
                   </div>
