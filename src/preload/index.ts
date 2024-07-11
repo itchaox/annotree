@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 01:56
+ * @LastTime   : 2024-07-12 07:52
  * @desc       :
  */
 
@@ -69,7 +69,10 @@ const api = {
         const res = await scan({
           folderPath: arg,
           // 默认自动忽略 node_modules 文件夹
-          ignorePath: [...['node_modules'].map((e) => path.sep + e), ..._params.ignoreFolderList],
+          ignorePath: [
+            ...['node_modules', '.git'].map((e) => path.sep + e),
+            ..._params.ignoreFolderList
+          ],
           ignoreExt: _params.ignoreFileList,
           ignoreFile: _params.onlyScanFolder,
           ignoreDotStartFile: _params.ignoreDotFile,
