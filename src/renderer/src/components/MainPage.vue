@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 07:56
+ * @LastTime   : 2024-07-12 08:14
  * @desc       :
 -->
 <script setup lang="ts">
@@ -352,6 +352,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
               size="26"
               color="#5e89fb"
               @click="isPreview = true"
+              title="预览区配置"
               ><Tools
             /></el-icon>
 
@@ -461,7 +462,12 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
               </template>
               <div>
                 <div class="tab-item">
-                  <div class="tab-item-label">自动打开文件</div>
+                  <div class="tab-item-label">
+                    自动打开文件
+                    <el-tooltip effect="dark" content="导出文件后自动打开" placement="top">
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
                   <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
                 </div>
                 <!-- FIXME 不生效，暂时注释 -->
@@ -481,7 +487,16 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
               </template>
               <div>
                 <div class="tab-item">
-                  <div class="tab-item-label">忽略文件夹</div>
+                  <div class="tab-item-label">
+                    忽略文件夹
+                    <el-tooltip
+                      effect="dark"
+                      content="忽略不需要扫描的文件夹，避免性能损失甚至程序失去响应，比如：node_modules 文件夹，程序内部已自动忽略 node_modules 文件夹"
+                      placement="top"
+                    >
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
                   <div class="tab-item-value">
                     <el-select
                       v-model="ignoreFolderList"
@@ -502,24 +517,56 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                   </div>
                 </div>
                 <div class="tab-item">
-                  <div class="tab-item-label">忽略以 "." 开头的文件夹</div>
+                  <div class="tab-item-label">
+                    忽略以 "." 开头的文件夹
+                    <el-tooltip
+                      effect="dark"
+                      content="这类文件夹在 MacOS 和 Linux 上是默认隐藏的文件夹"
+                      placement="top"
+                    >
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
                   <div class="tab-item-value">
                     <el-switch v-model="ignoreDotFolder"></el-switch>
                   </div>
                 </div>
 
                 <div class="tab-item">
-                  <div class="tab-item-label">只扫描文件夹</div>
+                  <div class="tab-item-label">
+                    只扫描文件夹
+                    <el-tooltip effect="dark" content="忽略所有文件，只扫描文件夹" placement="top">
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
                   <div class="tab-item-value"><el-switch v-model="onlyScanFolder"></el-switch></div>
                 </div>
 
                 <div class="tab-item">
-                  <div class="tab-item-label">忽略以 "." 开头的文件</div>
+                  <div class="tab-item-label">
+                    忽略以 "." 开头的文件
+                    <el-tooltip
+                      effect="dark"
+                      content="这类文件在 MacOS 和 Linux 上是默认隐藏的文件"
+                      placement="top"
+                    >
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
                   <div class="tab-item-value"><el-switch v-model="ignoreDotFile"></el-switch></div>
                 </div>
 
                 <div class="tab-item">
-                  <div class="tab-item-label">忽略文件类型</div>
+                  <div class="tab-item-label">
+                    忽略文件类型
+                    <el-tooltip
+                      effect="dark"
+                      content="在扫描一次后，会生成此处扫描后的所有文件类型，可以选择忽略不需要的文件类型，以提高扫描效率"
+                      placement="top"
+                    >
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
                   <div class="tab-item-value">
                     <el-select
                       v-model="ignoreFileList"
@@ -541,7 +588,16 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                 </div>
 
                 <div class="tab-item">
-                  <div class="tab-item-label">扫描深度</div>
+                  <div class="tab-item-label">
+                    扫描深度
+                    <el-tooltip
+                      effect="dark"
+                      content="设置扫描目录的深度，0 为所有深度，每递增一个数字则代表扫描深度 +1"
+                      placement="top"
+                    >
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
                   <div class="tab-item-value">
                     <el-input-number
                       v-model="scanDeep"
@@ -718,8 +774,10 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
     margin-bottom: 10px;
 
     .tab-item-label {
+      display: flex;
+      align-items: center;
       margin-right: 10px;
-      min-width: 150px;
+      min-width: 175px;
     }
 
     .tab-item-value {

@@ -21,6 +21,7 @@ declare module 'vue' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     MainPage: typeof import('./src/components/MainPage.vue')['default']
     Versions: typeof import('./src/components/Versions.vue')['default']
   }
