@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 08:44
+ * @LastTime   : 2024-07-12 11:30
  * @desc       :
 -->
 <script setup lang="ts">
@@ -233,36 +233,13 @@ watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
 const isCommon = ref(false)
 
 // 导出后自动打开文件
-const autoOpenFile = ref(false)
+const autoOpenFile = ref(true)
 
 // 导出文件后自动打开所在目录
 const autoOpenFolder = ref(false)
 
 // 忽略文件夹
 const ignoreFolderList = ref([])
-
-const options = [
-  {
-    value: 'Option1',
-    label: 'Option1'
-  },
-  {
-    value: 'Option2',
-    label: 'Option2'
-  },
-  {
-    value: 'Option3',
-    label: 'Option3'
-  },
-  {
-    value: 'Option4',
-    label: 'Option4'
-  },
-  {
-    value: 'Option5',
-    label: 'Option5'
-  }
-]
 
 // 忽略文件
 const ignoreFileList = ref([])
@@ -631,7 +608,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                 </div>
                 <!-- <div class="tab-item">
                   <div style="width: 100px">例子</div>
-                  <div>AnnoTate-Tree_2024-07-12_08-30-20.txt</div>
+                  <div>Annotate Tree_2024-07-12_08-30-20.txt</div>
                 </div> -->
               </div>
             </el-tab-pane>

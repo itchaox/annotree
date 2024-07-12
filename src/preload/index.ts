@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 07:52
+ * @LastTime   : 2024-07-12 11:35
  * @desc       :
  */
 
@@ -39,7 +39,7 @@ function showFilter(els) {
 
 const TREE_TEXT = {
   // 文件名
-  FILE_NAME: 'Annotate-Tree [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]',
+  FILE_NAME: 'Annotate Tree [ {YYYY}-{MM}-{DD} {HH}:{mm}:{ss} ]',
   // 元素格式化
   ELEMENT_FORMAT: '{tree}{name}{ext}',
   // 备注格式化

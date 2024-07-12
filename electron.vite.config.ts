@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-06 13:55
+ * @LastTime   : 2024-07-12 10:04
  * @desc       :
  */
 import { resolve } from 'path'
@@ -18,7 +18,10 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
+    build: {
+      outDir: 'out/preload'
+    }
   },
   renderer: {
     resolve: {

@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-10 09:30
+ * @LastTime   : 2024-07-12 11:21
  * @desc       :
  */
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
@@ -44,7 +44,7 @@ function createWindow(): void {
   }
 
   // 仅在开发环境下默认打开控制台
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools()
   }
 }
@@ -64,9 +64,9 @@ app.whenReady().then(() => {
 
   // FIXME 主进程，所以在终端打印信息
   // 渲染进程请求选择扫描的文件夹
-  ipcMain.on('IPC_FOLDER_SELECT', async (event, arg) => {
+  ipcMain.on('IPC_FOLDER_SELECT', async (event) => {
     const window = BrowserWindow.getFocusedWindow()
-    const result = await dialog.showOpenDialog(window, {
+    const result = await dialog.showOpenDialog(window as any, {
       // 'openDirectory'：允许用户选择文件夹
       // 'createDirectory'：允许用户在对话框中创建新文件夹
 
@@ -86,9 +86,9 @@ app.whenReady().then(() => {
   /**
    * 渲染进程请求选择保存结果的目录
    */
-  ipcMain.on('IPC_EXPORT', async (event, { name, value, openAfterExport }) => {
+  ipcMain.on('IPC_EXPORT', async (_, { name, value, openAfterExport }) => {
     const window = BrowserWindow.getFocusedWindow()
-    const result = await dialog.showSaveDialog(window, {
+    const result = await dialog.showSaveDialog(window as any, {
       defaultPath: name
     })
 
