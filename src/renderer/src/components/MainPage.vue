@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 08:14
+ * @LastTime   : 2024-07-12 08:44
  * @desc       :
 -->
 <script setup lang="ts">
@@ -561,7 +561,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                     忽略文件类型
                     <el-tooltip
                       effect="dark"
-                      content="在扫描一次后，会生成此处扫描后的所有文件类型，可以选择忽略不需要的文件类型，以提高扫描效率"
+                      content="在扫描一次后，会生成此次扫描后的所有文件类型，可以选择忽略不需要的文件类型，以提高扫描效率"
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
