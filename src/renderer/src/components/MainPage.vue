@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 11:30
+ * @LastTime   : 2024-07-13 18:05
  * @desc       :
 -->
 <script setup lang="ts">
@@ -206,7 +206,7 @@ function getPreviewData() {
 // 显示预览配置
 const isPreview = ref(false)
 
-// 备注格式化
+// 注释格式化
 const noteFormat = ref(' // {note}')
 
 // 桥梁最短字符数
@@ -257,7 +257,7 @@ const ignoreDotFile = ref(false)
 const ignoreDotFolder = ref(false)
 
 // 默认名称
-const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
+const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
 </script>
 
 <template>
@@ -299,7 +299,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
               <pre>{{ item.name }}</pre>
               <!-- 扩展名 -->
               <pre v-if="item.ext">{{ item.ext }}</pre>
-              <!-- 备注 -->
+              <!-- 注释 -->
               <!-- <pre v-if="item.note"> // {{ item.note }}</pre> -->
 
               <!-- <input type="text" /> -->
@@ -307,7 +307,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                 style="margin-left: 5px; height: 20px; width: 120px"
                 v-model="item.note"
                 size="small"
-                placeholder="请输入备注"
+                placeholder="请输入注释"
                 clearable
                 :tabindex="index + 1"
                 @change="inputChange"
@@ -370,7 +370,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
         <template #default>
           <div class="preview-config">
             <div class="preview-item">
-              <div class="preview-label">备注格式化</div>
+              <div class="preview-label">注释格式化</div>
               <div class="preview-value">
                 <el-input v-model="noteFormat" placeholder="请输入格式化字符串"></el-input>
               </div>
@@ -608,7 +608,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                 </div>
                 <!-- <div class="tab-item">
                   <div style="width: 100px">例子</div>
-                  <div>Annotate Tree_2024-07-12_08-30-20.txt</div>
+                  <div>Annotree_2024-07-12_08-30-20.txt</div>
                 </div> -->
               </div>
             </el-tab-pane>
@@ -643,7 +643,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
               <div>
                 <div class="tab-item">
                   <div class="tab-item-label">当前版本</div>
-                  <div class="tab-item-value">v 0.1.0</div>
+                  <div class="tab-item-value">v 0.1.2</div>
                 </div>
                 <div class="tab-item">
                   <div class="tab-item-label">开发者</div>
@@ -660,7 +660,7 @@ const defaultFileName = ref('Annotate-Tree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
 
                     <el-link
                       type="primary"
-                      href="https://github.com/itchaox/annotate-tree"
+                      href="https://github.com/itchaox/annotree"
                       target="_blank"
                       >GitHub 地址</el-link
                     >

@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: Annotate Tree
+productName: Annotree
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: Annotate Tree
+  executableName: Annotree
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

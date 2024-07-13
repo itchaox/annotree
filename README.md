@@ -1,10 +1,10 @@
-# Annotate Tree 注释树
+# Annotree 注释树
 
 ## 项目介绍
 
 | 本项目基于 [folder-explorer](https://github.com/d2-projects/folder-explorer) 进行二次开发，感谢 [FairyEver](https://github.com/FairyEver) 的创意和贡献！
 
-Annotate Tree 用于生成带注释的项目文件树形结构，大大方便技术文档的编写。
+Annotree 用于生成带注释的项目文件树形结构，大大方便技术文档的编写。
 
 <!-- ## 相关链接 -->
 
