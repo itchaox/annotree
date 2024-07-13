@@ -2,24 +2,141 @@
 
 ## 项目介绍
 
-| 本项目基于 [folder-explorer](https://github.com/d2-projects/folder-explorer) 进行二次开发，感谢 [FairyEver](https://github.com/FairyEver) 的创意和贡献！
+> 本项目基于 [folder-explorer](https://github.com/d2-projects/folder-explorer) 进行二次开发，感谢 [FairyEver](https://github.com/FairyEver) 的创意和贡献！
 
-Annotree 用于生成带注释的项目文件树形结构，大大方便技术文档的编写。
+**Annotree** 是一款用于生成带注释的项目文件树形结构的工具，大大方便技术文档的编写。
 
-<!-- ## 相关链接 -->
+> 这是我第一个正式的开源项目，如果对你有帮助，感谢 Star ⭐️ 和分享 ，这对我很重要，谢谢 💗！
+
+官方文档：https://annotree.com
+
+## 效果预览 🎉
+
+![demo](/resources/demo.gif)
+
+## 反馈渠道
+
+现在项目还处于 mvp（最简可行产品）阶段，如果你有任何意见或建议，欢迎通过以下方式与我联系：
+
+- 提交 [GitHub Issue](https://github.com/itchaox/annotree/issues)
+- 飞书群 [点击入群](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=e0aoc0d1-0df2-4cec-bb6f-97da6e754f5e)
+  > 我为何选择飞书群作为社区沟通渠道：
+  >
+  > - 我平时飞书用的较多，沟通方便。
+  > - 飞书话题群沟通问题，效率更高。
 
 <!-- 官方文档： -->
 
 ## 为何二次开发
 
-1.  [folder-explorer](https://github.com/d2-projects/folder-explorer) 部分功能我用不上，对我而言比较冗余，不符合自己的使用习惯。
-2.  [folder-explorer](https://github.com/d2-projects/folder-explorer) 每次配置导出文本后，都需要到处后才能看到配置后的效果，我希望有实时预览效果。
-3.  [folder-explorer](https://github.com/d2-projects/folder-explorer) 在编辑备注时，每次都需要右键打开编辑备注菜单，我个人使用起来觉得不是很方便。
+1.  folder-explorer 部分功能我用不上，对我而言比较冗余，不符合自己的使用习惯。
+2.  folder-explorer 每次配置导出文本后，都需要到处后才能看到配置后的效果，我希望有实时预览效果。
+3.  folder-explorer 在编辑备注时，每次都需要右键打开编辑备注菜单，我个人使用起来觉得不是很方便。
 
 ## 功能特性
 
-1.  实时预览效果，无需导出文本就能看到效果。
-2.  通过切换输入框方便编写注释。
-3.  支持忽略特定文件夹以及文件类型。
-4.  支持设置目录扫描深度。
-5.  支持导出后自动打开文件。
+1. ✨ 实时预览：无需导出文本，即可实时查看注释文件树的效果，让文档编写更加直观高效。
+2. 🖊️ 便捷注释：通过切换输入框轻松编写注释，避免繁琐的右键菜单操作，提高使用效率。
+3. 🚫 文件和文件夹忽略：支持忽略特定文件夹和文件类型，确保只展示你需要的文件结构，保持文件树的简洁。
+4. 📂 自动打开导出文件：导出文件后自动打开，无需手动查找文件，节省时间，让工作流程更加流畅。
+
+## 功能介绍
+
+### 扫描
+
+> 点击扫描按钮后打开文件选择器，选择需要扫描的文件夹，即可开始扫描。
+
+![20240713164331_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713164331_rec_.gif)
+
+### 全局配置
+
+#### 自动打开文件
+
+> 导出文件后自动打开。
+
+![](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713164440_rec_.gif)
+
+#### 忽略文件夹
+
+> 忽略不需要扫描的文件夹，避免性能损失甚至程序失去响应，比如：node_modules 文件夹，程序内部已自动忽略 node_modules 文件夹。
+
+![20240713164639_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713164639_rec_.gif)
+
+#### 忽略以 "." 开头的文件夹
+
+> 这类文件夹在 MacOS 和 Linux 上是默认隐藏的文件夹。
+
+![20240713170626_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713170626_rec_.gif)
+
+#### 只扫描文件夹
+
+> 忽略所有文件，只扫描文件夹。
+
+![20240713170250_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713170250_rec_.gif)
+
+#### 忽略以 "." 开头的文件
+
+> 这类文件在 MacOS 和 Linux 上是默认隐藏的文件。
+
+![20240713164849_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713164849_rec_.gif)
+
+#### 忽略文件类型
+
+> 在扫描一次后，会生成此次扫描后的所有文件类型，可以选择忽略不需要的文件类型，以提高扫描效率。
+
+![20240713164926_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713164926_rec_.gif)
+
+#### 扫描深度
+
+> 设置扫描目录的深度，0 为所有深度，每递增一个数字则代表扫描深度 +1。
+
+![20240713165112_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713165112_rec_.gif)
+
+#### 默认名称
+
+> 导出文本的默认名称配置。
+
+![20240713165204_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713165204_rec_.gif)
+
+### 预览区配置
+
+#### 注释格式化
+
+> 填充注释的格式
+
+![20240713165535_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713165535_rec_.gif)
+
+#### 桥梁最短字符数
+
+> 路径最长的地方，显示的桥梁字符数
+
+![20240713165623_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713165623_rec_.gif)
+
+#### 桥梁填充字符
+
+> 输入一个单字节填充字符，比如：\*，\#，\$，\-，\@，\_ 等。
+
+![20240713165710_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713165710_rec_.gif)
+
+#### 始终显示桥梁
+
+> 配置没有注释的地方是否显示桥梁。
+
+![20240713165800_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713165800_rec_.gif)
+
+### 导出
+
+> 设置好相关配置，编写好注释后，导出注释文件树形结构。
+
+![20240713171345_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713171345_rec_.gif)
+
+## 致谢
+
+1. 感谢 [electron-vite](https://github.com/alex8088/electron-vite) 提供的 electron 框架，大大提升我的开发效率。
+2. 感谢 [md](https://github.com/doocs/md) 提供给我的 README.md 文档思路。
+
+## 谁在使用
+
+> 如果你使用了本 Annotree 工具生成带注释的项目文件树形结构，并且希望在本项目 README 中展示你的项目，请到 [Discussions #2](https://github.com/itchaox/annotree/discussions/2) 留言。
+
+- [Annotree](https://github.com/itchaox/annotree)
