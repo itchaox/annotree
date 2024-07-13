@@ -10,6 +10,8 @@
 
 官方文档：https://annotree.com
 
+**软件最新版本下载地址，请访问 [Github Release](https://github.com/itchaox/annotree/releases)**
+
 ## 效果预览 🎉
 
 ![demo](/resources/demo.gif)
