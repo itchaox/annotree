@@ -1,4 +1,4 @@
-# <img src="/resources/icon.png" width="48" alt="Annotree"> Annotree 注释树
+# <img src="/resources/icon.png" width="48" alt="Annotree" style="vertical-align: middle"> Annotree 注释树
 
 ## 项目介绍
 
