@@ -4,7 +4,7 @@
 
 > 本项目基于 [folder-explorer](https://github.com/d2-projects/folder-explorer) 进行二次开发，感谢 [FairyEver](https://github.com/FairyEver) 的创意和贡献！
 
-**Annotree** 是一款用于生成带注释的项目文件树形结构的工具，大大方便技术文档的编写。
+**Annotree** 是一款生成带注释的目录树工具，大大方便技术文档的编写。
 
 > 这是我的第一个正式开源项目，如果对你有帮助，感谢 Star ⭐️ 和分享给你的朋友们 ，这对我很重要，谢谢 💗！
 
