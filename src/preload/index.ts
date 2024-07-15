@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 01:11
+ * @LastTime   : 2024-07-16 01:25
  * @desc       :
  */
 
@@ -197,15 +197,18 @@ function EXPORT_TREE_TEXT(data, params) {
   ipcRenderer.send('IPC_EXPORT', {
     name: `${nameReplace(params.defaultFileName)}.txt`,
     value: result.join('\n'),
-    openAfterExport: params.autoOpenFile
+    openAfterExport: params.autoOpenFile,
+    isEggshell: params?.isEggshell
     // openFolderAfterExport: params.autoOpenFolder
   })
 }
 
 // 导出后回调
 ipcRenderer.on('IPC_EXPORT_REPLY', (event, response) => {
-  // 导出后彩带
-  quickBurstConfetti()
+  if (response?.isEggshell) {
+    // 导出后彩带
+    quickBurstConfetti()
+  }
 })
 
 // 仅当启用上下文隔离时使用 `contextBridge` API 将 Electron API 暴露给渲染进程，否则直接添加到 DOM 全局对象。

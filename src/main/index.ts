@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 01:10
+ * @LastTime   : 2024-07-16 01:23
  * @desc       :
  */
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
@@ -86,7 +86,7 @@ app.whenReady().then(() => {
   /**
    * 渲染进程请求选择保存结果的目录
    */
-  ipcMain.on('IPC_EXPORT', async (event, { name, value, openAfterExport }) => {
+  ipcMain.on('IPC_EXPORT', async (event, { name, value, openAfterExport, isEggshell }) => {
     const window = BrowserWindow.getFocusedWindow()
     const result = await dialog.showSaveDialog(window as any, {
       defaultPath: name
@@ -104,7 +104,9 @@ app.whenReady().then(() => {
         })
       }
 
-      event.reply('IPC_EXPORT_REPLY')
+      event.reply('IPC_EXPORT_REPLY', {
+        isEggshell
+      })
     }
   })
 

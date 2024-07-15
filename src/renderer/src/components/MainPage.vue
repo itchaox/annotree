@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 01:02
+ * @LastTime   : 2024-07-16 01:21
  * @desc       :
 -->
 <script setup lang="ts">
@@ -111,7 +111,8 @@ function exportFile() {
     isRight: isRight.value,
     autoOpenFile: autoOpenFile.value,
     autoOpenFolder: autoOpenFolder.value,
-    defaultFileName: defaultFileName.value
+    defaultFileName: defaultFileName.value,
+    isEggshell: isEggshell.value
   }
   // ipc 通信需要序列化
   EXPORT_TREE_TEXT(JSON.stringify(treeData.value), JSON.stringify(params))
@@ -295,6 +296,9 @@ function selectEmoji(emoji) {
 
   copy()
 }
+
+// 导出后展示彩蛋
+const isEggshell = ref(true)
 </script>
 
 <template>
@@ -516,6 +520,15 @@ function selectEmoji(emoji) {
                     </el-tooltip>
                   </div>
                   <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">
+                    导出后展示彩带
+                    <el-tooltip effect="dark" content="导出成功后自动展示菜单" placement="top">
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
+                  <div class="tab-item-value"><el-switch v-model="isEggshell"></el-switch></div>
                 </div>
                 <!-- FIXME 不生效，暂时注释 -->
                 <!-- <div class="tab-item">
