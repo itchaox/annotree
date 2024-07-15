@@ -3,16 +3,20 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-15 12:02
+ * @LastTime   : 2024-07-15 23:28
  * @desc       :
 -->
 <script setup lang="ts">
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
+import { ElMessage } from 'element-plus'
 import { replace as elementReplace } from '../utils/replace.element.js'
 import { replace as noteReplace } from '../utils/replace.note.js'
+import data from 'emoji-mart-vue-fast/data/all.json'
+import 'emoji-mart-vue-fast/css/emoji-mart.css'
+import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
+const emojiIndex = ref(new EmojiIndex(data))
 
-import packageJson from '../../../../package.json'; // 根据你的文件结构调整路径
-
+import packageJson from '../../../../package.json' // 根据你的文件结构调整路径
 
 import { groupBy } from 'lodash'
 
@@ -261,10 +265,24 @@ const ignoreDotFolder = ref(false)
 
 // 默认名称
 const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
+
+const emojisOutput = ref('')
+
+const isShowEmoji = ref(false)
+
+// 更新 emoji
+function selectEmoji(emoji) {
+  emojisOutput.value = emoji.native
+
+  ElMessage({
+    message: `${emojisOutput.value} 复制成功！`,
+    type: 'success'
+  })
+}
 </script>
 
 <template>
-  <div class="main-page">
+  <div class="main-page" @click="isShowEmoji = false">
     <div class="operation">
       <div>
         <el-button type="primary" @click="scan">
@@ -281,7 +299,43 @@ const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
 
     <div class="content">
       <div class="left">
-        <h1>编辑区</h1>
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <h1>编辑区</h1>
+          <div style="position: relative">
+            <el-button type="warning" @click.stop="isShowEmoji = !isShowEmoji"
+              >🎉 选择表情</el-button
+            >
+            <Picker
+              @click.stop="isShowEmoji = true"
+              v-if="isShowEmoji"
+              style="position: absolute; top: 45px; right: 0; z-index: 2"
+              :data="emojiIndex"
+              set="google"
+              @select="selectEmoji"
+              :emojiSize="26"
+              :emojiTooltip="true"
+              :showPreview="false"
+              :i18n="{
+                search: '搜索（仅支持英文，如: 树 tree）',
+                notfound: '未找到表情符号',
+                categories: {
+                  search: '搜索结果',
+                  recent: '常用',
+                  smileys: '笑脸和表情',
+                  people: '人物和身体',
+                  nature: '动物和自然',
+                  foods: '食物和饮料',
+                  activity: '活动',
+                  places: '旅行和地点',
+                  objects: '物品',
+                  symbols: '符号',
+                  flags: '旗帜',
+                  custom: '自定义'
+                }
+              }"
+            />
+          </div>
+        </div>
 
         <recycle-scroller
           class="tree-scroller"
@@ -303,9 +357,6 @@ const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
               <!-- 扩展名 -->
               <pre v-if="item.ext">{{ item.ext }}</pre>
               <!-- 注释 -->
-              <!-- <pre v-if="item.note"> // {{ item.note }}</pre> -->
-
-              <!-- <input type="text" /> -->
               <el-input
                 style="margin-left: 5px; height: 20px; width: 120px"
                 v-model="item.note"
@@ -670,13 +721,10 @@ const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                     ，感谢 Star ⭐️
                   </div>
                 </div>
-                                <div class="tab-item">
+                <div class="tab-item">
                   <div class="tab-item-label">官方文档</div>
                   <div class="tab-item-value">
-                    <el-link
-                      type="primary"
-                      href="https://annotree.com"
-                      target="_blank"
+                    <el-link type="primary" href="https://annotree.com" target="_blank"
                       >⚡️ 点我查看</el-link
                     >
                   </div>
