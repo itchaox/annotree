@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-15 23:28
+ * @LastTime   : 2024-07-16 00:31
  * @desc       :
 -->
 <script setup lang="ts">
@@ -23,6 +23,25 @@ import { groupBy } from 'lodash'
 import width from 'string-width'
 
 import { ref, watch } from 'vue'
+import useClipboard from 'vue-clipboard3'
+
+const { toClipboard } = useClipboard()
+
+async function copy() {
+  try {
+    // 复制
+    await toClipboard(emojisOutput.value)
+    ElMessage({
+      message: `${emojisOutput.value} 复制成功！`,
+      type: 'success',
+      duration: 1500,
+      showClose: true
+    })
+    // 复制成功
+  } catch (e) {
+    // 复制失败
+  }
+}
 
 const treeData = ref(null)
 
@@ -274,10 +293,7 @@ const isShowEmoji = ref(false)
 function selectEmoji(emoji) {
   emojisOutput.value = emoji.native
 
-  ElMessage({
-    message: `${emojisOutput.value} 复制成功！`,
-    type: 'success'
-  })
+  copy()
 }
 </script>
 
