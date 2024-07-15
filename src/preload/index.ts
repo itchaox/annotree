@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-13 01:03
+ * @LastTime   : 2024-07-16 01:11
  * @desc       :
  */
 
@@ -21,6 +21,8 @@ import { replace as elementReplace } from '../renderer/src/utils/replace.element
 import { replace as noteReplace } from '../renderer/src/utils/replace.note.js'
 import { replace as nameReplace } from '../renderer/src/utils/replace.fileName.js'
 import { useTreeStoreHook } from '../renderer/src/store/modules/tree-store.ts'
+
+import { quickBurstConfetti } from '../renderer/src/utils/quickBurstConfetti.js'
 
 const treeStore = useTreeStoreHook()
 
@@ -199,6 +201,12 @@ function EXPORT_TREE_TEXT(data, params) {
     // openFolderAfterExport: params.autoOpenFolder
   })
 }
+
+// 导出后回调
+ipcRenderer.on('IPC_EXPORT_REPLY', (event, response) => {
+  // 导出后彩带
+  quickBurstConfetti()
+})
 
 // 仅当启用上下文隔离时使用 `contextBridge` API 将 Electron API 暴露给渲染进程，否则直接添加到 DOM 全局对象。
 if (process.contextIsolated) {

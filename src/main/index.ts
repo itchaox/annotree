@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 11:21
+ * @LastTime   : 2024-07-16 01:10
  * @desc       :
  */
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
@@ -86,12 +86,13 @@ app.whenReady().then(() => {
   /**
    * 渲染进程请求选择保存结果的目录
    */
-  ipcMain.on('IPC_EXPORT', async (_, { name, value, openAfterExport }) => {
+  ipcMain.on('IPC_EXPORT', async (event, { name, value, openAfterExport }) => {
     const window = BrowserWindow.getFocusedWindow()
     const result = await dialog.showSaveDialog(window as any, {
       defaultPath: name
     })
 
+    // 点击确定按钮
     if (result.canceled === false) {
       await fs.writeFileSync(result.filePath, new Uint8Array(Buffer.from(value)))
       if (openAfterExport) {
@@ -103,7 +104,7 @@ app.whenReady().then(() => {
         })
       }
 
-      // event.reply('IPC_EXPORT_REPLY')
+      event.reply('IPC_EXPORT_REPLY')
     }
   })
 
