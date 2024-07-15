@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-15 11:55
+ * @LastTime   : 2024-07-15 11:59
  * @desc       :
 -->
 <script setup lang="ts">
@@ -668,6 +668,17 @@ const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
                       >GitHub 地址</el-link
                     >
                     ，感谢 Star ⭐️
+                  </div>
+                </div>
+                                <div class="tab-item">
+                  <div class="tab-item-label">官方文档</div>
+                  <div class="tab-item-value">
+                    <el-link
+                      type="primary"
+                      href="https://annotree.com"
+                      target="_blank"
+                      >⚡️ 点我查看</el-link
+                    >
                   </div>
                 </div>
               </div>
