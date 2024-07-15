@@ -14,11 +14,17 @@ asarUnpack:
 win:
   icon: build/icon.ico
   executableName: Annotree
+  target:
+    - target: nsis
+      arch:
+        - x64
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  oneClick: false # 允许用户选择安装路径
+  allowToChangeInstallationDirectory: true # 允许用户更改安装路径
 mac:
   icon: build/icon.icns
   entitlementsInherit: build/entitlements.mac.plist

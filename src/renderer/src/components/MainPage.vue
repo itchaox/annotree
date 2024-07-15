@@ -3,13 +3,16 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-13 18:05
+ * @LastTime   : 2024-07-15 11:55
  * @desc       :
 -->
 <script setup lang="ts">
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
 import { replace as elementReplace } from '../utils/replace.element.js'
 import { replace as noteReplace } from '../utils/replace.note.js'
+
+import packageJson from '../../../../package.json'; // 根据你的文件结构调整路径
+
 
 import { groupBy } from 'lodash'
 
@@ -643,7 +646,7 @@ const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
               <div>
                 <div class="tab-item">
                   <div class="tab-item-label">当前版本</div>
-                  <div class="tab-item-value">v 0.1.2</div>
+                  <div class="tab-item-value">{{ packageJson.version }}</div>
                 </div>
                 <div class="tab-item">
                   <div class="tab-item-label">开发者</div>
