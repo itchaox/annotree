@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-15 11:59
+ * @LastTime   : 2024-07-15 12:02
  * @desc       :
 -->
 <script setup lang="ts">
@@ -646,7 +646,7 @@ const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
               <div>
                 <div class="tab-item">
                   <div class="tab-item-label">当前版本</div>
-                  <div class="tab-item-value">{{ packageJson.version }}</div>
+                  <div class="tab-item-value">v{{ packageJson.version }}</div>
                 </div>
                 <div class="tab-item">
                   <div class="tab-item-label">开发者</div>
