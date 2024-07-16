@@ -132,7 +132,9 @@
 
 ![20240713234122_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234122_rec_.gif)
 
-<iframe style="width:100%;height:auto;min-width:600px;min-height:400px;" src="https://star-history.com/embed?secret=#itchaox/annotree&Date" frameBorder="0"></iframe>
+## Star History Chart ⭐️
+
+[![Star History Chart](https://api.star-history.com/svg?repos=itchaox/annotree&type=Date)](https://star-history.com/#itchaox/annotree&Date)
 
 ## 致谢
 
