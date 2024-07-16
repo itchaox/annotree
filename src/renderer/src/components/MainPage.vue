@@ -51,6 +51,9 @@ const extList: any = ref([])
 // 忽略文件夹列表
 const folderList: any = ref([])
 
+// 文件加载解析 Loading
+const loading = ref(false)
+
 // 扫描
 async function scan() {
   const params = {
@@ -64,6 +67,7 @@ async function scan() {
 
   try {
     // 更新数据
+    loading.value = true
     const result = await IPC_FOLDER_SELECT(JSON.stringify(params))
     treeData.value = result
 
@@ -84,6 +88,8 @@ async function scan() {
     }, 0)
   } catch (error) {
     console.error('Scan failed:', error)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -356,7 +362,7 @@ function refreshNote() {
     </div>
     <el-divider />
 
-    <div class="content">
+    <div class="content" v-loading="loading" element-loading-text="数据加载中...">
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
           <h1>编辑区</h1>

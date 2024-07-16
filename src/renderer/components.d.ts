@@ -24,4 +24,7 @@ declare module 'vue' {
     MainPage: typeof import('./src/components/MainPage.vue')['default']
     Versions: typeof import('./src/components/Versions.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+  }
 }
