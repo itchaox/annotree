@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 09:15
+ * @LastTime   : 2024-07-16 14:17
  * @desc       :
 -->
 <script setup lang="ts">
@@ -426,6 +426,10 @@ function refreshNote() {
             </span>
             <!-- 文件信息 -->
             <span style="display: inline-flex; margin-left: 2px">
+              <!-- <img
+                src="https://fonts.gstatic.com/s/i/materialicons/file_present/v6/24px.svg"
+                alt=""
+              /> -->
               <!-- 文件名 -->
               <pre>{{ item.name }}</pre>
               <!-- 扩展名 -->
