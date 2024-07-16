@@ -12,6 +12,8 @@
 
 **软件最新版本下载地址，请访问 [Github Release](https://github.com/itchaox/annotree/releases)**
 
+> 项目愿景：做大做强，创造辉煌！打造全球范围内目录注释树的标准方案！
+
 ## 效果预览 🎉
 
 ![demo](/resources/demo.gif)
