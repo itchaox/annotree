@@ -132,6 +132,10 @@
 
 ![20240713234122_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234122_rec_.gif)
 
+## Star History Chart ⭐️
+
+[![Star History Chart](https://api.star-history.com/svg?repos=itchaox/annotree&type=Date)](https://star-history.com/#itchaox/annotree&Date)
+
 ## 致谢
 
 1. 感谢 [electron-vite](https://github.com/alex8088/electron-vite) 提供的 electron 框架，大大提升我的开发效率。
