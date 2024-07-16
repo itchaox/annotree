@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 20:52
+ * @LastTime   : 2024-07-17 01:08
  * @desc       :
 -->
 <script setup lang="ts">
@@ -22,7 +22,7 @@ import { groupBy } from 'lodash'
 
 import width from 'string-width'
 
-import { nextTick, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import useClipboard from 'vue-clipboard3'
 
 const { toClipboard } = useClipboard()
@@ -66,7 +66,9 @@ async function scan() {
     // 更新数据
     const result = await IPC_FOLDER_SELECT(JSON.stringify(params))
     treeData.value = result
-    console.log('🚀  treeData:', treeData)
+
+    folderNumber.value = treeData?.value.filter((item) => item?.isDirectory).length
+    fileNumber.value = treeData?.value.filter((item) => item?.isFile).length
 
     const grouped = groupBy(result, 'ext')
     extList.value = Object.keys(grouped)
@@ -339,6 +341,12 @@ function refreshNote() {
     showClose: true
   })
 }
+
+// 文件夹数量
+const folderNumber = ref(0)
+
+// 文件数量
+const fileNumber = ref(0)
 </script>
 
 <template>
@@ -829,6 +837,18 @@ function refreshNote() {
         </div>
       </el-dialog>
     </div>
+
+    <div class="info" v-if="treeData?.length > 0">
+      <div>总计 {{ treeData?.length }}</div>
+      <div v-if="folderNumber > 0">
+        <el-icon><FolderChecked /></el-icon>
+        <span>文件夹 {{ folderNumber }}</span>
+      </div>
+      <div v-if="fileNumber > 0">
+        <el-icon><DocumentChecked /></el-icon>
+        <span>文件 {{ fileNumber }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -900,6 +920,20 @@ function refreshNote() {
         .preview-label {
           width: 125px;
         }
+      }
+    }
+  }
+
+  .info {
+    display: flex;
+    margin-top: 14px;
+    font-size: 14px;
+    div {
+      margin-right: 20px;
+      display: flex;
+      align-items: center;
+      span {
+        margin-left: 3px;
       }
     }
   }
