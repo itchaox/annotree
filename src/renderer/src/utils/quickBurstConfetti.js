@@ -3,15 +3,13 @@
  * @Author     : itchaox
  * @Date       : 2024-07-16 01:02
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 01:05
+ * @LastTime   : 2024-07-16 08:04
  * @desc       :
  */
 import confetti from 'canvas-confetti'
 
 // 彩带
 export function quickBurstConfetti() {
-  console.log(222)
-
   // 左侧
   confetti({
     particleCount: 300,

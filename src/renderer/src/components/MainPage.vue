@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 01:21
+ * @LastTime   : 2024-07-16 08:09
  * @desc       :
 -->
 <script setup lang="ts">
@@ -22,7 +22,7 @@ import { groupBy } from 'lodash'
 
 import width from 'string-width'
 
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import useClipboard from 'vue-clipboard3'
 
 const { toClipboard } = useClipboard()
@@ -72,6 +72,16 @@ async function scan() {
 
     getPreviewData()
     getIgnoreFolderList()
+
+    // 聚焦第一个输入框
+    setTimeout(() => {
+      const inputs = document.getElementsByTagName('input')
+      if (inputs.length > 0) {
+        inputs[0].focus()
+      } else {
+        console.error('No input elements found on the page.')
+      }
+    }, 0)
   } catch (error) {
     console.error('Scan failed:', error)
   }
