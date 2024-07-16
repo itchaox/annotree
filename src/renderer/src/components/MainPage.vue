@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 08:09
+ * @LastTime   : 2024-07-16 09:15
  * @desc       :
 -->
 <script setup lang="ts">
@@ -43,7 +43,7 @@ async function copy() {
   }
 }
 
-const treeData = ref(null)
+const treeData = ref([])
 
 // 忽略文件类型列表
 const extList: any = ref([])
@@ -309,6 +309,35 @@ function selectEmoji(emoji) {
 
 // 导出后展示彩蛋
 const isEggshell = ref(true)
+
+// 重置数据
+function refreshData() {
+  treeData.value = []
+  previewList.value = []
+  ElMessage({
+    message: '重置数据成功！',
+    type: 'success',
+    duration: 1500,
+    showClose: true
+  })
+}
+
+// 重置注释
+function refreshNote() {
+  treeData.value = treeData.value.map((item) => ({
+    ...item,
+    note: ''
+  }))
+
+  getPreviewData()
+
+  ElMessage({
+    message: '重置注释成功！',
+    type: 'success',
+    duration: 1500,
+    showClose: true
+  })
+}
 </script>
 
 <template>
@@ -331,39 +360,54 @@ const isEggshell = ref(true)
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
           <h1>编辑区</h1>
-          <div style="position: relative">
-            <el-button type="warning" @click.stop="isShowEmoji = !isShowEmoji"
-              >🎉 选择表情</el-button
-            >
-            <Picker
-              @click.stop="isShowEmoji = true"
-              v-if="isShowEmoji"
-              style="position: absolute; top: 45px; right: 0; z-index: 2"
-              :data="emojiIndex"
-              set="google"
-              @select="selectEmoji"
-              :emojiSize="26"
-              :emojiTooltip="true"
-              :showPreview="false"
-              :i18n="{
-                search: '搜索（仅支持英文，如: 树 tree）',
-                notfound: '未找到表情符号',
-                categories: {
-                  search: '搜索结果',
-                  recent: '常用',
-                  smileys: '笑脸和表情',
-                  people: '人物和身体',
-                  nature: '动物和自然',
-                  foods: '食物和饮料',
-                  activity: '活动',
-                  places: '旅行和地点',
-                  objects: '物品',
-                  symbols: '符号',
-                  flags: '旗帜',
-                  custom: '自定义'
-                }
-              }"
-            />
+          <div class="edit-tools" v-if="treeData.length > 0">
+            <div class="edit-tool">
+              <el-button type="danger" @click="refreshData">
+                <el-icon><Refresh /></el-icon>
+                <span> 重置数据 </span>
+              </el-button>
+            </div>
+            <div class="edit-tool">
+              <el-button @click="refreshNote">
+                <el-icon><Refresh /></el-icon>
+                <span> 重置注释 </span>
+              </el-button>
+            </div>
+
+            <div style="position: relative">
+              <el-button type="warning" @click.stop="isShowEmoji = !isShowEmoji"
+                >🎉 选择表情</el-button
+              >
+              <Picker
+                @click.stop="isShowEmoji = true"
+                v-if="isShowEmoji"
+                style="position: absolute; top: 45px; right: 0; z-index: 2"
+                :data="emojiIndex"
+                set="google"
+                @select="selectEmoji"
+                :emojiSize="26"
+                :emojiTooltip="true"
+                :showPreview="false"
+                :i18n="{
+                  search: '搜索（仅支持英文，如: 树 tree）',
+                  notfound: '未找到表情符号',
+                  categories: {
+                    search: '搜索结果',
+                    recent: '常用',
+                    smileys: '笑脸和表情',
+                    people: '人物和身体',
+                    nature: '动物和自然',
+                    foods: '食物和饮料',
+                    activity: '活动',
+                    places: '旅行和地点',
+                    objects: '物品',
+                    symbols: '符号',
+                    flags: '旗帜',
+                    custom: '自定义'
+                  }
+                }"
+              />
+            </div>
           </div>
         </div>
 
@@ -801,6 +845,14 @@ const isEggshell = ref(true)
       margin-right: 20px;
       border-radius: 4px;
       border: 1px solid #dee2e6;
+
+      .edit-tools {
+        display: flex;
+        align-items: center;
+        .edit-tool {
+          margin-right: 15px;
+        }
+      }
     }
 
     .right {
