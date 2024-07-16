@@ -14,6 +14,8 @@
 
 ## 效果预览 🎉
 
+![PDF Icon](https://fonts.gstatic.com/s/i/materialicons/file_present/v6/24px.svg)
+
 ![demo](/resources/demo.gif)
 
 ## 反馈渠道
