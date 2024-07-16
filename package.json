@@ -40,6 +40,7 @@
     "emoji-mart-vue-fast": "^15.0.2",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.26.0",
+    "ignore": "^5.3.1",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
     "pinia": "^2.1.7",
