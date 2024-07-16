@@ -6,8 +6,9 @@
  * @LastTime   : 2024-07-06 16:33
  * @desc       :
  */
-import fs from 'fs'
+import fs, { readFileSync } from 'fs'
 import path from 'path'
+import ignore from 'ignore'
 
 /**
  * 返回传入目录的子文件数据
@@ -50,6 +51,18 @@ async function scan({
     return result
   }
 
+  // 读取 .gitignore 文件
+  const gitignorePath = path.join(rootFolderPath, '.gitignore')
+  let ig
+  try {
+    const gitignoreContent = readFileSync(gitignorePath, 'utf8')
+    ig = ignore().add(gitignoreContent)
+  } catch (err) {
+    // 如果没有找到 .gitignore 文件或者读取失败，创建一个空的 ignore 对象
+    ig = ignore()
+  }
+
+
   // FIXME 这里获取了文件夹的内容信息
 
   // 获得文件夹的内容
@@ -63,12 +76,16 @@ async function scan({
     const stat = await fs.statSync(filePathFull)
     const isFile = stat.isFile()
     const isDirectory = stat.isDirectory()
+    const relativePath = path.relative(rootFolderPath, filePathFull)
 
     // 是文件的话 如果设置不扫描文件 跳过这个文件
     if (isFile && ignoreFile) continue
 
     // 判断是否根据路径忽略
     if (isIgnoreByPath(filePath)) continue
+
+    // 判断是否根据 .gitignore 忽略
+    if (ig.ignores(relativePath)) continue
 
     // 解析路径
     const filePathParsed = path.parse(filePath)
