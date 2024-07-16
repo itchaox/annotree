@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 14:17
+ * @LastTime   : 2024-07-16 20:52
  * @desc       :
 -->
 <script setup lang="ts">
@@ -66,6 +66,7 @@ async function scan() {
     // 更新数据
     const result = await IPC_FOLDER_SELECT(JSON.stringify(params))
     treeData.value = result
+    console.log('🚀  treeData:', treeData)
 
     const grouped = groupBy(result, 'ext')
     extList.value = Object.keys(grouped)
@@ -355,6 +356,12 @@ function refreshNote() {
       </div>
     </div>
     <el-divider />
+
+    <!--
+    <div class="dir">
+      <div>扫描目录：</div>
+      <div></div>
+    </div> -->
 
     <div class="content">
       <div class="left">
@@ -832,6 +839,10 @@ function refreshNote() {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .dir {
+    margin-bottom: 14px;
   }
 
   .content {
