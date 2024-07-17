@@ -1,5 +1,5 @@
 <p align="center">
- <img src="/resources/icon.png" width="32" alt="Annotree" style="vertical-align: middle; margin-right: 15x;">
+ <img src="/resources/icon.png" width="32" alt="Annotree" style="width: 150px; height: 150px;">
 </p>
 
 <div align="center">
