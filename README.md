@@ -160,7 +160,6 @@ Annotree 注释树
 
 1. 感谢 [electron-vite](https://github.com/alex8088/electron-vite) 提供的 electron 框架，大大提升我的开发效率。
 2. 感谢 [md](https://github.com/doocs/md) 提供给我的 README.md 文档思路。
-3. 感谢 [electron-vite](https://github.com/alex8088/electron-vite) 提供给我的 README.md 文档思路。
 
 ## 谁在使用
 
