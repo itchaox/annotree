@@ -1,24 +1,12 @@
-<p align="center">
- <img src="/resources/icon.png" width="32" alt="Annotree" style="vertical-align: middle; margin-right: 15x;">
-</p>
-
-<div align="center">
-<h1>
-Annotree 注释树
-</h1>
-</div>
-
-<p align="center">一款生成带注释的目录树工具，大大方便技术文档的编写</p>
-
-<p align="center">
-<img src="https://img.shields.io/github/license/itchaox/annotree?color=blue" alt="license" />
-</p>
+# <img src="/resources/icon.png" width="32" alt="Annotree" style="vertical-align: middle; margin-right: 15x;"> <span style="vertical-align: middle" >Annotree 注释树</span>
 
 ## 项目介绍
 
 > 本项目基于 [folder-explorer](https://github.com/d2-projects/folder-explorer) 进行二次开发，感谢 [FairyEver](https://github.com/FairyEver) 的创意和贡献！
 
-这是我的第一个正式开源项目，如果对你有帮助，感谢 Star ⭐️ 和分享给你的朋友们 ，这对我很重要，谢谢 💗！
+**Annotree** 是一款生成带注释的目录树工具，大大方便技术文档的编写。
+
+> 这是我的第一个正式开源项目，如果对你有帮助，感谢 Star ⭐️ 和分享给你的朋友们 ，这对我很重要，谢谢 💗！
 
 官方文档：https://annotree.com
 
