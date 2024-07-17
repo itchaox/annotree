@@ -11,7 +11,8 @@ Annotree 注释树
 <p align="center">一款生成带注释的目录树工具，大大方便技术文档的编写</p>
 
 <p align="center">
-<img src="https://img.shields.io/github/license/itchaox/annotree?color=blue" alt="license" />
+<!-- <img src="https://img.shields.io/github/license/itchaox/annotree?color=blue" alt="license" /> -->
+
 </p>
 
 ## 项目介绍
