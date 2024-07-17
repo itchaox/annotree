@@ -26,8 +26,6 @@ Official documentation: https://annotree.com
 
 **For the latest version download, please visit [Github Release](https://github.com/itchaox/annotree/releases)**
 
-> Project vision: To grow and thrive, creating brilliance! To become the standard solution for directory annotation trees globally!
-
 > Tips：Our project currently only supports Chinese language, but will soon support English language as well. You can star⭐️ this project to stay updated with the latest information. Thank you for your interest💗!
 
 ## Preview 🎉
