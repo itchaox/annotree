@@ -18,10 +18,12 @@ Annotree
 
 ## Project Introduction
 
-> This project is based on folder-explorer and has been further developed. Thanks to FairyEver for the creativity and contribution!
+> This project is based on [folder-explorer](https://github.com/d2-projects/folder-explorer) and has been further developed. Thanks to [FairyEver](https://github.com/FairyEver) for the creativity and contribution!
 
 This is my first official open-source project. If it helps you, please Star ⭐️ and share it with your friends. It means a lot to me, thank you 💗!
+
 Official documentation: https://annotree.com
+
 **For the latest version download, please visit [Github Release](https://github.com/itchaox/annotree/releases)**
 
 > Project vision: To grow and thrive, creating brilliance! To become the standard solution for directory annotation trees globally!
