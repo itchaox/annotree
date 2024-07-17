@@ -11,8 +11,13 @@ Annotree 注释树
 <p align="center">一款生成带注释的目录树工具，大大方便技术文档的编写</p>
 
 <p align="center">
-<!-- <img src="https://img.shields.io/github/license/itchaox/annotree?color=blue" alt="license" /> -->
+ <img  src="https://img.shields.io/github/v/tag/itchaox/annotree?label=version&color=90d799" alt="version" style="margin-right: 2px"/>
+  <img src="https://img.shields.io/static/v1?label=license&message=MIT&color=blue" alt="license" />
+</p>
 
+<p align="center">
+<a href="/README.md">中文</a> |
+<a href="/README-EN.md">EN</a>
 </p>
 
 ## 项目介绍
@@ -25,7 +30,7 @@ Annotree 注释树
 
 **软件最新版本下载地址，请访问 [Github Release](https://github.com/itchaox/annotree/releases)**
 
-> 项目愿景：做大做强，创造辉煌！打造全球范围内目录注释树的标准方案！
+> 项目愿景：做大做强，创造辉煌！打造全球范围内目录注释树的标准解决方案！
 
 ## 效果预览 🎉
 
@@ -155,6 +160,7 @@ Annotree 注释树
 
 1. 感谢 [electron-vite](https://github.com/alex8088/electron-vite) 提供的 electron 框架，大大提升我的开发效率。
 2. 感谢 [md](https://github.com/doocs/md) 提供给我的 README.md 文档思路。
+3. 感谢 [electron-vite](https://github.com/alex8088/electron-vite) 提供给我的 README.md 文档思路。
 
 ## 谁在使用
 
