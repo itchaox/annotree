@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-16 01:25
+ * @LastTime   : 2024-07-17 08:10
  * @desc       :
  */
 
@@ -98,7 +98,10 @@ const api = {
           notes: []
         })
 
-        resolve(flatData)
+        resolve({
+          flatData,
+          folderPath: arg
+        })
 
         // 存储处理后的数据
 

@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-17 08:05
+ * @LastTime   : 2024-07-17 08:22
  * @desc       :
 -->
 <script setup lang="ts">
@@ -51,6 +51,9 @@ const extList: any = ref([])
 // 忽略文件夹列表
 const folderList: any = ref([])
 
+// 扫描目录
+const folderPath = ref('')
+
 // 扫描
 async function scan() {
   const params = {
@@ -64,7 +67,10 @@ async function scan() {
 
   try {
     // 更新数据
-    const result = await IPC_FOLDER_SELECT(JSON.stringify(params))
+    const allData = await IPC_FOLDER_SELECT(JSON.stringify(params))
+    const result = allData.flatData
+    folderPath.value = allData.folderPath
+
     treeData.value = result
 
     folderNumber.value = treeData?.value.filter((item) => item?.isDirectory).length
@@ -317,6 +323,7 @@ const isEggshell = ref(true)
 function refreshData() {
   treeData.value = []
   previewList.value = []
+  folderPath.value = ''
   ElMessage({
     message: '重置数据成功！',
     type: 'success',
@@ -363,13 +370,13 @@ const fileNumber = ref(0)
         </el-button>
       </div>
     </div>
+
+    <!-- <div class="divider"></div> -->
     <el-divider />
 
-    <!--
-    <div class="dir">
-      <div>扫描目录：</div>
-      <div></div>
-    </div> -->
+    <div class="dir" v-if="folderPath">
+      <div>扫描目录：{{ folderPath }}</div>
+    </div>
 
     <div class="content">
       <div class="left">
@@ -861,8 +868,14 @@ const fileNumber = ref(0)
     align-items: center;
   }
 
+  .divider {
+    margin: 15px 0;
+    border: 0.5px solid #dee2e6;
+  }
+
   .dir {
-    margin-bottom: 14px;
+    font-size: 14px;
+    margin-bottom: 10px;
   }
 
   .content {
