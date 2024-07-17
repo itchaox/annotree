@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-17 01:08
+ * @LastTime   : 2024-07-17 08:05
  * @desc       :
 -->
 <script setup lang="ts">
@@ -929,7 +929,7 @@ const fileNumber = ref(0)
     margin-top: 14px;
     font-size: 14px;
     div {
-      margin-right: 20px;
+      margin-right: 14px;
       display: flex;
       align-items: center;
       span {
