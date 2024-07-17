@@ -15,6 +15,7 @@ Annotree
 <a href="/README.md">中文</a> |
 <a href="/README-EN.md">EN</a>
 </p>
+
 ## Project Introduction
 
 > This project is based on folder-explorer and has been further developed. Thanks to FairyEver for the creativity and contribution!
@@ -25,6 +26,8 @@ Official documentation: https://annotree.com
 
 > Project vision: To grow and thrive, creating brilliance! To become the standard solution for directory annotation trees globally!
 
+> Tips：Our project currently only supports Chinese language, but will soon support English language as well. You can star⭐️ this project to stay updated with the latest information. Thank you for your interest💗!
+
 ## Preview 🎉
 
 ![demo](/resources/demo.gif)
@@ -34,7 +37,7 @@ Official documentation: https://annotree.com
 The project is currently in the MVP (Minimum Viable Product) stage. If you have any opinions or suggestions, please feel free to contact me through the following ways:
 
 - Submit a [GitHub Issue](https://github.com/itchaox/annotree/issues)
-- Feishu Group [点击入群](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=e0aoc0d1-0df2-4cec-bb6f-97da6e754f5e)
+- Feishu Group [Click to join the group](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=e0aoc0d1-0df2-4cec-bb6f-97da6e754f5e)
 
 > Why I chose Feishu group as the community communication channel:
 >
