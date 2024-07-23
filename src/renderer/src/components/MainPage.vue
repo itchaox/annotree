@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-23 09:36
+ * @LastTime   : 2024-07-23 10:10
  * @desc       :
 -->
 <script setup lang="ts">
@@ -485,6 +485,7 @@ function removeItem(item, index) {
                 alt=""
               /> -->
               <!-- 文件名 -->
+              <!-- <pre>{{ item?.isDirectory ? '📁' : '📄' }}{{ item.name }}</pre> -->
               <pre>{{ item.name }}</pre>
               <!-- 扩展名 -->
               <pre v-if="item.ext">{{ item.ext }}</pre>
