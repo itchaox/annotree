@@ -220,6 +220,13 @@ document.addEventListener('keydown', function (event) {
         event.preventDefault()
         if (event.shiftKey) {
           lastInput.focus()
+
+          if (scrollLeft.value) {
+            // 确保滚动条到底部
+            setTimeout(() => {
+              scrollLeft.value.scrollTop = scrollLeft.value.scrollHeight
+            }, 10)
+          }
         } else {
           firstInput.focus()
         }
