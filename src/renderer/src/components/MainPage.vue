@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-17 08:22
+ * @LastTime   : 2024-07-23 09:36
  * @desc       :
 -->
 <script setup lang="ts">
@@ -11,10 +11,14 @@ const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
 import { ElMessage } from 'element-plus'
 import { replace as elementReplace } from '../utils/replace.element.js'
 import { replace as noteReplace } from '../utils/replace.note.js'
+import translateFlat from '../utils/translate.flat.js'
 import data from 'emoji-mart-vue-fast/data/all.json'
+
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 const emojiIndex = ref(new EmojiIndex(data))
+
+import { set } from 'lodash'
 
 import packageJson from '../../../../package.json' // 根据你的文件结构调整路径
 
@@ -54,6 +58,9 @@ const folderList: any = ref([])
 // 扫描目录
 const folderPath = ref('')
 
+// 未拍平数组
+const noFlatData = ref([])
+
 // 扫描
 async function scan() {
   const params = {
@@ -69,6 +76,7 @@ async function scan() {
     // 更新数据
     const allData = await IPC_FOLDER_SELECT(JSON.stringify(params))
     const result = allData.flatData
+    noFlatData.value = allData?.noFlatData
     folderPath.value = allData.folderPath
 
     treeData.value = result
@@ -135,11 +143,6 @@ function exportFile() {
   }
   // ipc 通信需要序列化
   EXPORT_TREE_TEXT(JSON.stringify(treeData.value), JSON.stringify(params))
-}
-
-// 删除
-function deleteItem(index) {
-  console.log(index)
 }
 
 // 生成合适的桥梁
@@ -354,6 +357,35 @@ const folderNumber = ref(0)
 
 // 文件数量
 const fileNumber = ref(0)
+
+/**
+ * 根据 isShow 和 isShowElements 过滤数据
+ * @param {Array} elements 需要过滤的原数组
+ */
+function showFilter(els) {
+  return els
+    .filter((el) => el.isShow)
+    .map((el) => ({
+      ...el,
+      elements: el.isShowElements ? showFilter(el.elements) : []
+    }))
+}
+
+function removeItem(item, index) {
+  const data = set(noFlatData.value, `${item.dataPath}.isShow`, false)
+
+  const newData = translateFlat({
+    data: showFilter(data),
+    notes: []
+  })
+
+  // 找到之前的对象，因为以前有 note 数据
+  treeData.value = newData.map((i) => {
+    return treeData.value.find((j) => j.id === i.id)
+  })
+
+  getPreviewData()
+}
 </script>
 
 <template>
@@ -467,8 +499,10 @@ const fileNumber = ref(0)
                 @change="inputChange"
               ></el-input>
 
-              <!-- 暂时不做 -->
-              <!-- <el-button link type="danger" @click="deleteItem(index)">删除</el-button> -->
+              <!-- FIXME 实现基本的删除功能 -->
+              <!-- <el-button link type="danger" @click="removeItem(item, index)"
+                ><el-icon><Delete /></el-icon
+              ></el-button> -->
             </span>
           </div>
         </recycle-scroller>

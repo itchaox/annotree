@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-17 08:10
+ * @LastTime   : 2024-07-23 00:37
  * @desc       :
  */
 
@@ -99,6 +99,7 @@ const api = {
         })
 
         resolve({
+          noFlatData: data,
           flatData,
           folderPath: arg
         })
