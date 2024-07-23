@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-23 23:26
+ * @LastTime   : 2024-07-23 23:33
  * @desc       :
 -->
 <script setup lang="ts">
@@ -211,24 +211,37 @@ document.addEventListener('keydown', function (event) {
     const firstInput = inputs[0]
     const lastInput = inputs[inputs.length - 1]
     const activeElement = document.activeElement
-    const currentIndex = Array.prototype.indexOf.call(inputs, activeElement)
+
+    if (!inputs.length) return // 如果没有输入框，直接返回
+
+    // 检查当前焦点是否在输入框上
+    if (![...inputs].includes(activeElement)) {
+      event.preventDefault()
+      if (event.shiftKey) {
+        lastInput.focus()
+      } else {
+        firstInput.focus()
+      }
+      return
+    }
+
+    const currentIndex = Array.from(inputs).indexOf(activeElement)
 
     if (event.shiftKey) {
-      // 检查是否按下了 Shift 键
+      // Shift + Tab
+      event.preventDefault()
       if (activeElement === firstInput) {
-        event.preventDefault() // 阻止默认行为，避免切换到下一个元素
-        lastInput.focus() // 将焦点移到最后一个输入框
+        lastInput.focus() // 从第一个跳到最后一个
       } else {
-        event.preventDefault() // 阻止默认行为
-        inputs[currentIndex - 1].focus() // 将焦点移到上一个输入框
+        inputs[currentIndex - 1].focus() // 焦点移到上一个输入框
       }
     } else {
+      // Tab
+      event.preventDefault()
       if (activeElement === lastInput) {
-        event.preventDefault() // 阻止默认行为，避免切换到下一个元素
-        firstInput.focus() // 将焦点移到第一个输入框
+        firstInput.focus() // 从最后一个跳到第一个
       } else {
-        event.preventDefault() // 阻止默认行为
-        inputs[currentIndex + 1].focus() // 将焦点移到下一个输入框
+        inputs[currentIndex + 1].focus() // 焦点移到下一个输入框
       }
     }
   }
