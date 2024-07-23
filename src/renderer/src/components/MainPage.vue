@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-23 23:33
+ * @LastTime   : 2024-07-23 23:49
  * @desc       :
 -->
 <script setup lang="ts">
@@ -26,7 +26,7 @@ import { groupBy } from 'lodash'
 
 import width from 'string-width'
 
-import { ref, watch, watchEffect } from 'vue'
+import { nextTick, ref, watch, watchEffect } from 'vue'
 import useClipboard from 'vue-clipboard3'
 
 const { toClipboard } = useClipboard()
@@ -206,45 +206,54 @@ function getMaxWidth(result) {
 
 // tab 聚焦下一个输入框；shift + tab 聚焦上一个输入框；
 document.addEventListener('keydown', function (event) {
-  if (event.key === 'Tab') {
-    const inputs = document.querySelectorAll('input')
-    const firstInput = inputs[0]
-    const lastInput = inputs[inputs.length - 1]
-    const activeElement = document.activeElement
+  nextTick(() => {
+    if (event.key === 'Tab') {
+      const inputs = document.querySelectorAll('input')
+      const firstInput = inputs[0]
+      const lastInput = inputs[inputs.length - 1]
+      const activeElement = document.activeElement
 
-    if (!inputs.length) return // 如果没有输入框，直接返回
+      if (!inputs.length) return // 如果没有输入框，直接返回
 
-    // 检查当前焦点是否在输入框上
-    if (![...inputs].includes(activeElement)) {
-      event.preventDefault()
+      // 检查当前焦点是否在输入框上
+      if (![...inputs].includes(activeElement)) {
+        event.preventDefault()
+        if (event.shiftKey) {
+          lastInput.focus()
+        } else {
+          firstInput.focus()
+        }
+        return
+      }
+
+      const currentIndex = Array.from(inputs).indexOf(activeElement)
+
       if (event.shiftKey) {
-        lastInput.focus()
-      } else {
-        firstInput.focus()
-      }
-      return
-    }
+        // Shift + Tab
+        event.preventDefault()
+        if (activeElement === firstInput) {
+          lastInput.focus() // 从第一个跳到最后一个
 
-    const currentIndex = Array.from(inputs).indexOf(activeElement)
-
-    if (event.shiftKey) {
-      // Shift + Tab
-      event.preventDefault()
-      if (activeElement === firstInput) {
-        lastInput.focus() // 从第一个跳到最后一个
+          if (scrollLeft.value) {
+            // 确保滚动条到底部
+            setTimeout(() => {
+              scrollLeft.value.scrollTop = scrollLeft.value.scrollHeight
+            }, 10)
+          }
+        } else {
+          inputs[currentIndex - 1].focus() // 焦点移到上一个输入框
+        }
       } else {
-        inputs[currentIndex - 1].focus() // 焦点移到上一个输入框
-      }
-    } else {
-      // Tab
-      event.preventDefault()
-      if (activeElement === lastInput) {
-        firstInput.focus() // 从最后一个跳到第一个
-      } else {
-        inputs[currentIndex + 1].focus() // 焦点移到下一个输入框
+        // Tab
+        event.preventDefault()
+        if (activeElement === lastInput) {
+          firstInput.focus() // 从最后一个跳到第一个
+        } else {
+          inputs[currentIndex + 1].focus() // 焦点移到下一个输入框
+        }
       }
     }
-  }
+  })
 })
 
 // 预览数据
