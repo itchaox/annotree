@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-23 17:12
+ * @LastTime   : 2024-07-23 17:25
  * @desc       :
 -->
 <script setup lang="ts">
@@ -204,13 +204,32 @@ function getMaxWidth(result) {
   }
 }
 
+// tab 聚焦下一个输入框；shift + tab 聚焦上一个输入框；
 document.addEventListener('keydown', function (event) {
   if (event.key === 'Tab') {
-    const inputs = document.getElementsByTagName('input')
+    const inputs = document.querySelectorAll('input')
+    const firstInput = inputs[0]
     const lastInput = inputs[inputs.length - 1]
-    if (document.activeElement === lastInput) {
-      event.preventDefault() // 阻止默认行为，避免切换到下一个元素
-      inputs[0].focus() // 将焦点移到第一个输入框
+    const activeElement = document.activeElement
+    const currentIndex = Array.prototype.indexOf.call(inputs, activeElement)
+
+    if (event.shiftKey) {
+      // 检查是否按下了 Shift 键
+      if (activeElement === firstInput) {
+        event.preventDefault() // 阻止默认行为，避免切换到下一个元素
+        lastInput.focus() // 将焦点移到最后一个输入框
+      } else {
+        event.preventDefault() // 阻止默认行为
+        inputs[currentIndex - 1].focus() // 将焦点移到上一个输入框
+      }
+    } else {
+      if (activeElement === lastInput) {
+        event.preventDefault() // 阻止默认行为，避免切换到下一个元素
+        firstInput.focus() // 将焦点移到第一个输入框
+      } else {
+        event.preventDefault() // 阻止默认行为
+        inputs[currentIndex + 1].focus() // 将焦点移到下一个输入框
+      }
     }
   }
 })
