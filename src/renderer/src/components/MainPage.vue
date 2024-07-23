@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-23 10:10
+ * @LastTime   : 2024-07-23 17:12
  * @desc       :
 -->
 <script setup lang="ts">
@@ -386,6 +386,29 @@ function removeItem(item, index) {
 
   getPreviewData()
 }
+
+// 复制树
+async function copyTree() {
+  // 直接拿到处理后的tree
+  const result = previewList.value.map((item) => item?.value)
+
+  // 换行分割数组至字符串
+  const data = result.join('\n')
+
+  try {
+    // 复制
+    await toClipboard(data)
+    ElMessage({
+      message: `复制成功！`,
+      type: 'success',
+      duration: 1500,
+      showClose: true
+    })
+    // 复制成功
+  } catch (e) {
+    // 复制失败
+  }
+}
 </script>
 
 <template>
@@ -526,13 +549,16 @@ function removeItem(item, index) {
               <!-- <el-button type="warning" >预览配置</el-button> -->
             </div>
           </div>
-          <div>
-            <el-button v-if="previewList.length > 0" type="primary" @click="exportFile">
+          <div v-if="previewList.length > 0">
+            <el-button @click="copyTree" type="success">
+              <el-icon size="18"><CopyDocument /></el-icon>
+              <span>复制</span>
+            </el-button>
+
+            <el-button type="primary" @click="exportFile">
               <el-icon size="18"><Download /></el-icon>
               <span>导出</span>
             </el-button>
-            <!-- FIXME 暂时不做 -->
-            <!-- <el-button>复制</el-button> -->
           </div>
         </div>
         <!-- <recycle-scroller
