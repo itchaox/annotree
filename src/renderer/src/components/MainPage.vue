@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-23 17:25
+ * @LastTime   : 2024-07-23 23:26
  * @desc       :
 -->
 <script setup lang="ts">
@@ -26,7 +26,7 @@ import { groupBy } from 'lodash'
 
 import width from 'string-width'
 
-import { ref, watch } from 'vue'
+import { ref, watch, watchEffect } from 'vue'
 import useClipboard from 'vue-clipboard3'
 
 const { toClipboard } = useClipboard()
@@ -428,6 +428,33 @@ async function copyTree() {
     // 复制失败
   }
 }
+
+// 同步滚动
+const syncScroll = ref(true)
+
+const scrollLeft = ref(null)
+const scrollRight = ref(null)
+
+// 使用 isScrolling 标志来防止无限循环
+let isScrolling = false
+
+// 开启同步滚动后，先保证位置一致
+watchEffect(() => {
+  if (syncScroll.value && scrollLeft.value && scrollRight.value) {
+    scrollLeft.value.scrollTop = scrollRight.value.scrollTop
+    scrollLeft.value.scrollLeft = scrollRight.value.scrollLeft
+  }
+})
+
+// 处理同步滚动
+const handleScroll = (scrolledContainer, otherContainer) => {
+  if (!isScrolling && syncScroll.value) {
+    isScrolling = true
+    otherContainer.scrollTop = scrolledContainer.scrollTop
+    otherContainer.scrollLeft = scrolledContainer.scrollLeft
+    isScrolling = false
+  }
+}
 </script>
 
 <template>
@@ -445,13 +472,13 @@ async function copyTree() {
       </div>
     </div>
 
-    <!-- <div class="divider"></div> -->
     <el-divider />
 
     <div class="dir" v-if="folderPath">
       <div>扫描目录：{{ folderPath }}</div>
     </div>
 
+    <!-- 内容区 -->
     <div class="content">
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
@@ -507,48 +534,43 @@ async function copyTree() {
           </div>
         </div>
 
-        <recycle-scroller
-          class="tree-scroller"
-          :items="treeData"
-          :item-size="18"
-          key-field="id"
-          v-slot="{ item, index }"
-          v-if="treeData"
-        >
-          <div style="display: flex">
-            <!-- 树枝 -->
-            <span class="row-tree">
-              <pre>{{ item.tree }}</pre>
-            </span>
-            <!-- 文件信息 -->
-            <span style="display: inline-flex; margin-left: 2px">
-              <!-- <img
+        <div @scroll="handleScroll(scrollLeft, scrollRight)" ref="scrollLeft" class="tree-scroller">
+          <div v-for="item in treeData" :key="item.id">
+            <div style="display: flex">
+              <!-- 树枝 -->
+              <span class="row-tree">
+                <pre>{{ item.tree }}</pre>
+              </span>
+              <!-- 文件信息 -->
+              <span style="display: inline-flex; margin-left: 2px">
+                <!-- <img
                 src="https://fonts.gstatic.com/s/i/materialicons/file_present/v6/24px.svg"
                 alt=""
               /> -->
-              <!-- 文件名 -->
-              <!-- <pre>{{ item?.isDirectory ? '📁' : '📄' }}{{ item.name }}</pre> -->
-              <pre>{{ item.name }}</pre>
-              <!-- 扩展名 -->
-              <pre v-if="item.ext">{{ item.ext }}</pre>
-              <!-- 注释 -->
-              <el-input
-                style="margin-left: 5px; height: 20px; width: 120px"
-                v-model="item.note"
-                size="small"
-                placeholder="请输入注释"
-                clearable
-                :tabindex="index + 1"
-                @change="inputChange"
-              ></el-input>
+                <!-- 文件名 -->
+                <!-- <pre>{{ item?.isDirectory ? '📁' : '📄' }}{{ item.name }}</pre> -->
+                <pre>{{ item.name }}</pre>
+                <!-- 扩展名 -->
+                <pre v-if="item.ext">{{ item.ext }}</pre>
+                <!-- 注释 -->
+                <el-input
+                  style="margin-left: 5px; height: 20px; width: 120px"
+                  v-model="item.note"
+                  size="small"
+                  placeholder="请输入注释"
+                  clearable
+                  :tabindex="index + 1"
+                  @change="inputChange"
+                ></el-input>
 
-              <!-- FIXME 实现基本的删除功能 -->
-              <!-- <el-button link type="danger" @click="removeItem(item, index)"
+                <!-- FIXME 实现基本的删除功能 -->
+                <!-- <el-button link type="danger" @click="removeItem(item, index)"
                 ><el-icon><Delete /></el-icon
               ></el-button> -->
-            </span>
+              </span>
+            </div>
           </div>
-        </recycle-scroller>
+        </div>
       </div>
       <div class="right">
         <div style="display: flex; align-items: center; justify-content: space-between">
@@ -580,18 +602,12 @@ async function copyTree() {
             </el-button>
           </div>
         </div>
-        <!-- <recycle-scroller
-          class="tree-scroller"
-          :items="previewList"
-          :item-size="18"
-          key-field="id"
-          v-slot="{ item }"
-          v-if="previewList.length > 0"
-        >
-          <pre style="height: 18px; text-align: left">{{ item.value }}</pre>
-        </recycle-scroller> -->
 
-        <div class="tree-scroller">
+        <div
+          class="tree-scroller"
+          ref="scrollRight"
+          @scroll="handleScroll(scrollRight, scrollLeft)"
+        >
           <pre v-for="item in previewList" :key="item.id">{{ item.value }}</pre>
         </div>
       </div>
@@ -689,6 +705,15 @@ async function copyTree() {
                     </el-tooltip>
                   </div>
                   <div class="tab-item-value"><el-switch v-model="isEggshell"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">
+                    同步滚动
+                    <el-tooltip effect="dark" content="编辑区和预览区是否同步滚动" placement="top">
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
+                  <div class="tab-item-value"><el-switch v-model="syncScroll"></el-switch></div>
                 </div>
                 <!-- FIXME 不生效，暂时注释 -->
                 <!-- <div class="tab-item">
@@ -946,11 +971,6 @@ async function copyTree() {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .divider {
-    margin: 15px 0;
-    border: 0.5px solid #dee2e6;
   }
 
   .dir {
