@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-23 23:49
+ * @LastTime   : 2024-07-24 12:43
  * @desc       :
 -->
 <script setup lang="ts">
@@ -322,6 +322,22 @@ function inputChange() {
   getPreviewData()
 }
 
+let typingTimer: any = null
+let typingDelay = 100
+
+// 实现实时预览效果
+const handleInputChange = () => {
+  // 如果之前有定时器，清除它
+  if (typingTimer) {
+    clearTimeout(typingTimer)
+  }
+
+  // 设置新的定时器
+  typingTimer = setTimeout(() => {
+    getPreviewData()
+  }, typingDelay)
+}
+
 watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
   getPreviewData()
 })
@@ -564,7 +580,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
         </div>
 
         <div @scroll="handleScroll(scrollLeft, scrollRight)" ref="scrollLeft" class="tree-scroller">
-          <div v-for="item in treeData" :key="item.id">
+          <div v-for="(item, index) in treeData" :key="item.id">
             <div style="display: flex">
               <!-- 树枝 -->
               <span class="row-tree">
@@ -590,6 +606,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                   clearable
                   :tabindex="index + 1"
                   @change="inputChange"
+                  @input="handleInputChange"
                 ></el-input>
 
                 <!-- FIXME 实现基本的删除功能 -->
