@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-24 17:53
+ * @LastTime   : 2024-07-25 00:06
  * @desc       :
 -->
 <script setup lang="ts">
@@ -19,6 +19,7 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 const emojiIndex = ref(new EmojiIndex(data))
 
 import { set } from 'lodash'
+import { extList } from '../constants/constants.js'
 
 import packageJson from '../../../../package.json' // 根据你的文件结构调整路径
 
@@ -50,7 +51,7 @@ async function copy() {
 const treeData = ref([])
 
 // 忽略文件类型列表
-const extList: any = ref([])
+// const extList: any = ref([])
 
 // 忽略文件夹列表
 const folderList: any = ref([])
@@ -80,13 +81,13 @@ async function scan() {
     folderPath.value = allData.folderPath
 
     treeData.value = result
-    console.log('🚀  treeData.value:', treeData.value)
 
     folderNumber.value = treeData?.value.filter((item) => item?.isDirectory).length
     fileNumber.value = treeData?.value.filter((item) => item?.isFile).length
 
-    const grouped = groupBy(result, 'ext')
-    extList.value = Object.keys(grouped)
+    // const grouped = groupBy(result, 'ext')
+    // extList.value = Object.keys(grouped)
+    // console.log('🚀   extList.value:', extList.value)
 
     getPreviewData()
     getIgnoreFolderList()
@@ -894,7 +895,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                     忽略文件类型
                     <el-tooltip
                       effect="dark"
-                      content="在扫描一次后，会生成此次扫描后的所有文件类型，可以选择忽略不需要的文件类型，以提高扫描效率"
+                      content="可以选择忽略不需要的文件类型，以提高扫描效率"
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
@@ -908,14 +909,22 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                       style="width: 325px"
                       multiple
                       collapse-tags
+                      default-first-option
+                      allow-create
                       :max-collapse-tags="3"
                     >
-                      <el-option
-                        v-for="item in extList.filter((i) => i)"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                      />
+                      <el-option-group
+                        v-for="group in extList"
+                        :key="group.label"
+                        :label="group.label"
+                      >
+                        <el-option
+                          v-for="item in group.options"
+                          :key="item"
+                          :label="item"
+                          :value="item"
+                        />
+                      </el-option-group>
                     </el-select>
                   </div>
                 </div>
