@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-25 00:10
+ * @LastTime   : 2024-07-25 00:15
  * @desc       :
 -->
 <script setup lang="ts">
@@ -49,6 +49,7 @@ async function copy() {
 const treeData = ref([])
 
 // 忽略文件夹列表
+// const folderList: any = ref(['dist', 'build'])
 const folderList: any = ref([])
 
 // 扫描目录
@@ -112,7 +113,7 @@ function getIgnoreFolderList() {
   isFolderAndPush(treeData.value)
 
   let uniquePaths = [...new Set(result)]
-  folderList.value = uniquePaths
+  folderList.value = [...folderList.value, ...uniquePaths]
 }
 
 // 设置

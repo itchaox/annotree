@@ -4,8 +4,8 @@ export const extList = [
     // 常见编程语言和web开发文件
     label: '编程语言',
     options: [
-      // '.js',
-      // '.ts',
+      '.js',
+      '.ts',
       '.py',
       '.html',
       '.css',
