@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-25 00:15
+ * @LastTime   : 2024-07-25 00:30
  * @desc       :
 -->
 <script setup lang="ts">
@@ -77,6 +77,9 @@ async function scan() {
     folderPath.value = allData.folderPath
 
     treeData.value = result
+
+    // 初始化缓存
+    cacheNoteList.value = result.map((item) => ({ id: item?.id, note: null }))
 
     folderNumber.value = treeData?.value.filter((item) => item?.isDirectory).length
     fileNumber.value = treeData?.value.filter((item) => item?.isFile).length
@@ -312,7 +315,19 @@ const showBridge = ref(false)
 // 右侧对齐
 const isRight = ref(false)
 
-function inputChange() {
+function inputChange(item) {
+  //  缓存 note
+  cacheNoteList.value = cacheNoteList.value.map((i) => {
+    if (i?.id === item.id) {
+      return {
+        id: i?.id,
+        note: item.note
+      }
+    } else {
+      return i
+    }
+  })
+
   getPreviewData()
 }
 
@@ -452,6 +467,9 @@ function removeNode(item) {
   getPreviewData()
 }
 
+// 缓存 note 列表
+const cacheNoteList = ref([])
+
 // 折叠节点
 function foldNode(item) {
   const data = set(noFlatData.value, `${item.dataPath}.isShowElements`, !item.isShowElements)
@@ -465,14 +483,12 @@ function foldNode(item) {
   // 这里有问题，需要替换 tree
 
   treeData.value = newData.map((i) => {
-    let obj = treeData.value?.find((j) => j.id === i.id)
+    let obj = cacheNoteList.value?.find((j) => j?.id === i.id)
     return {
       ...i,
       note: obj?.note
     }
   })
-
-  console.log('🚀  treeData.value:', treeData.value)
 
   getPreviewData()
 }
@@ -641,7 +657,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                   placeholder="请输入注释"
                   clearable
                   :tabindex="index + 1"
-                  @change="inputChange"
+                  @change="inputChange(item)"
                   @input="handleInputChange"
                 ></el-input>
 
