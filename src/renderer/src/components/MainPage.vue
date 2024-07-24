@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-24 12:43
+ * @LastTime   : 2024-07-24 15:45
  * @desc       :
 -->
 <script setup lang="ts">
@@ -435,7 +435,8 @@ function showFilter(els) {
     }))
 }
 
-function removeItem(item, index) {
+// 删除节点
+function removeNode(item) {
   const data = set(noFlatData.value, `${item.dataPath}.isShow`, false)
 
   const newData = translateFlat({
@@ -444,8 +445,14 @@ function removeItem(item, index) {
   })
 
   // 找到之前的对象，因为以前有 note 数据
+  // 这里有问题，需要替换 tree
+
   treeData.value = newData.map((i) => {
-    return treeData.value.find((j) => j.id === i.id)
+    let obj = treeData.value.find((j) => j.id === i.id)
+    return {
+      ...obj,
+      tree: i.tree
+    }
   })
 
   getPreviewData()
@@ -609,10 +616,9 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                   @input="handleInputChange"
                 ></el-input>
 
-                <!-- FIXME 实现基本的删除功能 -->
-                <!-- <el-button link type="danger" @click="removeItem(item, index)"
-                ><el-icon><Delete /></el-icon
-              ></el-button> -->
+                <el-button link type="danger" @click="removeNode(item)"
+                  ><el-icon><Delete /></el-icon
+                ></el-button>
               </span>
             </div>
           </div>
