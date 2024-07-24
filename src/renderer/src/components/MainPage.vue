@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-25 00:06
+ * @LastTime   : 2024-07-25 00:10
  * @desc       :
 -->
 <script setup lang="ts">
@@ -22,8 +22,6 @@ import { set } from 'lodash'
 import { extList } from '../constants/constants.js'
 
 import packageJson from '../../../../package.json' // 根据你的文件结构调整路径
-
-import { groupBy } from 'lodash'
 
 import width from 'string-width'
 
@@ -49,9 +47,6 @@ async function copy() {
 }
 
 const treeData = ref([])
-
-// 忽略文件类型列表
-// const extList: any = ref([])
 
 // 忽略文件夹列表
 const folderList: any = ref([])
@@ -84,10 +79,6 @@ async function scan() {
 
     folderNumber.value = treeData?.value.filter((item) => item?.isDirectory).length
     fileNumber.value = treeData?.value.filter((item) => item?.isFile).length
-
-    // const grouped = groupBy(result, 'ext')
-    // extList.value = Object.keys(grouped)
-    // console.log('🚀   extList.value:', extList.value)
 
     getPreviewData()
     getIgnoreFolderList()

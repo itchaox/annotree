@@ -1,3 +1,4 @@
+// 忽略文件类型列表
 export const extList = [
   {
     // 常见编程语言和web开发文件
