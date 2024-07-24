@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-24 15:45
+ * @LastTime   : 2024-07-24 17:53
  * @desc       :
 -->
 <script setup lang="ts">
@@ -80,6 +80,7 @@ async function scan() {
     folderPath.value = allData.folderPath
 
     treeData.value = result
+    console.log('🚀  treeData.value:', treeData.value)
 
     folderNumber.value = treeData?.value.filter((item) => item?.isDirectory).length
     fileNumber.value = treeData?.value.filter((item) => item?.isFile).length
@@ -458,6 +459,31 @@ function removeNode(item) {
   getPreviewData()
 }
 
+// 折叠节点
+function foldNode(item) {
+  const data = set(noFlatData.value, `${item.dataPath}.isShowElements`, !item.isShowElements)
+
+  const newData = translateFlat({
+    data: showFilter(data),
+    notes: []
+  })
+
+  // 找到之前的对象，因为以前有 note 数据
+  // 这里有问题，需要替换 tree
+
+  treeData.value = newData.map((i) => {
+    let obj = treeData.value?.find((j) => j.id === i.id)
+    return {
+      ...i,
+      note: obj?.note
+    }
+  })
+
+  console.log('🚀  treeData.value:', treeData.value)
+
+  getPreviewData()
+}
+
 // 复制树
 async function copyTree() {
   // 直接拿到处理后的tree
@@ -589,6 +615,16 @@ const handleScroll = (scrolledContainer, otherContainer) => {
         <div @scroll="handleScroll(scrollLeft, scrollRight)" ref="scrollLeft" class="tree-scroller">
           <div v-for="(item, index) in treeData" :key="item.id">
             <div style="display: flex">
+              <div
+                class="folder-icon"
+                style="width: 15px"
+                v-if="item?.isDirectory"
+                @click="foldNode(item)"
+              >
+                <el-icon color="#00000090" v-if="item.isShowElements"><CaretBottom /></el-icon>
+                <el-icon color="#00000090" v-else><CaretRight /></el-icon>
+              </div>
+              <div v-else style="width: 15px"></div>
               <!-- 树枝 -->
               <span class="row-tree">
                 <pre>{{ item.tree }}</pre>
@@ -1074,6 +1110,16 @@ const handleScroll = (scrolledContainer, otherContainer) => {
     .tree-scroller {
       height: calc(100% - 100px);
       overflow: auto;
+    }
+
+    .folder-icon {
+      &:hover {
+        cursor: pointer;
+
+        .el-icon {
+          color: #5a9cf8;
+        }
+      }
     }
 
     .preview-config {
