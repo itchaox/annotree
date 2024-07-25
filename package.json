@@ -1,6 +1,6 @@
 {
   "name": "Annotree",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A tool designed to assist in generating annotated folder trees",
   "main": "./out/main/index.js",
   "author": "itchaox",
@@ -18,7 +18,8 @@
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win --config",
     "build:mac": "npm run build && electron-builder --mac --config",
-    "build:linux": "npm run build && electron-builder --linux"
+    "build:linux": "npm run build && electron-builder --linux",
+    "build:all": "npm run build && npm run build:mac && npm run build:win"
   },
   "dependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",

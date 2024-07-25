@@ -63,57 +63,39 @@ The project is currently in the MVP (Minimum Viable Product) stage. If you have 
 
 > After clicking the scan button, open the file selector, choose the folder you want to scan, and start scanning.
 
-![20240713233436_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713233436_rec_.gif)
-
 ## Global Configuration
 
 ### Automatically Open Files
 
 > Automatically open files after exporting.
 
-![20240713233511_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713233511_rec_.gif)
-
 ### Ignore Folders
 
 > Ignore folders that don't need to be scanned to avoid performance loss or even program unresponsiveness, such as the node_modules folder. The program automatically ignores the node_modules folder internally.
-
-![20240713233557_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713233557_rec_.gif)
 
 ### Ignore Folders Starting with "."
 
 > These folders are hidden by default on MacOS and Linux.
 
-![20240713235057_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713235057_rec_.gif)
-
 ### Scan Only Folders
 
 > Ignore all files and scan only folders.
-
-![20240713233700_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713233700_rec_.gif)
 
 ### Ignore Files Starting with "."
 
 > These files are hidden by default on MacOS and Linux.
 
-![20240713234828_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234828_rec_.gif)
-
 ### Ignore File Types
 
 > After scanning once, all file types from this scan will be generated. You can choose to ignore unnecessary file types to improve scanning efficiency.
-
-![20240713233809_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713233809_rec_.gif)
 
 ### Scanning Depth
 
 > Set the depth of directory scanning. 0 means all depths, each increment in number represents +1 scanning depth.
 
-![20240713233922_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713233922_rec_.gif)
-
 ### Default Name
 
 > Configure the default name for exported text.
-
-![20240713234030_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234030_rec_.gif)
 
 ## Preview Area Configuration
 
@@ -121,31 +103,21 @@ The project is currently in the MVP (Minimum Viable Product) stage. If you have 
 
 > Format for filling in annotations
 
-![20240713234450_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234450_rec_.gif)
-
 ### Minimum Bridge Characters
 
 > Number of bridge characters displayed at the longest path
-
-![20240713234351_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234351_rec_.gif)
 
 ### Bridge Fill Character
 
 > Enter a single-byte fill character, such as: \*, #, $, -, @, \_, etc.
 
-![20240713234259_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234259_rec_.gif)
-
 ### Always Show Bridge
 
 > Configure whether to display the bridge where there are no annotations.
 
-![20240713234200_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234200_rec_.gif)
-
 ## Export
 
 > After setting the relevant configurations and writing annotations, export the annotated file tree structure.
-
-![20240713234122_rec_.gif](https://itchao-1318613604.cos.ap-chengdu.myqcloud.com/20240713234122_rec_.gif)
 
 ## Star History Chart ⭐️
 
