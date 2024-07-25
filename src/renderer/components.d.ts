@@ -7,7 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    copy: typeof import('./src/components/MainPage copy.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDivider: typeof import('element-plus/es')['ElDivider']
@@ -24,7 +23,5 @@ declare module 'vue' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     MainPage: typeof import('./src/components/MainPage.vue')['default']
-    MainPageC: typeof import('./src/components/MainPage-c.vue')['default']
-    Versions: typeof import('./src/components/Versions.vue')['default']
   }
 }
