@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-25 10:54
+ * @LastTime   : 2024-07-25 16:18
  * @desc       :
 -->
 <script setup lang="ts">
@@ -137,8 +137,17 @@ function exportFile() {
     defaultFileName: defaultFileName.value,
     isEggshell: isEggshell.value
   }
+
+  // 临时的数组，增加文件夹和文件的图标显示
+  let _list = treeData.value
+  _list = treeData.value.map((item) => {
+    return {
+      ...item,
+      tree: item.tree + (showIcon.value ? (item?.isDirectory ? '📁 ' : '📄 ') : '')
+    }
+  })
   // ipc 通信需要序列化
-  EXPORT_TREE_TEXT(JSON.stringify(treeData.value), JSON.stringify(params))
+  EXPORT_TREE_TEXT(JSON.stringify(_list), JSON.stringify(params))
 }
 
 // 生成合适的桥梁
@@ -268,9 +277,12 @@ function getPreviewData() {
 
   // 第一步 转换 element 和 note
   result = result?.map((item) => {
-    const element = elementReplace('{tree}{name}{ext}', {
-      data: item
-    })
+    const element = elementReplace(
+      `{tree}${showIcon.value ? (item?.isDirectory ? '📁 ' : '📄 ') : ''}{name}{ext}`,
+      {
+        data: item
+      }
+    )
     const bridge = ''
 
     const note = item.note
@@ -278,7 +290,7 @@ function getPreviewData() {
           data: item
         })
       : ''
-    return { element, bridge, note }
+    return { element, bridge, note, type: item?.isFile ? 'file' : 'folder' }
   })
 
   const max = getMaxWidth(result)
@@ -346,7 +358,10 @@ const handleInputChange = () => {
   }, typingDelay)
 }
 
-watch([bridgeChar, minBridge, noteFormat, showBridge, isRight], () => {
+// 是否显示文件和文件夹的图标
+const showIcon = ref(true)
+
+watch([bridgeChar, minBridge, noteFormat, showBridge, isRight, showIcon], () => {
   getPreviewData()
 })
 
@@ -495,6 +510,8 @@ function foldNode(item) {
 // 复制树
 async function copyTree() {
   // 直接拿到处理后的tree
+
+  // 显示图标
   const result = previewList.value.map((item) => item?.value)
 
   // 换行分割数组至字符串
@@ -644,7 +661,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                 alt=""
               /> -->
                 <!-- 文件名 -->
-                <!-- <pre>{{ item?.isDirectory ? '📁' : '📄' }}{{ item.name }}</pre> -->
+                <pre>{{ showIcon ? (item?.isDirectory ? '📁 ' : '📄 ') : '' }}</pre>
                 <pre>{{ item.name }}</pre>
                 <!-- 扩展名 -->
                 <pre v-if="item.ext">{{ item.ext }}</pre>
@@ -810,6 +827,15 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                     </el-tooltip>
                   </div>
                   <div class="tab-item-value"><el-switch v-model="syncScroll"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">
+                    显示图标
+                    <el-tooltip effect="dark" content="是否显示文件夹和文件的图标" placement="top">
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
+                  <div class="tab-item-value"><el-switch v-model="showIcon"></el-switch></div>
                 </div>
                 <!-- FIXME 不生效，暂时注释 -->
                 <!-- <div class="tab-item">
