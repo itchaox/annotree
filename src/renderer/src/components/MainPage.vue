@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-25 00:30
+ * @LastTime   : 2024-07-25 10:54
  * @desc       :
 -->
 <script setup lang="ts">
@@ -49,7 +49,6 @@ async function copy() {
 const treeData = ref([])
 
 // 忽略文件夹列表
-// const folderList: any = ref(['dist', 'build'])
 const folderList: any = ref([])
 
 // 扫描目录
@@ -116,7 +115,7 @@ function getIgnoreFolderList() {
   isFolderAndPush(treeData.value)
 
   let uniquePaths = [...new Set(result)]
-  folderList.value = [...folderList.value, ...uniquePaths]
+  folderList.value = uniquePaths
 }
 
 // 设置
@@ -833,7 +832,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                     忽略文件夹
                     <el-tooltip
                       effect="dark"
-                      content="忽略不需要扫描的文件夹，避免性能损失甚至程序失去响应，比如：node_modules 文件夹，程序内部已自动忽略 node_modules 文件夹"
+                      content="忽略不需要扫描的文件夹，提高扫描效率。可新增需要过滤的文件夹，例如：macOS 下为 /build、/dist，Windows 下为 \build、\dist。"
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
@@ -848,6 +847,8 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                       collapse-tags
                       :max-collapse-tags="3"
                       filterable
+                      default-first-option
+                      allow-create
                     >
                       <el-option
                         v-for="item in folderList.filter((i) => i)"
@@ -903,7 +904,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                     忽略文件类型
                     <el-tooltip
                       effect="dark"
-                      content="可以选择忽略不需要的文件类型，以提高扫描效率"
+                      content="可以选择忽略不需要的文件类型，以提高扫描效率。可新增需要过滤的文件类型。"
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
