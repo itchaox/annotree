@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-28 00:51
+ * @LastTime   : 2024-07-28 00:58
  * @desc       :
 -->
 <script setup lang="ts">
@@ -222,6 +222,7 @@ async function scan() {
     // 读取缓存
     const annotreeNotes = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
 
+    // 读取缓存的 note
     treeData.value = treeData.value.map((item) => {
       for (const key in annotreeNotes) {
         const value = annotreeNotes[key]
