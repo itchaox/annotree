@@ -28,7 +28,7 @@ Official documentation: https://annotree.com
 
 ## Preview 🎉
 
-![demo](/resources/demo.gif)
+![demo](/resources/demo-en.gif)
 
 ## Feedback Channels
 
