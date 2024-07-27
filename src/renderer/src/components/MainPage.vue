@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-28 00:58
+ * @LastTime   : 2024-07-28 01:05
  * @desc       :
 -->
 <script setup lang="ts">
@@ -80,6 +80,16 @@ const syncScroll = ref(true)
 // 判断是否为中文
 function isChinese(languageCode) {
   return languageCode.toLowerCase().startsWith('zh')
+}
+
+// 清楚缓存的 note
+function clearNotes() {
+  const annotreeNotes = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
+  for (const item of treeData.value) {
+    delete annotreeNotes[item.id]
+  }
+
+  localStorage.setItem('annotree-notes', JSON.stringify(annotreeNotes))
 }
 
 // 语言列表
@@ -594,9 +604,12 @@ function selectEmoji(emoji) {
 
 // 重置数据
 function refreshData() {
+  clearNotes()
+
   treeData.value = []
   previewList.value = []
   folderPath.value = ''
+
   ElMessage({
     message: t('zhong-zhi-shu-ju-cheng-gong'),
     type: 'success',
@@ -611,6 +624,8 @@ function refreshNote() {
     ...item,
     note: ''
   }))
+
+  clearNotes()
 
   getPreviewData()
 
