@@ -3,11 +3,11 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-25 16:18
+ * @LastTime   : 2024-07-27 12:38
  * @desc       :
 -->
 <script setup lang="ts">
-const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT } = window.api as any
+const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage } = window.api as any
 import { ElMessage } from 'element-plus'
 import { replace as elementReplace } from '../utils/replace.element.js'
 import { replace as noteReplace } from '../utils/replace.note.js'
@@ -25,10 +25,93 @@ import packageJson from '../../../../package.json' // 根据你的文件结构�
 
 import width from 'string-width'
 
-import { nextTick, ref, watch, watchEffect } from 'vue'
+import { nextTick, onMounted, ref, watch, watchEffect } from 'vue'
 import useClipboard from 'vue-clipboard3'
 
 const { toClipboard } = useClipboard()
+
+// 全局配置
+const isCommon = ref(false)
+
+// 导出后自动打开文件
+const autoOpenFile = ref(true)
+
+// 导出文件后自动打开所在目录
+const autoOpenFolder = ref(false)
+
+// 忽略文件夹
+const ignoreFolderList = ref([])
+
+// 忽略文件
+const ignoreFileList = ref([])
+
+// 扫描深度
+const scanDeep = ref(0)
+
+// 只扫描文件夹
+const onlyScanFolder = ref(false)
+
+// 忽略以 . 开头的文件
+const ignoreDotFile = ref(false)
+
+//  忽略以 . 开头的文件夹
+const ignoreDotFolder = ref(false)
+
+// 默认名称
+const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
+
+const emojisOutput = ref('')
+
+const isShowEmoji = ref(false)
+
+// 导出后展示彩蛋
+const isEggshell = ref(true)
+
+// 同步滚动
+const syncScroll = ref(true)
+
+onMounted(() => {
+  loadLocalStorage()
+})
+
+// 加载本地存储的数据
+const loadLocalStorage = () => {
+  // 通用
+  const common = JSON.parse(localStorage.getItem('annotree-common'))
+  if (common) {
+    autoOpenFile.value = common.autoOpenFile ?? true
+    isEggshell.value = common.isEggshell ?? true
+    syncScroll.value = common.syncScroll ?? true
+    showIcon.value = common.showIcon ?? true
+  }
+
+  // 扫描
+  const scan = JSON.parse(localStorage.getItem('annotree-scan'))
+  if (scan) {
+    ;(ignoreDotFile.value = scan.ignoreDotFile ?? false),
+      (ignoreDotFolder.value = scan.ignoreDotFolder ?? false),
+      (onlyScanFolder.value = scan.onlyScanFolder ?? false),
+      (scanDeep.value = scan.scanDeep ?? 0),
+      (ignoreFolderList.value = scan.ignoreFolderList ?? []),
+      (ignoreFileList.value = scan.ignoreFileList ?? [])
+  }
+
+  // 导出
+  const exportConfig = JSON.parse(localStorage.getItem('annotree-exportConfig'))
+  if (exportConfig) {
+    defaultFileName.value =
+      exportConfig.defaultFileName ?? 'Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}'
+  }
+
+  // 预览区
+  const preview = JSON.parse(localStorage.getItem('annotree-preview'))
+  if (preview) {
+    bridgeChar.value = preview.bridgeChar ?? '─'
+    minBridge.value = preview.minBridge ?? 4
+    noteFormat.value = preview.noteFormat ?? ' // {note}'
+    showBridge.value = preview.showBridge ?? false
+  }
+}
 
 async function copy() {
   try {
@@ -361,43 +444,67 @@ const handleInputChange = () => {
 // 是否显示文件和文件夹的图标
 const showIcon = ref(true)
 
-watch([bridgeChar, minBridge, noteFormat, showBridge, isRight, showIcon], () => {
-  getPreviewData()
+// 全局配置-通用
+watch([autoOpenFile, isEggshell, syncScroll, showIcon], () => {
+  console.log('🚀  autoOpenFile:', autoOpenFile.value)
+  //  存储数据
+  localStorage.setItem(
+    'annotree-common',
+    JSON.stringify({
+      autoOpenFile: autoOpenFile.value,
+      isEggshell: isEggshell.value,
+      syncScroll: syncScroll.value,
+      showIcon: showIcon.value
+    })
+  )
 })
 
-// 全局配置
-const isCommon = ref(false)
+// 全局配置-扫描
+watch(
+  [ignoreDotFolder, ignoreDotFile, onlyScanFolder, scanDeep, ignoreFolderList, ignoreFileList],
+  () => {
+    //  存储数据
+    localStorage.setItem(
+      'annotree-scan',
+      JSON.stringify({
+        ignoreDotFile: ignoreDotFile.value,
+        ignoreDotFolder: ignoreDotFolder.value,
+        onlyScanFolder: onlyScanFolder.value,
+        scanDeep: scanDeep.value,
+        ignoreFolderList: ignoreFolderList.value,
+        ignoreFileList: ignoreFileList.value
+      })
+    )
+  }
+)
 
-// 导出后自动打开文件
-const autoOpenFile = ref(true)
+// 全局配置-导出文本
 
-// 导出文件后自动打开所在目录
-const autoOpenFolder = ref(false)
+watch([defaultFileName], () => {
+  //  存储数据
+  localStorage.setItem(
+    'annotree-exportConfig',
+    JSON.stringify({
+      defaultFileName: defaultFileName.value
+    })
+  )
+})
 
-// 忽略文件夹
-const ignoreFolderList = ref([])
+// 预览区配置
+watch([bridgeChar, minBridge, noteFormat, showBridge, isRight, showIcon], () => {
+  //  存储数据
+  localStorage.setItem(
+    'annotree-preview',
+    JSON.stringify({
+      bridgeChar: bridgeChar.value,
+      minBridge: minBridge.value,
+      noteFormat: noteFormat.value,
+      showBridge: showBridge.value
+    })
+  )
 
-// 忽略文件
-const ignoreFileList = ref([])
-
-// 扫描深度
-const scanDeep = ref(0)
-
-// 只扫描文件夹
-const onlyScanFolder = ref(false)
-
-// 忽略以 . 开头的文件
-const ignoreDotFile = ref(false)
-
-//  忽略以 . 开头的文件夹
-const ignoreDotFolder = ref(false)
-
-// 默认名称
-const defaultFileName = ref('Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}')
-
-const emojisOutput = ref('')
-
-const isShowEmoji = ref(false)
+  getPreviewData()
+})
 
 // 更新 emoji
 function selectEmoji(emoji) {
@@ -405,9 +512,6 @@ function selectEmoji(emoji) {
 
   copy()
 }
-
-// 导出后展示彩蛋
-const isEggshell = ref(true)
 
 // 重置数据
 function refreshData() {
@@ -531,9 +635,6 @@ async function copyTree() {
     // 复制失败
   }
 }
-
-// 同步滚动
-const syncScroll = ref(true)
 
 const scrollLeft = ref(null)
 const scrollRight = ref(null)

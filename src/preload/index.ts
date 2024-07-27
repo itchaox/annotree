@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-23 00:37
+ * @LastTime   : 2024-07-27 11:26
  * @desc       :
  */
 
@@ -58,7 +58,12 @@ const TREE_TEXT = {
 
 // 自定义 api 用于渲染
 const api = {
-  name: 'wangchao',
+  localStorage: {
+    setItem: (key, value) => window.localStorage.setItem(key, value),
+    getItem: (key) => window.localStorage.getItem(key),
+    removeItem: (key) => window.localStorage.removeItem(key),
+    clear: () => window.localStorage.clear()
+  },
   // 扫描函数
   IPC_FOLDER_SELECT: (params) => {
     const _params = JSON.parse(params)
