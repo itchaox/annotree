@@ -36,11 +36,6 @@ The project is currently in the MVP (Minimum Viable Product) stage. If you have 
 
 - Submit a [GitHub Issue](https://github.com/itchaox/annotree/issues)
 
-> Why I chose Feishu group as the community communication channel:
->
-> I use Feishu more often, which makes communication convenient.
-> Feishu topic groups are more efficient for discussing issues.
-
 ## Why Further Development
 
 1. Some features of folder-explorer were redundant for me and didn't fit my usage habits.
