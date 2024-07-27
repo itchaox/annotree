@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-27 23:10
+ * @LastTime   : 2024-07-28 00:51
  * @desc       :
 -->
 <script setup lang="ts">
@@ -219,6 +219,19 @@ async function scan() {
     folderNumber.value = treeData?.value.filter((item) => item?.isDirectory).length
     fileNumber.value = treeData?.value.filter((item) => item?.isFile).length
 
+    // 读取缓存
+    const annotreeNotes = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
+
+    treeData.value = treeData.value.map((item) => {
+      for (const key in annotreeNotes) {
+        const value = annotreeNotes[key]
+        if (item.id === key) {
+          item.note = value
+        }
+      }
+
+      return item
+    })
     getPreviewData()
     getIgnoreFolderList()
 
@@ -481,7 +494,7 @@ let typingTimer: any = null
 let typingDelay = 100
 
 // 实现实时预览效果
-const handleInputChange = () => {
+const handleInputChange = (item) => {
   // 如果之前有定时器，清除它
   if (typingTimer) {
     clearTimeout(typingTimer)
@@ -489,6 +502,19 @@ const handleInputChange = () => {
 
   // 设置新的定时器
   typingTimer = setTimeout(() => {
+    // 此处缓存 note
+    const obj = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
+    const id = item.id
+    const note = item.note
+
+    localStorage.setItem(
+      'annotree-notes',
+      JSON.stringify({
+        ...obj,
+        [id]: note
+      })
+    )
+
     getPreviewData()
   }, typingDelay)
 }
@@ -827,7 +853,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                   clearable
                   :tabindex="index + 1"
                   @change="inputChange(item)"
-                  @input="handleInputChange"
+                  @input="handleInputChange(item)"
                 ></el-input>
 
                 <el-button link type="danger" @click="removeNode(item)"
