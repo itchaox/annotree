@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-27 11:26
+ * @LastTime   : 2024-07-27 22:31
  * @desc       :
  */
 
@@ -64,6 +64,8 @@ const api = {
     removeItem: (key) => window.localStorage.removeItem(key),
     clear: () => window.localStorage.clear()
   },
+  // 获取系统语言
+  getSystemLanguage: () => ipcRenderer.invoke('get-system-language'),
   // 扫描函数
   IPC_FOLDER_SELECT: (params) => {
     const _params = JSON.parse(params)

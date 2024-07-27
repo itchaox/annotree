@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-17 08:08
+ * @LastTime   : 2024-07-27 22:34
  * @desc       :
  */
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
@@ -108,6 +108,10 @@ app.whenReady().then(() => {
         isEggshell
       })
     }
+  })
+
+  ipcMain.handle('get-system-language', () => {
+    return app.getLocale()
   })
 
   createWindow()

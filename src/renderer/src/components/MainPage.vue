@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-27 17:26
+ * @LastTime   : 2024-07-27 23:10
  * @desc       :
 -->
 <script setup lang="ts">
@@ -31,7 +31,7 @@ import { useI18n } from 'vue-i18n'
 
 import { i18n } from '../locales/i18n.js'
 
-const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage } = window.api as any
+const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage, getSystemLanguage } = window.api as any
 
 const { t } = useI18n()
 
@@ -77,8 +77,17 @@ const isEggshell = ref(true)
 // 同步滚动
 const syncScroll = ref(true)
 
+// 判断是否为中文
+function isChinese(languageCode) {
+  return languageCode.toLowerCase().startsWith('zh')
+}
+
 // 语言列表
 const languageList = ref([
+  // {
+  //   id: 'system',
+  //   name: t('gen-sui-xi-tong')
+  // },
   {
     id: 'en',
     name: 'English'
@@ -90,15 +99,31 @@ const languageList = ref([
 ])
 
 // 语言
-const languageId = ref('en')
+const languageId = ref('system')
 
-onMounted(() => {
+onMounted(async () => {
   loadLocalStorage()
+
+  // 切换至系统语言
+  let systemLanguage
+  if (languageId.value === 'system') {
+    systemLanguage = isChinese(await getSystemLanguage()) ? 'zh' : 'en'
+    languageId.value = systemLanguage
+    i18n.global.locale = systemLanguage
+  }
 })
 
 // 切换语言
-watch([languageId], () => {
-  i18n.global.locale = languageId.value
+watch([languageId], async () => {
+  // 切换至系统语言
+  let systemLanguage
+  if (languageId.value === 'system') {
+    systemLanguage = isChinese(await getSystemLanguage()) ? 'zh' : 'en'
+    languageId.value = systemLanguage
+    i18n.global.locale = systemLanguage
+  } else {
+    i18n.global.locale = languageId.value
+  }
 })
 
 // 加载本地存储的数据
@@ -106,7 +131,7 @@ const loadLocalStorage = () => {
   // 通用
   const common = JSON.parse(localStorage.getItem('annotree-common'))
   if (common) {
-    languageId.value = common.languageId ?? 'en'
+    languageId.value = common.languageId ?? 'system'
     autoOpenFile.value = common.autoOpenFile ?? true
     isEggshell.value = common.isEggshell ?? true
     syncScroll.value = common.syncScroll ?? true
