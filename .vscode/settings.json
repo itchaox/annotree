@@ -7,5 +7,12 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "i18n-ally.localesPaths": ["locales", "src/renderer/src/locales"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.extract.ignoredByFiles": {
+    "src/renderer/src/components/MainPage.vue": [
+      "\n                    开源\n\n                    "
+    ]
   }
 }

@@ -3,11 +3,10 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-27 12:38
+ * @LastTime   : 2024-07-27 17:26
  * @desc       :
 -->
 <script setup lang="ts">
-const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage } = window.api as any
 import { ElMessage } from 'element-plus'
 import { replace as elementReplace } from '../utils/replace.element.js'
 import { replace as noteReplace } from '../utils/replace.note.js'
@@ -21,12 +20,20 @@ const emojiIndex = ref(new EmojiIndex(data))
 import { set } from 'lodash'
 import { extList } from '../constants/constants.js'
 
-import packageJson from '../../../../package.json' // 根据你的文件结构调整路径
+import packageJson from '../../../../package.json'
 
 import width from 'string-width'
 
 import { nextTick, onMounted, ref, watch, watchEffect } from 'vue'
 import useClipboard from 'vue-clipboard3'
+
+import { useI18n } from 'vue-i18n'
+
+import { i18n } from '../locales/i18n.js'
+
+const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage } = window.api as any
+
+const { t } = useI18n()
 
 const { toClipboard } = useClipboard()
 
@@ -70,8 +77,28 @@ const isEggshell = ref(true)
 // 同步滚动
 const syncScroll = ref(true)
 
+// 语言列表
+const languageList = ref([
+  {
+    id: 'en',
+    name: 'English'
+  },
+  {
+    id: 'zh',
+    name: '简体中文'
+  }
+])
+
+// 语言
+const languageId = ref('en')
+
 onMounted(() => {
   loadLocalStorage()
+})
+
+// 切换语言
+watch([languageId], () => {
+  i18n.global.locale = languageId.value
 })
 
 // 加载本地存储的数据
@@ -79,6 +106,7 @@ const loadLocalStorage = () => {
   // 通用
   const common = JSON.parse(localStorage.getItem('annotree-common'))
   if (common) {
+    languageId.value = common.languageId ?? 'en'
     autoOpenFile.value = common.autoOpenFile ?? true
     isEggshell.value = common.isEggshell ?? true
     syncScroll.value = common.syncScroll ?? true
@@ -118,7 +146,7 @@ async function copy() {
     // 复制
     await toClipboard(emojisOutput.value)
     ElMessage({
-      message: `${emojisOutput.value} 复制成功！`,
+      message: `${emojisOutput.value} ${t('copySuccess')}`,
       type: 'success',
       duration: 1500,
       showClose: true
@@ -203,7 +231,6 @@ function getIgnoreFolderList() {
 
 // 设置
 function setCommon() {
-  // 设置弄成一个弹窗操作
   isCommon.value = true
 }
 
@@ -445,8 +472,7 @@ const handleInputChange = () => {
 const showIcon = ref(true)
 
 // 全局配置-通用
-watch([autoOpenFile, isEggshell, syncScroll, showIcon], () => {
-  console.log('🚀  autoOpenFile:', autoOpenFile.value)
+watch([autoOpenFile, isEggshell, syncScroll, showIcon, languageId], () => {
   //  存储数据
   localStorage.setItem(
     'annotree-common',
@@ -454,7 +480,8 @@ watch([autoOpenFile, isEggshell, syncScroll, showIcon], () => {
       autoOpenFile: autoOpenFile.value,
       isEggshell: isEggshell.value,
       syncScroll: syncScroll.value,
-      showIcon: showIcon.value
+      showIcon: showIcon.value,
+      languageId: languageId.value
     })
   )
 })
@@ -519,7 +546,7 @@ function refreshData() {
   previewList.value = []
   folderPath.value = ''
   ElMessage({
-    message: '重置数据成功！',
+    message: t('zhong-zhi-shu-ju-cheng-gong'),
     type: 'success',
     duration: 1500,
     showClose: true
@@ -536,7 +563,7 @@ function refreshNote() {
   getPreviewData()
 
   ElMessage({
-    message: '重置注释成功！',
+    message: t('zhong-zhi-zhu-shi-cheng-gong'),
     type: 'success',
     duration: 1500,
     showClose: true
@@ -625,7 +652,7 @@ async function copyTree() {
     // 复制
     await toClipboard(data)
     ElMessage({
-      message: `复制成功！`,
+      message: t('copySuccess'),
       type: 'success',
       duration: 1500,
       showClose: true
@@ -667,11 +694,11 @@ const handleScroll = (scrolledContainer, otherContainer) => {
       <div>
         <el-button type="primary" @click="scan">
           <el-icon><Search /></el-icon>
-          <span> 扫描 </span>
+          <span> {{ $t('sao-miao') }} </span>
         </el-button>
         <el-button type="warning" @click="setCommon">
           <el-icon size="16"><Setting /></el-icon>
-          <span> 全局配置 </span>
+          <span> {{ $t('quan-ju-pei-zhi') }} </span>
         </el-button>
       </div>
     </div>
@@ -679,31 +706,31 @@ const handleScroll = (scrolledContainer, otherContainer) => {
     <el-divider />
 
     <div class="dir" v-if="folderPath">
-      <div>扫描目录：{{ folderPath }}</div>
+      <div>{{ $t('sco-miao-mu-lu') }}：{{ folderPath }}</div>
     </div>
 
     <!-- 内容区 -->
     <div class="content">
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <h1>编辑区</h1>
+          <h1>{{ $t('bian-ji-qu') }}</h1>
           <div class="edit-tools" v-if="treeData.length > 0">
             <div class="edit-tool">
               <el-button type="danger" @click="refreshData">
                 <el-icon><Refresh /></el-icon>
-                <span> 重置数据 </span>
+                <span> {{ $t('zhong-zhi-shu-ju') }} </span>
               </el-button>
             </div>
             <div class="edit-tool">
               <el-button @click="refreshNote">
                 <el-icon><Refresh /></el-icon>
-                <span> 重置注释 </span>
+                <span> {{ $t('zhong-zhi-zhu-shi') }} </span>
               </el-button>
             </div>
 
             <div style="position: relative">
               <el-button type="warning" @click.stop="isShowEmoji = !isShowEmoji"
-                >🎉 选择表情</el-button
+                >🎉 {{ $t('xuan-ze-biao-qing') }}</el-button
               >
               <Picker
                 @click.stop="isShowEmoji = true"
@@ -716,21 +743,21 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                 :emojiTooltip="true"
                 :showPreview="false"
                 :i18n="{
-                  search: '搜索（仅支持英文，如: 树 tree）',
-                  notfound: '未找到表情符号',
+                  search: t('p1'),
+                  notfound: t('p2'),
                   categories: {
-                    search: '搜索结果',
-                    recent: '常用',
-                    smileys: '笑脸和表情',
-                    people: '人物和身体',
-                    nature: '动物和自然',
-                    foods: '食物和饮料',
-                    activity: '活动',
-                    places: '旅行和地点',
-                    objects: '物品',
-                    symbols: '符号',
-                    flags: '旗帜',
-                    custom: '自定义'
+                    search: t('p3'),
+                    recent: t('p4'),
+                    smileys: t('p5'),
+                    people: t('p6'),
+                    nature: t('p7'),
+                    foods: t('p8'),
+                    activity: t('p9'),
+                    places: t('p10'),
+                    objects: t('p11'),
+                    symbols: t('p12'),
+                    flags: t('p13'),
+                    custom: t('p14')
                   }
                 }"
               />
@@ -771,7 +798,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                   style="margin-left: 5px; height: 20px; width: 120px"
                   v-model="item.note"
                   size="small"
-                  placeholder="请输入注释"
+                  :placeholder="$t('qing-shu-ru-zhu-shi')"
                   clearable
                   :tabindex="index + 1"
                   @change="inputChange(item)"
@@ -789,30 +816,26 @@ const handleScroll = (scrolledContainer, otherContainer) => {
       <div class="right">
         <div style="display: flex; align-items: center; justify-content: space-between">
           <div style="display: flex; align-items: center">
-            <h1>预览区</h1>
+            <h1>{{ $t('yu-lan-qu') }}</h1>
             <el-icon
               class="tools-icon"
               style="margin-left: 2px"
               size="26"
               color="#5e89fb"
               @click="isPreview = true"
-              title="预览区配置"
+              :title="$t('yu-lan-qu-pei-zhi')"
               ><Tools
             /></el-icon>
-
-            <div style="margin-left: 5px">
-              <!-- <el-button type="warning" >预览配置</el-button> -->
-            </div>
           </div>
           <div v-if="previewList.length > 0">
             <el-button @click="copyTree" type="success">
               <el-icon size="18"><CopyDocument /></el-icon>
-              <span>复制</span>
+              <span>{{ $t('fu-zhi') }}</span>
             </el-button>
 
             <el-button type="primary" @click="exportFile">
               <el-icon size="18"><Download /></el-icon>
-              <span>导出</span>
+              <span>{{ $t('dao-chu') }}</span>
             </el-button>
           </div>
         </div>
@@ -829,63 +852,55 @@ const handleScroll = (scrolledContainer, otherContainer) => {
       <!-- 预览配置 -->
       <el-drawer v-model="isPreview" direction="ltr" :modal="true" @close="isPreview = false">
         <template #header>
-          <h4>预览配置</h4>
+          <h4>{{ $t('yu-lan-pei-zhi') }}</h4>
         </template>
         <template #default>
           <div class="preview-config">
             <div class="preview-item">
-              <div class="preview-label">注释格式化</div>
+              <div class="preview-label">{{ $t('zhu-shi-ge-shi-hua') }}</div>
               <div class="preview-value">
-                <el-input v-model="noteFormat" placeholder="请输入格式化字符串"></el-input>
+                <el-input
+                  v-model="noteFormat"
+                  :placeholder="$t('qing-shu-ru-ge-shi-hua-zi-fu-chuan')"
+                ></el-input>
               </div>
             </div>
 
             <div class="preview-item">
-              <div class="preview-label">桥梁最短字符数</div>
+              <div class="preview-label">{{ $t('qiao-liang-zui-duan-zi-fu-shu') }}</div>
               <div class="preview-value">
                 <el-input-number
                   v-model="minBridge"
-                  placeholder="请输入桥梁最短字符数"
+                  :placeholder="$t('qing-shu-ru-qiao-liang-zui-duan-zi-fu-shu')"
                   :min="0"
                 ></el-input-number>
               </div>
             </div>
 
             <div class="preview-item">
-              <div class="preview-label">桥梁填充字符</div>
+              <div class="preview-label">{{ $t('qiao-liang-tian-chong-zi-fu') }}</div>
               <div class="preview-value">
-                <el-input v-model="bridgeChar" placeholder="请输入单字节填充字符"></el-input>
+                <el-input
+                  v-model="bridgeChar"
+                  :placeholder="$t('qing-shu-ru-dan-zi-jie-tian-chong-zi-fu')"
+                ></el-input>
               </div>
             </div>
 
             <div class="preview-item">
-              <div class="preview-label">始终显示桥梁</div>
+              <div class="preview-label">{{ $t('shi-zhong-xian-shi-qiao-liang') }}</div>
               <div class="preview-value">
                 <el-switch size="large" v-model="showBridge"></el-switch>
               </div>
             </div>
-
-            <!-- FIXME 暂时注释 -->
-            <!-- <div class="preview-item">
-              <div class="preview-label">右侧对齐</div>
-              <div class="preview-value">
-                <el-switch size="large" v-model="isRight"></el-switch>
-              </div>
-            </div> -->
           </div>
         </template>
-        <!-- <template #footer>
-          <div style="flex: auto">
-            <el-button @click="cancelPreview">取消</el-button>
-            <el-button type="primary" @click="confirmPreview">保存</el-button>
-          </div>
-        </template> -->
       </el-drawer>
 
       <!-- 全局配置 -->
       <el-dialog
         v-model="isCommon"
-        title="全局配置"
+        :title="$t('quan-ju-pei-zhi')"
         width="40vw"
         :close-on-click-modal="true"
         :close-on-press-escape="true"
@@ -898,14 +913,44 @@ const handleScroll = (scrolledContainer, otherContainer) => {
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><house /></el-icon>
-                  <span>通用</span>
+                  <span>{{ $t('tong-yong') }}</span>
                 </span>
               </template>
               <div>
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    自动打开文件
-                    <el-tooltip effect="dark" content="导出文件后自动打开" placement="top">
+                    {{ $t('yu-yan') }}
+                    <el-tooltip
+                      effect="dark"
+                      :content="$t('pei-zhi-ruan-jian-xian-shi-yu-yan')"
+                      placement="top"
+                    >
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
+                  <div class="tab-item-value">
+                    <el-select
+                      v-model="languageId"
+                      :placeholder="$t('qing-xuan-ze-yu-yan')"
+                      style="width: 110px"
+                    >
+                      <el-option
+                        v-for="item in languageList"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                      ></el-option>
+                    </el-select>
+                  </div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">
+                    {{ $t('zi-dong-da-kai-wen-jian') }}
+                    <el-tooltip
+                      effect="dark"
+                      :content="$t('dao-chu-wen-jian-hou-zi-dong-da-kai')"
+                      placement="top"
+                    >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
                     </el-tooltip>
                   </div>
@@ -913,8 +958,12 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                 </div>
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    导出后展示彩带
-                    <el-tooltip effect="dark" content="导出成功后自动展示菜单" placement="top">
+                    {{ $t('dao-chu-hou-zhan-shi-cai-dai') }}
+                    <el-tooltip
+                      effect="dark"
+                      :content="$t('dao-chu-cheng-gong-hou-zi-dong-zhan-shi-cai-dan')"
+                      placement="top"
+                    >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
                     </el-tooltip>
                   </div>
@@ -922,8 +971,12 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                 </div>
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    同步滚动
-                    <el-tooltip effect="dark" content="编辑区和预览区是否同步滚动" placement="top">
+                    {{ $t('tong-bu-gun-dong') }}
+                    <el-tooltip
+                      effect="dark"
+                      :content="$t('bian-ji-qu-he-yu-lan-qu-shi-fou-tong-bu-gun-dong')"
+                      placement="top"
+                    >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
                     </el-tooltip>
                   </div>
@@ -931,8 +984,12 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                 </div>
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    显示图标
-                    <el-tooltip effect="dark" content="是否显示文件夹和文件的图标" placement="top">
+                    {{ $t('xian-shi-tu-biao') }}
+                    <el-tooltip
+                      effect="dark"
+                      :content="$t('shi-fou-xian-shi-wen-jian-jia-he-wen-jian-de-tu-biao')"
+                      placement="top"
+                    >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
                     </el-tooltip>
                   </div>
@@ -950,16 +1007,20 @@ const handleScroll = (scrolledContainer, otherContainer) => {
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><Search /></el-icon>
-                  <span>扫描</span>
+                  <span>{{ $t('sao-miao') }}</span>
                 </span>
               </template>
               <div>
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    忽略文件夹
+                    {{ $t('hu-lve-wen-jian-jia') }}
                     <el-tooltip
                       effect="dark"
-                      content="忽略不需要扫描的文件夹，提高扫描效率。可新增需要过滤的文件夹，例如：macOS 下为 /build、/dist，Windows 下为 \build、\dist。"
+                      :content="
+                        $t(
+                          'hu-lve-bu-xu-yao-sao-miao-de-wen-jian-jia-ti-gao-sao-miao-xiao-shuai-ke-xin-zeng-xu-yao-guo-lv-de-wen-jian-jia-li-ru-macos-xia-wei-builddistwindows-xia-wei-builddist'
+                        )
+                      "
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
@@ -968,7 +1029,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                   <div class="tab-item-value">
                     <el-select
                       v-model="ignoreFolderList"
-                      placeholder="请选择需要忽略的文件夹"
+                      :placeholder="$t('qing-xuan-ze-xu-yao-hu-lve-de-wen-jian-jia')"
                       style="width: 325px"
                       multiple
                       collapse-tags
@@ -988,10 +1049,14 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                 </div>
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    忽略以 "." 开头的文件夹
+                    {{ $t('hu-lve-yi-kai-tou-de-wen-jian-jia') }}
                     <el-tooltip
                       effect="dark"
-                      content="这类文件夹在 MacOS 和 Linux 上是默认隐藏的文件夹"
+                      :content="
+                        $t(
+                          'zhe-lei-wen-jian-jia-zai-macos-he-linux-shang-shi-mo-ren-yin-cang-de-wen-jian-jia'
+                        )
+                      "
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
@@ -1004,8 +1069,12 @@ const handleScroll = (scrolledContainer, otherContainer) => {
 
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    只扫描文件夹
-                    <el-tooltip effect="dark" content="忽略所有文件，只扫描文件夹" placement="top">
+                    {{ $t('zhi-sao-miao-wen-jian-jia') }}
+                    <el-tooltip
+                      effect="dark"
+                      :content="$t('hu-lve-suo-you-wen-jian-zhi-sao-miao-wen-jian-jia')"
+                      placement="top"
+                    >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
                     </el-tooltip>
                   </div>
@@ -1014,10 +1083,14 @@ const handleScroll = (scrolledContainer, otherContainer) => {
 
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    忽略以 "." 开头的文件
+                    {{ $t('hu-lve-yi-kai-tou-de-wen-jian') }}
                     <el-tooltip
                       effect="dark"
-                      content="这类文件在 MacOS 和 Linux 上是默认隐藏的文件"
+                      :content="
+                        $t(
+                          'zhe-lei-wen-jian-zai-macos-he-linux-shang-shi-mo-ren-yin-cang-de-wen-jian'
+                        )
+                      "
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
@@ -1028,10 +1101,14 @@ const handleScroll = (scrolledContainer, otherContainer) => {
 
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    忽略文件类型
+                    {{ $t('hu-lve-wen-jian-lei-xing') }}
                     <el-tooltip
                       effect="dark"
-                      content="可以选择忽略不需要的文件类型，以提高扫描效率。可新增需要过滤的文件类型。"
+                      :content="
+                        $t(
+                          'xuan-ze-hu-lve-bu-xu-yao-de-wen-jian-lei-xing-yi-ti-gao-sao-miao-xiao-shuai-ke-xin-zeng-xu-yao-guo-lv-de-wen-jian-lei-xing'
+                        )
+                      "
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
@@ -1040,7 +1117,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                   <div class="tab-item-value">
                     <el-select
                       v-model="ignoreFileList"
-                      placeholder="请选择需要忽略的文件类型"
+                      :placeholder="$t('qing-xuan-ze-xu-yao-hu-lve-de-wen-jian-lei-xing')"
                       filterable
                       style="width: 325px"
                       multiple
@@ -1067,21 +1144,21 @@ const handleScroll = (scrolledContainer, otherContainer) => {
 
                 <div class="tab-item">
                   <div class="tab-item-label">
-                    扫描深度
+                    {{ $t('sao-miao-shen-du') }}
                     <el-tooltip
                       effect="dark"
-                      content="设置扫描目录的深度，0 为所有深度，每递增一个数字则代表扫描深度 +1"
+                      :content="
+                        $t(
+                          'she-zhi-sao-miao-mu-lu-de-shen-du-0-wei-suo-you-shen-du-mei-di-zeng-yi-ge-shu-zi-ze-dai-biao-sao-miao-shen-du-1'
+                        )
+                      "
                       placement="top"
                     >
                       <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
                     </el-tooltip>
                   </div>
                   <div class="tab-item-value">
-                    <el-input-number
-                      v-model="scanDeep"
-                      placeholder="请输入扫描深度"
-                      :min="0"
-                    ></el-input-number>
+                    <el-input-number v-model="scanDeep" :min="0"></el-input-number>
                   </div>
                 </div>
               </div>
@@ -1091,38 +1168,24 @@ const handleScroll = (scrolledContainer, otherContainer) => {
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><Download /></el-icon>
-                  <span>导出文本</span>
+                  <span>{{ $t('dao-chu-wen-ben') }}</span>
                 </span>
               </template>
               <div>
                 <div class="tab-item">
-                  <div style="width: 100px">默认名称</div>
+                  <div style="width: 100px">{{ $t('mo-ren-ming-cheng') }}</div>
                   <div>
                     <el-input
                       style="width: 380px; font-size: 12px"
                       v-model="defaultFileName"
-                      placeholder="请输入默认名称"
+                      :placeholder="$t('qing-shu-ru-mo-ren-ming-cheng')"
                     >
                       <template #append>.txt</template>
                     </el-input>
                   </div>
                 </div>
-                <!-- <div class="tab-item">
-                  <div style="width: 100px">例子</div>
-                  <div>Annotree_2024-07-12_08-30-20.txt</div>
-                </div> -->
               </div>
             </el-tab-pane>
-            <!-- 备份和恢复 -->
-            <!-- <el-tab-pane>
-              <template #label>
-                <span class="custom-tabs-label">
-                  <el-icon><CircleCheck /></el-icon>
-                  <span>备份和恢复</span>
-                </span>
-              </template>
-              <div>测试</div>
-            </el-tab-pane> -->
             <!-- 重置 -->
             <!-- <el-tab-pane>
               <template #label>
@@ -1138,16 +1201,16 @@ const handleScroll = (scrolledContainer, otherContainer) => {
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><WarningFilled /></el-icon>
-                  <span>关于</span>
+                  <span>{{ $t('guan-yu') }}</span>
                 </span>
               </template>
               <div>
                 <div class="tab-item">
-                  <div class="tab-item-label">当前版本</div>
+                  <div class="tab-item-label">{{ $t('dang-qian-ban-ben') }}</div>
                   <div class="tab-item-value">v{{ packageJson.version }}</div>
                 </div>
                 <div class="tab-item">
-                  <div class="tab-item-label">开发者</div>
+                  <div class="tab-item-label">{{ $t('kai-fa-zhe') }}</div>
                   <div class="tab-item-value">
                     <el-link type="primary" href="https://github.com/itchaox" target="_blank"
                       >itchaox</el-link
@@ -1155,25 +1218,24 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                   </div>
                 </div>
                 <div class="tab-item">
-                  <div class="tab-item-label">其他信息</div>
+                  <div class="tab-item-label">{{ $t('qi-ta-xin-xi') }}</div>
                   <div class="tab-item-value">
-                    开源
+                    {{ $t('kai-yuan') }}
 
                     <el-link
                       type="primary"
                       href="https://github.com/itchaox/annotree"
                       target="_blank"
-                      >GitHub 地址</el-link
-                    >
-                    ，感谢 Star ⭐️
+                      >{{ $t('github-di-zhi') }}</el-link
+                    >{{ $t('gan-xie-star') }}
                   </div>
                 </div>
                 <div class="tab-item">
-                  <div class="tab-item-label">官方文档</div>
+                  <div class="tab-item-label">{{ $t('guan-fang-wen-dang') }}</div>
                   <div class="tab-item-value">
-                    <el-link type="primary" href="https://annotree.com" target="_blank"
-                      >⚡️ 点我查看</el-link
-                    >
+                    <el-link type="primary" href="https://annotree.com" target="_blank">{{
+                      $t('dian-wo-cha-kan')
+                    }}</el-link>
                   </div>
                 </div>
               </div>
@@ -1184,14 +1246,14 @@ const handleScroll = (scrolledContainer, otherContainer) => {
     </div>
 
     <div class="info" v-if="treeData?.length > 0">
-      <div>总计 {{ treeData?.length }}</div>
+      <div>{{ $t('zong-ji-treedatalength', [treeData?.length]) }}</div>
       <div v-if="folderNumber > 0">
         <el-icon><FolderChecked /></el-icon>
-        <span>文件夹 {{ folderNumber }}</span>
+        <span>{{ $t('wen-jian-jia-foldernumber', [folderNumber]) }}</span>
       </div>
       <div v-if="fileNumber > 0">
         <el-icon><DocumentChecked /></el-icon>
-        <span>文件 {{ fileNumber }}</span>
+        <span>{{ $t('wen-jian-filenumber', [fileNumber]) }}</span>
       </div>
     </div>
   </div>
@@ -1276,6 +1338,10 @@ const handleScroll = (scrolledContainer, otherContainer) => {
         .preview-label {
           width: 125px;
         }
+
+        .preview-value {
+          margin-left: 15px;
+        }
       }
     }
   }
@@ -1312,7 +1378,7 @@ const handleScroll = (scrolledContainer, otherContainer) => {
       display: flex;
       align-items: center;
       margin-right: 10px;
-      min-width: 175px;
+      width: 185px;
     }
 
     .tab-item-value {
