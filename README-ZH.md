@@ -17,7 +17,7 @@ Annotree 注释树
 
 <p align="center">
 <a href="/README-ZH.md">中文</a> |
-<a href="/README.md">EN</a>
+<a href="/README.md">English</a>
 </p>
 
 ## 项目介绍
