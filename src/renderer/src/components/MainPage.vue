@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-28 22:48
+ * @LastTime   : 2024-07-28 23:29
  * @desc       :
 -->
 <script setup lang="ts">
@@ -108,35 +108,35 @@ const languageList = ref([
   },
   {
     id: 'es',
-    name: '西班牙语'
+    name: 'Español'
   },
   {
     id: 'fr',
-    name: '法语'
+    name: 'Français'
   },
   {
     id: 'de',
-    name: '德语'
+    name: 'Deutsch'
   },
   {
     id: 'ko',
-    name: '韩语'
+    name: '한국인'
   },
   {
     id: 'ru',
-    name: '俄语'
+    name: 'Русский'
   },
   {
     id: 'pt',
-    name: '葡萄牙语'
+    name: 'Português'
   },
   {
     id: 'it',
-    name: '意大利语'
+    name: 'Italiano'
   },
   {
     id: 'ja',
-    name: '日语'
+    name: '日本語'
   }
 ])
 
