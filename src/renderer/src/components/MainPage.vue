@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-28 23:29
+ * @LastTime   : 2024-07-29 01:01
  * @desc       :
 -->
 <script setup lang="ts">
@@ -141,39 +141,27 @@ const languageList = ref([
 ])
 
 // 默认展示系统语言
-const languageId = ref('system')
-
-// 是否在支持的语言中
-async function inLanguage() {
-  const languageId = await getSystemLanguage()
-
-  // 在支持的语言中，则默认展示该语言，否则展示英文
-  return languageList.value.find((item) => item.id === languageId) ? languageId : 'en'
-}
+const languageId = ref('en')
 
 onMounted(async () => {
-  loadLocalStorage()
+  const common = JSON.parse(localStorage.getItem('annotree-common'))
 
-  // 切换至系统语言
-  let systemLanguage
-  if (languageId.value === 'system') {
-    systemLanguage = isChinese(await getSystemLanguage()) ? 'zh' : inLanguage()
-    languageId.value = systemLanguage
-    i18n.global.locale = systemLanguage
-  }
+  // 获取系统语言
+  const _languageId = await getSystemLanguage()
+
+  // 如果当前语言支持，则展示选中语言，否则默认展示英文
+  languageId.value =
+    common?.languageId ??
+    (languageList.value.find((item) => item.id === _languageId) ? _languageId : 'en')
+
+  i18n.global.locale = languageId.value
+
+  loadLocalStorage()
 })
 
 // 切换语言
 watch([languageId], async () => {
-  // 切换至系统语言
-  let systemLanguage
-  if (languageId.value === 'system') {
-    systemLanguage = isChinese(await getSystemLanguage()) ? 'zh' : languageId.value
-    languageId.value = systemLanguage
-    i18n.global.locale = systemLanguage
-  } else {
-    i18n.global.locale = languageId.value
-  }
+  i18n.global.locale = languageId.value
 })
 
 // 加载本地存储的数据
@@ -181,7 +169,7 @@ const loadLocalStorage = () => {
   // 通用
   const common = JSON.parse(localStorage.getItem('annotree-common'))
   if (common) {
-    languageId.value = common.languageId ?? 'system'
+    languageId.value = common.languageId ?? 'en'
     autoOpenFile.value = common.autoOpenFile ?? true
     isEggshell.value = common.isEggshell ?? true
     syncScroll.value = common.syncScroll ?? true

@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-27 13:20
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-28 22:42
+ * @LastTime   : 2024-07-29 00:15
  * @desc       :
  */
 import { createI18n } from 'vue-i18n'
@@ -36,11 +36,11 @@ export const i18n = createI18n({
 })
 
 // 获取缓存的语言配置
-let lang = 'en'
-// 根据缓存语言，修改语言环境
-const common = JSON.parse(localStorage.getItem('annotree-common'))
-if (common) {
-  lang = common.languageId ?? 'en'
-}
+// let lang = 'en'
+// // 根据缓存语言，修改语言环境
+// const common = JSON.parse(localStorage.getItem('annotree-common'))
+// if (common) {
+//   lang = common.languageId ?? 'en'
+// }
 
-i18n.global.locale = lang
+// i18n.global.locale = lang

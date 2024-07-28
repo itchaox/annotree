@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-27 17:07
+ * @LastTime   : 2024-07-29 00:17
  * @desc       :
  */
 //全局初始化样式
@@ -38,7 +38,7 @@ if (common) {
   lang = common.languageId ?? 'en'
 }
 
-i18n.global.locale = lang
+// i18n.global.locale = lang
 const _isZh = lang === 'zh'
 
 app.use(ElementPlus, {
