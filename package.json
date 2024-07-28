@@ -19,7 +19,7 @@
     "build:win": "npm run build && electron-builder --win --config",
     "build:mac": "npm run build && electron-builder --mac --config",
     "build:linux": "npm run build && electron-builder --linux",
-    "build:all": "npm run build && npm run build:mac && npm run build:win"
+    "build:all": "npm run build && npm run build:mac && npm run build:win && npm run build:linux"
   },
   "dependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",

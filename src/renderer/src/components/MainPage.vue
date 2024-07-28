@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-28 01:05
+ * @LastTime   : 2024-07-28 22:48
  * @desc       :
 -->
 <script setup lang="ts">
@@ -105,11 +105,51 @@ const languageList = ref([
   {
     id: 'zh',
     name: '简体中文'
+  },
+  {
+    id: 'es',
+    name: '西班牙语'
+  },
+  {
+    id: 'fr',
+    name: '法语'
+  },
+  {
+    id: 'de',
+    name: '德语'
+  },
+  {
+    id: 'ko',
+    name: '韩语'
+  },
+  {
+    id: 'ru',
+    name: '俄语'
+  },
+  {
+    id: 'pt',
+    name: '葡萄牙语'
+  },
+  {
+    id: 'it',
+    name: '意大利语'
+  },
+  {
+    id: 'ja',
+    name: '日语'
   }
 ])
 
-// 语言
+// 默认展示系统语言
 const languageId = ref('system')
+
+// 是否在支持的语言中
+async function inLanguage() {
+  const languageId = await getSystemLanguage()
+
+  // 在支持的语言中，则默认展示该语言，否则展示英文
+  return languageList.value.find((item) => item.id === languageId) ? languageId : 'en'
+}
 
 onMounted(async () => {
   loadLocalStorage()
@@ -117,7 +157,7 @@ onMounted(async () => {
   // 切换至系统语言
   let systemLanguage
   if (languageId.value === 'system') {
-    systemLanguage = isChinese(await getSystemLanguage()) ? 'zh' : 'en'
+    systemLanguage = isChinese(await getSystemLanguage()) ? 'zh' : inLanguage()
     languageId.value = systemLanguage
     i18n.global.locale = systemLanguage
   }
@@ -128,7 +168,7 @@ watch([languageId], async () => {
   // 切换至系统语言
   let systemLanguage
   if (languageId.value === 'system') {
-    systemLanguage = isChinese(await getSystemLanguage()) ? 'zh' : 'en'
+    systemLanguage = isChinese(await getSystemLanguage()) ? 'zh' : languageId.value
     languageId.value = systemLanguage
     i18n.global.locale = systemLanguage
   } else {
