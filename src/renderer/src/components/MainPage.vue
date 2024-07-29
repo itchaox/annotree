@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-30 00:05
+ * @LastTime   : 2024-07-30 00:12
  * @desc       :
 -->
 <script setup lang="ts">
@@ -817,7 +817,27 @@ const handleScroll = (scrolledContainer, otherContainer) => {
 }
 
 // 复制图片
-function copyImg() {}
+function copyImg() {
+  html2canvas(document.querySelector('#capture'), {
+    backgroundColor: '#f8f9fa',
+    useCORS: true, //支持图片跨域
+    scale: 1 //设置放大的倍数
+  }).then((canvas) => {
+    canvas.toBlob(async (blob) => {
+      try {
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+        ElMessage({
+          message: '图片已复制到剪贴板',
+          type: 'success',
+          duration: 1500,
+          showClose: true
+        })
+      } catch (err) {
+        console.error('无法复制图片到剪贴板', err)
+      }
+    }, 'image/png')
+  })
+}
 
 // 导出图片
 function exportImg() {
