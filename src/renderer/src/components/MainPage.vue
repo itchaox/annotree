@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-29 01:01
+ * @LastTime   : 2024-07-29 12:54
  * @desc       :
 -->
 <script setup lang="ts">
@@ -77,12 +77,51 @@ const isEggshell = ref(true)
 // 同步滚动
 const syncScroll = ref(true)
 
-// 判断是否为中文
-function isChinese(languageCode) {
-  return languageCode.toLowerCase().startsWith('zh')
+// 缓存
+const isCache = ref(false)
+
+// 配置
+const isConfig = ref(false)
+
+// 确定重置配置
+async function resetCache() {
+  // 重置配置
+  if (isConfig.value) {
+    localStorage.removeItem('annotree-common')
+    localStorage.removeItem('annotree-scan')
+    localStorage.removeItem('annotree-exportConfig')
+    localStorage.removeItem('annotree-preview')
+    // 获取系统语言
+    const _languageId = await getSystemLanguage()
+
+    const common = JSON.parse(localStorage.getItem('annotree-common'))
+
+    // 如果当前语言支持，则展示选中语言，否则默认展示英文
+    languageId.value =
+      common?.languageId ??
+      (languageList.value.find((item) => item.id === _languageId) ? _languageId : 'en')
+
+    i18n.global.locale = languageId.value
+  }
+
+  // 重置注释
+  if (isCache.value) {
+    localStorage.removeItem('annotree-notes')
+    treeData.value = []
+    previewList.value = []
+  }
+
+  loadLocalStorage()
+
+  ElMessage({
+    message: '重置成功',
+    type: 'success',
+    duration: 1500,
+    showClose: true
+  })
 }
 
-// 清楚缓存的 note
+// 清楚当前文件夹缓存的 note
 function clearNotes() {
   const annotreeNotes = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
   for (const item of treeData.value) {
@@ -1089,6 +1128,20 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                     </el-tooltip>
                   </div>
                   <div class="tab-item-value"><el-switch v-model="showIcon"></el-switch></div>
+                </div>
+                <div class="tab-item">
+                  <div class="tab-item-label">重置范围</div>
+                  <div class="tab-item-value" style="display: flex; align-items: center">
+                    <div style="margin-right: 30px">
+                      <el-checkbox v-model="isCache" label="缓存" />
+                      <el-checkbox v-model="isConfig" label="设置" />
+                    </div>
+                    <div>
+                      <el-button type="danger" :disabled="!isCache && !isConfig" @click="resetCache"
+                        >重置</el-button
+                      >
+                    </div>
+                  </div>
                 </div>
                 <!-- FIXME 不生效，暂时注释 -->
                 <!-- <div class="tab-item">
