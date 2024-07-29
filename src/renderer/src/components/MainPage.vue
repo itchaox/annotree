@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-29 12:54
+ * @LastTime   : 2024-07-29 13:02
  * @desc       :
 -->
 <script setup lang="ts">
@@ -109,6 +109,7 @@ async function resetCache() {
     localStorage.removeItem('annotree-notes')
     treeData.value = []
     previewList.value = []
+    folderPath.value = ''
   }
 
   loadLocalStorage()
@@ -207,40 +208,32 @@ watch([languageId], async () => {
 const loadLocalStorage = () => {
   // 通用
   const common = JSON.parse(localStorage.getItem('annotree-common'))
-  if (common) {
-    languageId.value = common.languageId ?? 'en'
-    autoOpenFile.value = common.autoOpenFile ?? true
-    isEggshell.value = common.isEggshell ?? true
-    syncScroll.value = common.syncScroll ?? true
-    showIcon.value = common.showIcon ?? true
-  }
+  languageId.value = common?.languageId ?? 'en'
+  autoOpenFile.value = common?.autoOpenFile ?? true
+  isEggshell.value = common?.isEggshell ?? true
+  syncScroll.value = common?.syncScroll ?? true
+  showIcon.value = common?.showIcon ?? true
 
   // 扫描
   const scan = JSON.parse(localStorage.getItem('annotree-scan'))
-  if (scan) {
-    ;(ignoreDotFile.value = scan.ignoreDotFile ?? false),
-      (ignoreDotFolder.value = scan.ignoreDotFolder ?? false),
-      (onlyScanFolder.value = scan.onlyScanFolder ?? false),
-      (scanDeep.value = scan.scanDeep ?? 0),
-      (ignoreFolderList.value = scan.ignoreFolderList ?? []),
-      (ignoreFileList.value = scan.ignoreFileList ?? [])
-  }
+  ignoreDotFile.value = scan?.ignoreDotFile ?? false
+  ignoreDotFolder.value = scan?.ignoreDotFolder ?? false
+  onlyScanFolder.value = scan?.onlyScanFolder ?? false
+  scanDeep.value = scan?.scanDeep ?? 0
+  ignoreFolderList.value = scan?.ignoreFolderList ?? []
+  ignoreFileList.value = scan?.ignoreFileList ?? []
 
   // 导出
   const exportConfig = JSON.parse(localStorage.getItem('annotree-exportConfig'))
-  if (exportConfig) {
-    defaultFileName.value =
-      exportConfig.defaultFileName ?? 'Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}'
-  }
+  defaultFileName.value =
+    exportConfig?.defaultFileName ?? 'Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}'
 
   // 预览区
   const preview = JSON.parse(localStorage.getItem('annotree-preview'))
-  if (preview) {
-    bridgeChar.value = preview.bridgeChar ?? '─'
-    minBridge.value = preview.minBridge ?? 4
-    noteFormat.value = preview.noteFormat ?? ' // {note}'
-    showBridge.value = preview.showBridge ?? false
-  }
+  bridgeChar.value = preview?.bridgeChar ?? '─'
+  minBridge.value = preview?.minBridge ?? 4
+  noteFormat.value = preview?.noteFormat ?? ' // {note}'
+  showBridge.value = preview?.showBridge ?? false
 }
 
 async function copy() {
