@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-29 13:04
+ * @LastTime   : 2024-07-29 13:10
  * @desc       :
 -->
 <script setup lang="ts">
@@ -1130,14 +1130,19 @@ const handleScroll = (scrolledContainer, otherContainer) => {
                       <el-checkbox v-model="isConfig" label="设置" />
                     </div>
                     <div>
-                      <el-button
-                        type="danger"
-                        :disabled="!isCache && !isConfig"
-                        @click="resetCache"
+                      <el-popconfirm
+                        title="确认重置所有数据吗?"
+                        @confirm="resetCache"
+                        confirm-button-type="danger"
+                        width="210"
                       >
-                        <el-icon><Refresh /></el-icon>
-                        <span> 重置 </span>
-                      </el-button>
+                        <template #reference>
+                          <el-button type="danger" :disabled="!isCache && !isConfig">
+                            <el-icon><Refresh /></el-icon>
+                            <span> 重置 </span>
+                          </el-button>
+                        </template>
+                      </el-popconfirm>
                     </div>
                   </div>
                 </div>
