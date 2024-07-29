@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-29 13:10
+ * @LastTime   : 2024-07-29 14:52
  * @desc       :
 -->
 <script setup lang="ts">
@@ -30,6 +30,8 @@ import useClipboard from 'vue-clipboard3'
 import { useI18n } from 'vue-i18n'
 
 import { i18n } from '../locales/i18n.js'
+
+import html2canvas from 'html2canvas'
 
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage, getSystemLanguage } = window.api as any
 
@@ -813,6 +815,23 @@ const handleScroll = (scrolledContainer, otherContainer) => {
     isScrolling = false
   }
 }
+
+// 复制图片
+function copyImg() {}
+
+// 导出图片
+function exportImg() {
+  html2canvas(document.querySelector('#capture'), {
+    scrollX: 0,
+    scrollY: 0
+  }).then((canvas) => {
+    const img = canvas.toDataURL('image/png')
+    const link = document.createElement('a')
+    link.href = img
+    link.download = 'screenshot.png'
+    link.click()
+  })
+}
 </script>
 
 <template>
@@ -964,10 +983,21 @@ const handleScroll = (scrolledContainer, otherContainer) => {
               <el-icon size="18"><Download /></el-icon>
               <span>{{ $t('dao-chu') }}</span>
             </el-button>
+
+            <el-button @click="copyImg" type="success">
+              <el-icon size="18"><CopyDocument /></el-icon>
+              <span>复制图片</span>
+            </el-button>
+
+            <el-button type="primary" @click="exportImg">
+              <el-icon size="18"><Download /></el-icon>
+              <span>导出图片</span>
+            </el-button>
           </div>
         </div>
 
         <div
+          id="capture"
           class="tree-scroller"
           ref="scrollRight"
           @scroll="handleScroll(scrollRight, scrollLeft)"
