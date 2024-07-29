@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-29 14:52
+ * @LastTime   : 2024-07-29 23:01
  * @desc       :
 -->
 <script setup lang="ts">
@@ -912,7 +912,7 @@ function exportImg() {
         </div>
 
         <div @scroll="handleScroll(scrollLeft, scrollRight)" ref="scrollLeft" class="tree-scroller">
-          <div v-for="(item, index) in treeData" :key="item.id">
+          <div v-for="(item, index) in treeData" :key="item.id" class="tree-node">
             <div style="display: flex">
               <div
                 class="folder-icon"
@@ -1002,7 +1002,7 @@ function exportImg() {
           ref="scrollRight"
           @scroll="handleScroll(scrollRight, scrollLeft)"
         >
-          <pre v-for="item in previewList" :key="item.id">{{ item.value }}</pre>
+          <pre class="tree-node" v-for="item in previewList" :key="item.id">{{ item.value }}</pre>
         </div>
       </div>
 
@@ -1498,6 +1498,10 @@ function exportImg() {
     .tree-scroller {
       height: calc(100% - 100px);
       overflow: auto;
+    }
+
+    .tree-node {
+      height: 20px;
     }
 
     .folder-icon {
