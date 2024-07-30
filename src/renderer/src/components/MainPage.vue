@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-30 00:12
+ * @LastTime   : 2024-07-31 00:42
  * @desc       :
 -->
 <script setup lang="ts">
@@ -868,6 +868,9 @@ function exportImg() {
     link.click()
   })
 }
+
+// 忽略 .gitignore
+const dotGitignore = ref(false)
 </script>
 
 <template>
@@ -1220,7 +1223,7 @@ function exportImg() {
                 </div> -->
               </div>
             </el-tab-pane>
-            <!-- 扫描 -->
+            <!-- FIXME 扫描 -->
             <el-tab-pane>
               <template #label>
                 <span class="custom-tabs-label">
@@ -1379,6 +1382,23 @@ function exportImg() {
                     <el-input-number v-model="scanDeep" :min="0"></el-input-number>
                   </div>
                 </div>
+
+                <!-- FIXME 忽略 .gitignore 中的信息 -->
+                <!-- <div class="tab-item">
+                  <div class="tab-item-label">
+                    忽略 .gitignore 中的信息
+                    <el-tooltip
+                      effect="dark"
+                      content="忽略 .gitignore 文件中的信息，如：忽略某些文件或文件夹。"
+                      placement="top"
+                    >
+                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                    </el-tooltip>
+                  </div>
+                  <div class="tab-item-value">
+                    <el-switch v-model="dotGitignore"></el-switch>
+                  </div>
+                </div> -->
               </div>
             </el-tab-pane>
             <!-- 导出文本 -->
@@ -1404,16 +1424,6 @@ function exportImg() {
                 </div>
               </div>
             </el-tab-pane>
-            <!-- 重置 -->
-            <!-- <el-tab-pane>
-              <template #label>
-                <span class="custom-tabs-label">
-                  <el-icon><Refresh /></el-icon>
-                  <span>重置</span>
-                </span>
-              </template>
-              <div>测试</div>
-            </el-tab-pane> -->
             <!-- 关于 -->
             <el-tab-pane>
               <template #label>
