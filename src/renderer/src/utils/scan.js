@@ -3,34 +3,12 @@
  * @Author     : itchaox
  * @Date       : 2024-04-03 15:45
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-01 01:02
+ * @LastTime   : 2024-08-01 09:20
  * @desc       :
  */
 import fs from 'fs'
 import path from 'path'
 import ignore from 'ignore'
-
-// 读取 .gitignore 文件
-const ignoreRules = fs.readFileSync('.gitignore', 'utf8')
-
-// 处理 ignoreRules
-const processedRules = ignoreRules
-  .split('\n') // 按行分割
-  .map((rule) => rule.trim()) // 去除每行的前后空白
-  .filter((rule) => rule && !rule.startsWith('#')) // 过滤掉空行和注释行
-  .flatMap((rule) => {
-    // 如果规则以 '/' 结尾，则添加规则本身去掉 '/' 后的字符串，并换行
-    if (rule.endsWith('/')) {
-      const baseRule = rule.slice(0, -1) // 去掉末尾的 '/'
-      return [`${baseRule}`, rule] // 保持原规则和添加的新规则
-    }
-    // 否则保持原样，并换行
-    return [rule]
-  })
-  .join('\n') // 将处理后的规则重新组合为字符串，并换行
-
-// 创建 ignore 实例
-const ig = ignore().add(processedRules)
 
 /**
  * 返回传入目录的子文件数据
@@ -74,6 +52,30 @@ async function scan({
   }
 
   // FIXME 这里获取了文件夹的内容信息
+
+  // 读取 .gitignore 文件
+  const gitignorePath = path.join(rootFolderPath, '.gitignore')
+
+  const ignoreRules = fs.readFileSync(gitignorePath, 'utf8')
+
+  // 处理 ignoreRules
+  const processedRules = ignoreRules
+    .split('\n') // 按行分割
+    .map((rule) => rule.trim()) // 去除每行的前后空白
+    .filter((rule) => rule && !rule.startsWith('#')) // 过滤掉空行和注释行
+    .flatMap((rule) => {
+      // 如果规则以 '/' 结尾，则添加规则本身去掉 '/' 后的字符串，并换行
+      if (rule.endsWith('/')) {
+        const baseRule = rule.slice(0, -1) // 去掉末尾的 '/'
+        return [`${baseRule}`, rule] // 保持原规则和添加的新规则
+      }
+      // 否则保持原样，并换行
+      return [rule]
+    })
+    .join('\n') // 将处理后的规则重新组合为字符串，并换行
+
+  // 创建 ignore 实例
+  const ig = ignore().add(processedRules)
 
   // 获得文件夹的内容
   const files = await fs.readdirSync(folderPath)

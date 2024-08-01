@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-27 22:34
+ * @LastTime   : 2024-08-01 09:14
  * @desc       :
  */
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
@@ -44,9 +44,9 @@ function createWindow(): void {
   }
 
   // 仅在开发环境下默认打开控制台
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.webContents.openDevTools()
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  mainWindow.webContents.openDevTools()
+  // }
 }
 
 // 当 Electron 初始化完成并准备好创建浏览器窗口时将调用此方法。
