@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-01 10:13
+ * @LastTime   : 2024-08-02 01:05
  * @desc       :
 -->
 <script setup lang="ts">
@@ -85,6 +85,9 @@ const isCache = ref(false)
 // 配置
 const isConfig = ref(false)
 
+// 文件夹显示 /
+const folderSuffix = ref(true)
+
 // 确定重置配置
 async function resetCache() {
   // 重置配置
@@ -124,7 +127,7 @@ async function resetCache() {
   })
 }
 
-// 清楚当前文件夹缓存的 note
+// 清除当前文件夹缓存的 note
 function clearNotes() {
   const annotreeNotes = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
   for (const item of treeData.value) {
@@ -215,6 +218,7 @@ const loadLocalStorage = () => {
   isEggshell.value = common?.isEggshell ?? true
   syncScroll.value = common?.syncScroll ?? true
   showIcon.value = common?.showIcon ?? true
+  folderSuffix.value = common?.folderSuffix ?? true
 
   // 扫描
   const scan = JSON.parse(localStorage.getItem('annotree-scan'))
@@ -515,6 +519,7 @@ function getPreviewData() {
   })
 
   const max = getMaxWidth(result)
+  console.log('🚀  max:', max)
 
   // 补齐桥梁
   result = result.map((item) => ({ ...item, bridge: bridgeAuto(item, max) }))
@@ -596,7 +601,7 @@ const handleInputChange = (item) => {
 const showIcon = ref(true)
 
 // 全局配置-通用
-watch([autoOpenFile, isEggshell, syncScroll, showIcon, languageId], () => {
+watch([autoOpenFile, isEggshell, syncScroll, showIcon, languageId, folderSuffix], () => {
   //  存储数据
   localStorage.setItem(
     'annotree-common',
@@ -605,7 +610,8 @@ watch([autoOpenFile, isEggshell, syncScroll, showIcon, languageId], () => {
       isEggshell: isEggshell.value,
       syncScroll: syncScroll.value,
       showIcon: showIcon.value,
-      languageId: languageId.value
+      languageId: languageId.value,
+      folderSuffix: folderSuffix.value
     })
   )
 })
@@ -868,9 +874,6 @@ function exportImg() {
     link.click()
   })
 }
-
-// 忽略 .gitignore
-const dotGitignore = ref(false)
 </script>
 
 <template>
@@ -953,34 +956,38 @@ const dotGitignore = ref(false)
         <div @scroll="handleScroll(scrollLeft, scrollRight)" ref="scrollLeft" class="tree-scroller">
           <div v-for="(item, index) in treeData" :key="item.id" class="tree-node">
             <div style="display: flex">
-              <div
-                class="folder-icon"
-                style="width: 15px"
-                v-if="item?.isDirectory"
-                @click="foldNode(item)"
-              >
-                <el-icon color="#00000090" v-if="item.isShowElements"><CaretBottom /></el-icon>
-                <el-icon color="#00000090" v-else><CaretRight /></el-icon>
+              <div style="display: flex; flex: 1">
+                <div
+                  class="folder-icon"
+                  style="width: 15px"
+                  v-if="item?.isDirectory"
+                  @click="foldNode(item)"
+                >
+                  <el-icon color="#00000090" v-if="item.isShowElements"><CaretBottom /></el-icon>
+                  <el-icon color="#00000090" v-else><CaretRight /></el-icon>
+                </div>
+                <div v-else style="width: 15px"></div>
+                <!-- 树枝 -->
+                <span class="row-tree">
+                  <pre>{{ item.tree }}</pre>
+                </span>
+                <!-- 文件信息 -->
+                <span class="row-info">
+                  <!-- 文件名 -->
+                  <div style="display: flex">
+                    <pre>{{ showIcon ? (item?.isDirectory ? '📁 ' : '📄 ') : '' }}</pre>
+                    <pre>{{ item.name }}</pre>
+                    <!-- 扩展名 -->
+                    <pre v-if="item.ext">{{ item.ext }}</pre>
+                    <pre>{{ folderSuffix ? (item?.isDirectory ? '/' : '') : '' }}</pre>
+                  </div>
+                </span>
               </div>
-              <div v-else style="width: 15px"></div>
-              <!-- 树枝 -->
-              <span class="row-tree">
-                <pre>{{ item.tree }}</pre>
-              </span>
-              <!-- 文件信息 -->
-              <span style="display: inline-flex; margin-left: 2px">
-                <!-- <img
-                src="https://fonts.gstatic.com/s/i/materialicons/file_present/v6/24px.svg"
-                alt=""
-              /> -->
-                <!-- 文件名 -->
-                <pre>{{ showIcon ? (item?.isDirectory ? '📁 ' : '📄 ') : '' }}</pre>
-                <pre>{{ item.name }}</pre>
-                <!-- 扩展名 -->
-                <pre v-if="item.ext">{{ item.ext }}</pre>
+
+              <div>
                 <!-- 注释 -->
                 <el-input
-                  style="margin-left: 5px; height: 20px; width: 120px"
+                  style="height: 20px; width: 120px; margin-right: 2px"
                   v-model="item.note"
                   size="small"
                   :placeholder="$t('qing-shu-ru-zhu-shi')"
@@ -993,7 +1000,7 @@ const dotGitignore = ref(false)
                 <el-button link type="danger" @click="removeNode(item)"
                   ><el-icon><Delete /></el-icon
                 ></el-button>
-              </span>
+              </div>
             </div>
           </div>
         </div>
@@ -1193,6 +1200,10 @@ const dotGitignore = ref(false)
                   <div class="tab-item-value"><el-switch v-model="showIcon"></el-switch></div>
                 </div>
                 <div class="tab-item">
+                  <div class="tab-item-label">📁 文件夹后显示 /</div>
+                  <div class="tab-item-value"><el-switch v-model="folderSuffix"></el-switch></div>
+                </div>
+                <div class="tab-item">
                   <div class="tab-item-label">重置范围</div>
                   <div class="tab-item-value" style="display: flex; align-items: center">
                     <div style="margin-right: 30px">
@@ -1382,23 +1393,6 @@ const dotGitignore = ref(false)
                     <el-input-number v-model="scanDeep" :min="0"></el-input-number>
                   </div>
                 </div>
-
-                <!-- FIXME 忽略 .gitignore 中的信息 -->
-                <!-- <div class="tab-item">
-                  <div class="tab-item-label">
-                    忽略 .gitignore 中的信息
-                    <el-tooltip
-                      effect="dark"
-                      content="忽略 .gitignore 文件中的信息，如：忽略某些文件或文件夹。"
-                      placement="top"
-                    >
-                      <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
-                    </el-tooltip>
-                  </div>
-                  <div class="tab-item-value">
-                    <el-switch v-model="dotGitignore"></el-switch>
-                  </div>
-                </div> -->
               </div>
             </el-tab-pane>
             <!-- 导出文本 -->
@@ -1549,6 +1543,14 @@ const dotGitignore = ref(false)
 
     .tree-node {
       height: 20px;
+      padding-right: 20px;
+    }
+
+    .tree-node-active {
+      &:hover {
+        background-color: #99999950;
+        cursor: pointer;
+      }
     }
 
     .folder-icon {
@@ -1559,6 +1561,12 @@ const dotGitignore = ref(false)
           color: #5a9cf8;
         }
       }
+    }
+
+    .row-info {
+      display: inline-flex;
+      justify-content: space-between;
+      margin-left: 2px;
     }
 
     .preview-config {

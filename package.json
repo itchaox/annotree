@@ -1,6 +1,6 @@
 {
   "name": "Annotree",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A tool designed to assist in generating annotated folder trees",
   "main": "./out/main/index.js",
   "author": "itchaox",
