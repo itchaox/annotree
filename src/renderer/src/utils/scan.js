@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-04-03 15:45
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-01 09:20
+ * @LastTime   : 2024-08-01 10:27
  * @desc       :
  */
 import fs from 'fs'
@@ -56,26 +56,32 @@ async function scan({
   // 读取 .gitignore 文件
   const gitignorePath = path.join(rootFolderPath, '.gitignore')
 
-  const ignoreRules = fs.readFileSync(gitignorePath, 'utf8')
+  const isGitIgnorePath = fs.existsSync(gitignorePath)
 
-  // 处理 ignoreRules
-  const processedRules = ignoreRules
-    .split('\n') // 按行分割
-    .map((rule) => rule.trim()) // 去除每行的前后空白
-    .filter((rule) => rule && !rule.startsWith('#')) // 过滤掉空行和注释行
-    .flatMap((rule) => {
-      // 如果规则以 '/' 结尾，则添加规则本身去掉 '/' 后的字符串，并换行
-      if (rule.endsWith('/')) {
-        const baseRule = rule.slice(0, -1) // 去掉末尾的 '/'
-        return [`${baseRule}`, rule] // 保持原规则和添加的新规则
-      }
-      // 否则保持原样，并换行
-      return [rule]
-    })
-    .join('\n') // 将处理后的规则重新组合为字符串，并换行
+  let ig
+  // 路径存在才处理
+  if (isGitIgnorePath) {
+    const ignoreRules = fs.readFileSync(gitignorePath, 'utf8')
 
-  // 创建 ignore 实例
-  const ig = ignore().add(processedRules)
+    // 处理 ignoreRules
+    const processedRules = ignoreRules
+      .split('\n') // 按行分割
+      .map((rule) => rule.trim()) // 去除每行的前后空白
+      .filter((rule) => rule && !rule.startsWith('#')) // 过滤掉空行和注释行
+      .flatMap((rule) => {
+        // 如果规则以 '/' 结尾，则添加规则本身去掉 '/' 后的字符串，并换行
+        if (rule.endsWith('/')) {
+          const baseRule = rule.slice(0, -1) // 去掉末尾的 '/'
+          return [`${baseRule}`, rule] // 保持原规则和添加的新规则
+        }
+        // 否则保持原样，并换行
+        return [rule]
+      })
+      .join('\n') // 将处理后的规则重新组合为字符串，并换行
+
+    // 创建 ignore 实例
+    ig = ignore().add(processedRules)
+  }
 
   // 获得文件夹的内容
   const files = await fs.readdirSync(folderPath)
@@ -87,10 +93,11 @@ async function scan({
     const filePathFull = path.join(folderPath, filename)
     const filePath = filePathFull.replace(rootFolderPath, '')
 
-    const relativePath = path.relative(rootFolderPath, filePathFull)
-
-    // FIXME 先根据 ignore 来判断， 直接默认忽略就行了
-    if (ig.ignores(relativePath)) continue
+    if (isGitIgnorePath) {
+      const relativePath = path.relative(rootFolderPath, filePathFull)
+      // FIXME 先根据 ignore 来判断， 直接默认忽略就行了
+      if (ig.ignores(relativePath)) continue
+    }
 
     // 是否为文件或者文件夹
     const stat = await fs.statSync(filePathFull)
