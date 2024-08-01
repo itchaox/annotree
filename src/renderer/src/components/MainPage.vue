@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-02 01:05
+ * @LastTime   : 2024-08-02 01:14
  * @desc       :
 -->
 <script setup lang="ts">
@@ -434,6 +434,7 @@ function getMaxWidth(result) {
   }
 }
 
+const currentIndex = ref(0)
 // tab 聚焦下一个输入框；shift + tab 聚焦上一个输入框；
 document.addEventListener('keydown', function (event) {
   nextTick(() => {
@@ -463,7 +464,7 @@ document.addEventListener('keydown', function (event) {
         return
       }
 
-      const currentIndex = Array.from(inputs).indexOf(activeElement)
+      currentIndex.value = Array.from(inputs).indexOf(activeElement)
 
       if (event.shiftKey) {
         // Shift + Tab
@@ -478,7 +479,7 @@ document.addEventListener('keydown', function (event) {
             }, 10)
           }
         } else {
-          inputs[currentIndex - 1].focus() // 焦点移到上一个输入框
+          inputs[currentIndex.value - 1].focus() // 焦点移到上一个输入框
         }
       } else {
         // Tab
@@ -486,7 +487,7 @@ document.addEventListener('keydown', function (event) {
         if (activeElement === lastInput) {
           firstInput.focus() // 从最后一个跳到第一个
         } else {
-          inputs[currentIndex + 1].focus() // 焦点移到下一个输入框
+          inputs[currentIndex.value + 1].focus() // 焦点移到下一个输入框
         }
       }
     }
@@ -954,7 +955,12 @@ function exportImg() {
         </div>
 
         <div @scroll="handleScroll(scrollLeft, scrollRight)" ref="scrollLeft" class="tree-scroller">
-          <div v-for="(item, index) in treeData" :key="item.id" class="tree-node">
+          <div
+            v-for="(item, index) in treeData"
+            :class="{ 'tree-node-active': currentIndex + 1 === index }"
+            :key="item.id"
+            class="tree-node"
+          >
             <div style="display: flex">
               <div style="display: flex; flex: 1">
                 <div
@@ -1543,14 +1549,17 @@ function exportImg() {
 
     .tree-node {
       height: 20px;
-      padding-right: 20px;
-    }
+      padding-right: 30px;
 
-    .tree-node-active {
       &:hover {
         background-color: #99999950;
         cursor: pointer;
       }
+    }
+
+    .tree-node-active {
+      background-color: #99999950;
+      cursor: pointer;
     }
 
     .folder-icon {
