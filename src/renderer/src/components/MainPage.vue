@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-31 00:42
+ * @LastTime   : 2024-08-01 10:13
  * @desc       :
 -->
 <script setup lang="ts">
@@ -232,7 +232,7 @@ const loadLocalStorage = () => {
 
   // 预览区
   const preview = JSON.parse(localStorage.getItem('annotree-preview'))
-  bridgeChar.value = preview?.bridgeChar ?? '─'
+  bridgeChar.value = preview?.bridgeChar ?? '-'
   minBridge.value = preview?.minBridge ?? 4
   noteFormat.value = preview?.noteFormat ?? ' // {note}'
   showBridge.value = preview?.showBridge ?? false
