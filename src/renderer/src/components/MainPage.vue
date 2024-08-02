@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-03 01:46
+ * @LastTime   : 2024-08-03 01:56
  * @desc       :
 -->
 <script setup lang="ts">
@@ -939,7 +939,7 @@ function nodeClick(index) {
           <el-icon><Search /></el-icon>
           <span> {{ $t('sao-miao') }} </span>
         </el-button>
-        <el-button type="warning" @click="setCommon">
+        <el-button type="success" plain @click="setCommon">
           <el-icon size="16"><Setting /></el-icon>
           <span> {{ $t('quan-ju-pei-zhi') }} </span>
         </el-button>
