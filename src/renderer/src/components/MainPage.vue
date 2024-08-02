@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-02 14:07
+ * @LastTime   : 2024-08-02 14:10
  * @desc       :
 -->
 <script setup lang="ts">
@@ -914,10 +914,6 @@ function nodeClick(index) {
 
     <el-divider />
 
-    <div class="dir" v-if="folderPath">
-      <div>{{ $t('sco-miao-mu-lu') }}：{{ folderPath }}</div>
-    </div>
-
     <!-- 内容区 -->
     <div class="content">
       <div class="left">
@@ -1490,14 +1486,19 @@ function nodeClick(index) {
     </div>
 
     <div class="info" v-if="treeData?.length > 0">
-      <div>{{ $t('zong-ji-treedatalength', [treeData?.length]) }}</div>
-      <div v-if="folderNumber > 0">
-        <el-icon><FolderChecked /></el-icon>
-        <span>{{ $t('wen-jian-jia-foldernumber', [folderNumber]) }}</span>
+      <div class="dir" v-if="folderPath">
+        <div>{{ $t('sco-miao-mu-lu') }}：{{ folderPath }}</div>
       </div>
-      <div v-if="fileNumber > 0">
-        <el-icon><DocumentChecked /></el-icon>
-        <span>{{ $t('wen-jian-filenumber', [fileNumber]) }}</span>
+      <div>
+        <div>{{ $t('zong-ji-treedatalength', [treeData?.length]) }}</div>
+        <div v-if="folderNumber > 0">
+          <el-icon><FolderChecked /></el-icon>
+          <span>{{ $t('wen-jian-jia-foldernumber', [folderNumber]) }}</span>
+        </div>
+        <div v-if="fileNumber > 0">
+          <el-icon><DocumentChecked /></el-icon>
+          <span>{{ $t('wen-jian-filenumber', [fileNumber]) }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1513,8 +1514,9 @@ function nodeClick(index) {
   }
 
   .dir {
-    font-size: 14px;
-    margin-bottom: 10px;
+    &::after {
+      content: '|';
+    }
   }
 
   .content {
@@ -1621,6 +1623,7 @@ function nodeClick(index) {
 
   .info {
     display: flex;
+    align-items: center;
     margin-top: 14px;
     font-size: 14px;
     div {
