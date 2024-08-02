@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-02 14:10
+ * @LastTime   : 2024-08-02 14:15
  * @desc       :
 -->
 <script setup lang="ts">
@@ -912,8 +912,6 @@ function nodeClick(index) {
       </div>
     </div>
 
-    <el-divider />
-
     <!-- 内容区 -->
     <div class="content">
       <div class="left">
@@ -988,8 +986,8 @@ function nodeClick(index) {
                   v-if="item?.isDirectory"
                   @click="foldNode(item)"
                 >
-                  <el-icon color="#00000090" v-if="item.isShowElements"><CaretBottom /></el-icon>
-                  <el-icon color="#00000090" v-else><CaretRight /></el-icon>
+                  <el-icon color="#00000088" v-if="item.isShowElements"><CaretBottom /></el-icon>
+                  <el-icon color="#00000088" v-else><CaretRight /></el-icon>
                 </div>
                 <div v-else style="width: 15px"></div>
                 <!-- 树枝 -->
@@ -1511,6 +1509,7 @@ function nodeClick(index) {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
   }
 
   .dir {
@@ -1529,7 +1528,7 @@ function nodeClick(index) {
     .left {
       flex: 1;
       background-color: #f7f8f9;
-      height: 83vh;
+      height: 88vh;
       border-radius: 4px;
       border: 1px solid #dee2e6;
       border-right: none;
@@ -1549,7 +1548,7 @@ function nodeClick(index) {
 
     .right {
       flex: 1;
-      height: 83vh;
+      height: 88vh;
       border-radius: 4px;
 
       background-color: #fff;
@@ -1662,7 +1661,7 @@ function nodeClick(index) {
       display: flex;
       align-items: center;
       margin-right: 10px;
-      width: 185px;
+      width: 188px;
     }
 
     .tab-item-value {
