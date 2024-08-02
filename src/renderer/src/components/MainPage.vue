@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-02 10:31
+ * @LastTime   : 2024-08-02 14:07
  * @desc       :
 -->
 <script setup lang="ts">
@@ -922,25 +922,23 @@ function nodeClick(index) {
     <div class="content">
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <h1>{{ $t('bian-ji-qu') }}</h1>
           <div class="edit-tools" v-if="treeData.length > 0">
-            <div class="edit-tool">
-              <el-button type="danger" @click="refreshData">
-                <el-icon><Refresh /></el-icon>
-                <span> {{ $t('zhong-zhi-shu-ju') }} </span>
-              </el-button>
-            </div>
-            <div class="edit-tool">
-              <el-button @click="refreshNote">
-                <el-icon><Refresh /></el-icon>
-                <span> {{ $t('zhong-zhi-zhu-shi') }} </span>
-              </el-button>
-            </div>
+            <el-icon
+              size="24"
+              class="tools-icon"
+              @click="refreshNote"
+              :title="$t('zhong-zhi-zhu-shi')"
+              ><Refresh
+            /></el-icon>
 
             <div style="position: relative">
-              <el-button type="warning" @click.stop="isShowEmoji = !isShowEmoji"
-                >🎉 {{ $t('xuan-ze-biao-qing') }}</el-button
-              >
+              <el-icon
+                size="24"
+                :title="$t('xuan-ze-biao-qing')"
+                @click.stop="isShowEmoji = !isShowEmoji"
+                class="tools-icon"
+                ><Star
+              /></el-icon>
               <Picker
                 @click.stop="isShowEmoji = true"
                 v-if="isShowEmoji"
@@ -1037,39 +1035,32 @@ function nodeClick(index) {
         </div>
       </div>
       <div class="right">
-        <div style="display: flex; align-items: center; justify-content: space-between">
+        <div class="preview-tools" v-if="previewList.length > 0">
           <div style="display: flex; align-items: center">
-            <h1>{{ $t('yu-lan-qu') }}</h1>
             <el-icon
               class="tools-icon"
-              style="margin-left: 2px"
-              size="26"
-              color="#5e89fb"
+              size="24"
               @click="isPreview = true"
               :title="$t('yu-lan-qu-pei-zhi')"
-              ><Tools
+              ><Setting
             /></el-icon>
           </div>
-          <div v-if="previewList.length > 0">
-            <el-button @click="copyTree" type="success">
-              <el-icon size="18"><CopyDocument /></el-icon>
-              <span>{{ $t('fu-zhi') }}</span>
-            </el-button>
+          <div>
+            <el-icon class="tools-icon" size="24" @click="copyTree" title="复制文本"
+              ><CopyDocument
+            /></el-icon>
 
-            <el-button type="primary" @click="exportFile">
-              <el-icon size="18"><Download /></el-icon>
-              <span>{{ $t('dao-chu') }}</span>
-            </el-button>
+            <el-icon class="tools-icon" size="24" @click="exportFile" title="导出文本"
+              ><Download
+            /></el-icon>
 
-            <el-button @click="copyImg" type="success">
-              <el-icon size="18"><CopyDocument /></el-icon>
-              <span>复制图片</span>
-            </el-button>
+            <el-icon class="tools-icon" size="24" @click="copyImg" title="复制图片"
+              ><Picture
+            /></el-icon>
 
-            <el-button type="primary" @click="exportImg">
-              <el-icon size="18"><Download /></el-icon>
-              <span>导出图片</span>
-            </el-button>
+            <el-icon class="tools-icon" @click="exportImg" size="24" title="导出图片"
+              ><Camera
+            /></el-icon>
           </div>
         </div>
 
@@ -1534,17 +1525,20 @@ function nodeClick(index) {
     }
 
     .left {
-      padding: 10px;
       flex: 1;
-      background-color: #f8f9fa;
+      background-color: #f7f8f9;
       height: 83vh;
-      margin-right: 20px;
       border-radius: 4px;
       border: 1px solid #dee2e6;
+      border-right: none;
 
       .edit-tools {
         display: flex;
         align-items: center;
+        width: 100%;
+        border-bottom: 1px solid #dee2e6;
+        padding: 5px 10px;
+
         .edit-tool {
           margin-right: 15px;
         }
@@ -1552,22 +1546,27 @@ function nodeClick(index) {
     }
 
     .right {
-      padding: 10px;
       flex: 1;
       height: 83vh;
       border-radius: 4px;
 
-      background-color: #f8f9fa;
+      background-color: #fff;
       border: 1px solid #dee2e6;
 
-      .tools-icon {
-        &:hover {
-          cursor: pointer;
-        }
+      .preview-tools {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+        border-bottom: 1px solid #dee2e6;
+        padding: 5px 10px;
       }
     }
 
     .tree-scroller {
+      margin-top: 20px;
+      padding: 0 10px 0 10px;
       height: calc(100% - 100px);
       overflow: auto;
     }
@@ -1632,6 +1631,14 @@ function nodeClick(index) {
         margin-left: 3px;
       }
     }
+  }
+}
+
+.tools-icon {
+  margin-right: 24px;
+  &:hover {
+    color: #5a9cf8;
+    cursor: pointer;
   }
 }
 
