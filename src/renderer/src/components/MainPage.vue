@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-03 01:24
+ * @LastTime   : 2024-08-03 01:46
  * @desc       :
 -->
 <script setup lang="ts">
@@ -322,6 +322,8 @@ async function scan() {
         console.error('No input elements found on the page.')
       }
     }, 0)
+
+    handleFolderSuffix()
   } catch (error) {
     console.error('Scan failed:', error)
   }
@@ -623,6 +625,38 @@ watch([autoOpenFile, isEggshell, syncScroll, showIcon, languageId, folderSuffix]
     })
   )
 })
+
+// 控制文件夹结尾显示 /
+watch([folderSuffix], () => {
+  handleFolderSuffix()
+})
+
+// 处理文件夹尾部
+function handleFolderSuffix() {
+  if (folderSuffix.value) {
+    treeData.value = treeData.value.map((item) => {
+      if (item.isDirectory) {
+        // 检查名称是否已经以斜杠结尾
+        if (!item.name.endsWith('/')) {
+          item.name = item.name + '/'
+        }
+      }
+      return item
+    })
+  } else {
+    treeData.value = treeData.value.map((item) => {
+      if (item.isDirectory) {
+        // 去掉文件夹名称末尾的斜杠
+        if (item.name.endsWith('/')) {
+          item.name = item.name.slice(0, -1)
+        }
+      }
+      return item
+    })
+  }
+
+  getPreviewData()
+}
 
 // 全局配置-扫描
 watch(
@@ -1008,7 +1042,6 @@ function nodeClick(index) {
                     <pre>{{ item.name }}</pre>
                     <!-- 扩展名 -->
                     <pre v-if="item.ext">{{ item.ext }}</pre>
-                    <pre>{{ folderSuffix ? (item?.isDirectory ? '/' : '') : '' }}</pre>
                   </div>
                 </span>
               </div>
