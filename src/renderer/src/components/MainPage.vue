@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-02 01:14
+ * @LastTime   : 2024-08-02 10:31
  * @desc       :
 -->
 <script setup lang="ts">
@@ -317,6 +317,7 @@ async function scan() {
       const inputs = document.getElementsByTagName('input')
       if (inputs.length > 0) {
         inputs[0].focus()
+        currentIndex.value = -1
       } else {
         console.error('No input elements found on the page.')
       }
@@ -434,15 +435,20 @@ function getMaxWidth(result) {
   }
 }
 
-const currentIndex = ref(0)
+// 当前输入框索引
+const currentIndex = ref(-1)
+
+const isShiftTab = ref(false)
 // tab 聚焦下一个输入框；shift + tab 聚焦上一个输入框；
 document.addEventListener('keydown', function (event) {
   nextTick(() => {
     if (event.key === 'Tab') {
+      const activeElement = document.activeElement
       const inputs = document.querySelectorAll('input')
+      currentIndex.value = Array.from(inputs).indexOf(activeElement)
+
       const firstInput = inputs[0]
       const lastInput = inputs[inputs.length - 1]
-      const activeElement = document.activeElement
 
       if (!inputs.length) return // 如果没有输入框，直接返回
 
@@ -464,13 +470,13 @@ document.addEventListener('keydown', function (event) {
         return
       }
 
-      currentIndex.value = Array.from(inputs).indexOf(activeElement)
-
       if (event.shiftKey) {
+        isShiftTab.value = true
         // Shift + Tab
         event.preventDefault()
         if (activeElement === firstInput) {
           lastInput.focus() // 从第一个跳到最后一个
+          currentIndex.value = inputs.length
 
           if (scrollLeft.value) {
             // 确保滚动条到底部
@@ -482,10 +488,12 @@ document.addEventListener('keydown', function (event) {
           inputs[currentIndex.value - 1].focus() // 焦点移到上一个输入框
         }
       } else {
+        isShiftTab.value = false
         // Tab
         event.preventDefault()
         if (activeElement === lastInput) {
           firstInput.focus() // 从最后一个跳到第一个
+          currentIndex.value = -1
         } else {
           inputs[currentIndex.value + 1].focus() // 焦点移到下一个输入框
         }
@@ -520,7 +528,6 @@ function getPreviewData() {
   })
 
   const max = getMaxWidth(result)
-  console.log('🚀  max:', max)
 
   // 补齐桥梁
   result = result.map((item) => ({ ...item, bridge: bridgeAuto(item, max) }))
@@ -875,6 +882,19 @@ function exportImg() {
     link.click()
   })
 }
+
+// 点击树节点
+function nodeClick(index) {
+  if (isShiftTab.value) {
+    currentIndex.value = index + 1
+  } else {
+    currentIndex.value = index - 1
+  }
+
+  // 点击后聚焦至当前输入框
+  const inputs = document.querySelectorAll('input')
+  inputs[index].focus()
+}
 </script>
 
 <template>
@@ -957,9 +977,14 @@ function exportImg() {
         <div @scroll="handleScroll(scrollLeft, scrollRight)" ref="scrollLeft" class="tree-scroller">
           <div
             v-for="(item, index) in treeData"
-            :class="{ 'tree-node-active': currentIndex + 1 === index }"
+            :class="{
+              'tree-node-active': isShiftTab
+                ? currentIndex - 1 === index
+                : currentIndex + 1 === index
+            }"
             :key="item.id"
             class="tree-node"
+            @click="nodeClick(index)"
           >
             <div style="display: flex">
               <div style="display: flex; flex: 1">
@@ -1206,7 +1231,7 @@ function exportImg() {
                   <div class="tab-item-value"><el-switch v-model="showIcon"></el-switch></div>
                 </div>
                 <div class="tab-item">
-                  <div class="tab-item-label">📁 文件夹后显示 /</div>
+                  <div class="tab-item-label">文件夹结尾显示 /</div>
                   <div class="tab-item-value"><el-switch v-model="folderSuffix"></el-switch></div>
                 </div>
                 <div class="tab-item">
