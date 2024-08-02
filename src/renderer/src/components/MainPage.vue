@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-03 01:05
+ * @LastTime   : 2024-08-03 01:24
  * @desc       :
 -->
 <script setup lang="ts">
@@ -1450,10 +1450,6 @@ function nodeClick(index) {
               </template>
               <div>
                 <div class="tab-item">
-                  <div class="tab-item-label">{{ $t('dang-qian-ban-ben') }}</div>
-                  <div class="tab-item-value">v{{ packageJson.version }}</div>
-                </div>
-                <div class="tab-item">
                   <div class="tab-item-label">{{ $t('kai-fa-zhe') }}</div>
                   <div class="tab-item-value">
                     <el-link type="primary" href="https://github.com/itchaox" target="_blank"
@@ -1481,6 +1477,12 @@ function nodeClick(index) {
                       $t('dian-wo-cha-kan')
                     }}</el-link>
                   </div>
+                </div>
+
+                <div class="tab-item-center">
+                  <img src="../assets/images/icon-128.png" alt="" />
+                  <div class="tab-item-center-title">Annotree</div>
+                  <div class="tab-item-center-version">v{{ packageJson.version }}</div>
                 </div>
               </div>
             </el-tab-pane>
@@ -1699,6 +1701,24 @@ function nodeClick(index) {
 
     .tab-item-value {
       width: 400px;
+    }
+  }
+
+  .tab-item-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+
+    .tab-item-center-title {
+      padding: 10px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .tab-item-center-version {
+      font-size: 20px;
+      color: #00000090;
     }
   }
 }
