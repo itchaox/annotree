@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-01 09:36
+ * @LastTime   : 2024-08-03 00:59
  * @desc       :
  */
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
@@ -17,6 +17,8 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
+    minWidth: 700, // Set the minimum width
+    minHeight: 600, // Set the minimum height
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),

@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-02 17:55
+ * @LastTime   : 2024-08-03 01:05
  * @desc       :
 -->
 <script setup lang="ts">
@@ -913,7 +913,7 @@ function nodeClick(index) {
     </div>
 
     <!-- 内容区 -->
-    <div class="content">
+    <div class="content" v-if="treeData.length > 0">
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
           <div
@@ -1488,6 +1488,10 @@ function nodeClick(index) {
         </div>
       </el-dialog>
     </div>
+    <div class="no-data" v-else>
+      <img src="../assets/images/noData.png" alt="" />
+      <div>请 <span class="no-data-btn" @click="scan">扫描</span> 文件夹录入数据</div>
+    </div>
 
     <div class="info" v-if="treeData?.length > 0">
       <div class="dir" v-if="folderPath">
@@ -1521,6 +1525,29 @@ function nodeClick(index) {
   .dir {
     &::after {
       content: '|';
+    }
+  }
+
+  .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid #dee2e6;
+    height: 88vh;
+    border-radius: 4px;
+    font-size: 18px;
+    img {
+      width: 35%;
+    }
+
+    .no-data-btn {
+      color: #5a9cf8;
+      font-size: 22px;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
