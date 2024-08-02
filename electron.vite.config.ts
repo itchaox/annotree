@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-12 10:04
+ * @LastTime   : 2024-08-02 15:57
  * @desc       :
  */
 import { resolve } from 'path'
@@ -24,6 +24,9 @@ export default defineConfig({
     }
   },
   renderer: {
+    server: {
+      port: 4396
+    },
     resolve: {
       alias: {
         '@renderer': resolve('src/renderer/src')

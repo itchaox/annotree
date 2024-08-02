@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-02 14:15
+ * @LastTime   : 2024-08-02 16:02
  * @desc       :
 -->
 <script setup lang="ts">
@@ -916,14 +916,20 @@ function nodeClick(index) {
     <div class="content">
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <div class="edit-tools" v-if="treeData.length > 0">
-            <el-icon
-              size="24"
-              class="tools-icon"
-              @click="refreshNote"
-              :title="$t('zhong-zhi-zhu-shi')"
-              ><Refresh
-            /></el-icon>
+          <div
+            class="edit-tools"
+            style="display: flex; align-items: center; justify-content: space-between"
+            v-if="treeData.length > 0"
+          >
+            <div>
+              <el-icon
+                size="24"
+                class="tools-icon"
+                @click="refreshNote"
+                :title="$t('zhong-zhi-zhu-shi')"
+                ><Refresh
+              /></el-icon>
+            </div>
 
             <div style="position: relative">
               <el-icon
@@ -936,7 +942,7 @@ function nodeClick(index) {
               <Picker
                 @click.stop="isShowEmoji = true"
                 v-if="isShowEmoji"
-                style="position: absolute; top: 45px; right: 0; z-index: 2"
+                style="position: absolute; top: 45px; left: 20px; z-index: 2"
                 :data="emojiIndex"
                 set="google"
                 @select="selectEmoji"
