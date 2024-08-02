@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-02 16:02
+ * @LastTime   : 2024-08-02 17:55
  * @desc       :
 -->
 <script setup lang="ts">
@@ -1477,7 +1477,7 @@ function nodeClick(index) {
                 <div class="tab-item">
                   <div class="tab-item-label">{{ $t('guan-fang-wen-dang') }}</div>
                   <div class="tab-item-value">
-                    <el-link type="primary" href="https://annotree.com" target="_blank">{{
+                    <el-link type="primary" href="https://www.annotree.com" target="_blank">{{
                       $t('dian-wo-cha-kan')
                     }}</el-link>
                   </div>
