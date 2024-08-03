@@ -78,5 +78,18 @@
   "p12": "符号",
   "p13": "旗帜",
   "p14": "自定义",
-  "gen-sui-xi-tong": "跟随系统"
+  "gen-sui-xi-tong": "跟随系统",
+  "tu-pian-yi-fu-zhi-dao-jian-tie-ban": "图片已复制到剪贴板",
+  "fu-zhi-wen-ben": "复制文本",
+  "fu-zhi-tu-pian": "复制图片",
+  "dao-chu-tu-pian": "导出图片",
+  "wen-jian-jia-jie-wei-xian-shi": "文件夹结尾显示 /",
+  "zhong-zhi-fan-wei": "重置范围",
+  "huan-cun": "缓存",
+  "qing": "请",
+  "wen-jian-jia-lu-ru-shu-ju": "文件夹录入数据",
+  "she-zhi": "设置",
+  "que-ren-zhong-zhi-suo-you-shu-ju-ma": "确认重置所有数据吗?",
+  "zhong-zhi": "重置",
+  "zhong-zhi-cheng-gong": "重置成功"
 }
