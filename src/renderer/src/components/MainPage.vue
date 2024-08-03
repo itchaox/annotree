@@ -224,11 +224,10 @@ onMounted(async () => {
     }
   }
 
-  languageId.value = languageToUse
-
-  i18n.global.locale = languageId.value
-
   loadLocalStorage()
+
+  languageId.value = languageToUse
+  i18n.global.locale = languageId.value
 })
 
 // 切换语言
