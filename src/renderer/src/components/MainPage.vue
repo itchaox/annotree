@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-03 14:47
+ * @LastTime   : 2024-08-03 15:19
  * @desc       :
 -->
 <script setup lang="ts">
@@ -205,10 +205,26 @@ onMounted(async () => {
   // 获取系统语言
   const _languageId = await getSystemLanguage()
 
+  const zhLanguages = ['zh-CN', 'zh-TW', 'zh-HK', 'zh-MO', 'zh-SG']
+
   // 如果当前语言支持，则展示选中语言，否则默认展示英文
-  languageId.value =
-    common?.languageId ??
-    (languageList.value.find((item) => item.id === _languageId) ? _languageId : 'en')
+
+  const defaultLanguage = 'en'
+
+  // 确定最终使用的语言ID
+  let languageToUse = common?.languageId
+
+  if (!languageToUse) {
+    if (zhLanguages.includes(_languageId)) {
+      languageToUse = 'zh'
+    } else if (languageList.value.some((item) => item.id === _languageId)) {
+      languageToUse = _languageId
+    } else {
+      languageToUse = defaultLanguage
+    }
+  }
+
+  languageId.value = languageToUse
 
   i18n.global.locale = languageId.value
 
