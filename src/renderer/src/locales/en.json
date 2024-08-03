@@ -78,5 +78,20 @@
   "p12": "Symbols",
   "p13": "Flags",
   "p14": "Custom",
-  "gen-sui-xi-tong": "Follow the system"
+  "gen-sui-xi-tong": "Follow the system",
+  "tu-pian-yi-fu-zhi-dao-jian-tie-ban": "Image copied to clipboard",
+  "fu-zhi-wen-ben": "Copy text",
+  "fu-zhi-tu-pian": "Copy image",
+  "dao-chu-tu-pian": "Export image",
+  "wen-jian-jia-jie-wei-xian-shi": "Show folder end /",
+  "zhong-zhi-fan-wei": "Reset range",
+  "huan-cun": "Cache",
+  "qing": "Please",
+  "wen-jian-jia-lu-ru-shu-ju": "Enter folder data",
+  "she-zhi": "Settings",
+  "que-ren-zhong-zhi-suo-you-shu-ju-ma": "Are you sure you want to reset all data?",
+  "zhong-zhi": "Reset",
+  "zhong-zhi-cheng-gong": "Reset successful",
+  "que-ding": "Confirm",
+  "qu-xiao": "Cancel"
 }

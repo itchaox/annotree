@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-03 14:34
+ * @LastTime   : 2024-08-03 14:47
  * @desc       :
 -->
 <script setup lang="ts">
@@ -136,6 +136,17 @@ function clearNotes() {
 
   localStorage.setItem('annotree-notes', JSON.stringify(annotreeNotes))
 }
+
+// 日语: ja
+// 西班牙语: es
+// 法语: fr
+// 德语: de
+// 韩语: ko
+// 俄语: ru
+// 葡萄牙语: pt
+// 意大利语: it
+// 中文: zh
+// 英文: en
 
 // 语言列表
 const languageList = ref([
@@ -1279,6 +1290,8 @@ function nodeClick(index) {
                       @confirm="resetCache"
                       confirm-button-type="danger"
                       width="210"
+                      :confirm-button-text="$t('que-ding')"
+                      :cancel-button-text="$t('qu-xiao')"
                     >
                       <template #reference>
                         <el-button type="danger" :disabled="!isCache && !isConfig">

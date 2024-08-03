@@ -78,5 +78,20 @@
   "p12": "기호",
   "p13": "깃발",
   "p14": "사용자 정의",
-  "gen-sui-xi-tong": "시스템 따르기"
+  "gen-sui-xi-tong": "시스템 따르기",
+  "tu-pian-yi-fu-zhi-dao-jian-tie-ban": "이미지가 클립보드에 복사되었습니다",
+  "fu-zhi-wen-ben": "텍스트 복사",
+  "fu-zhi-tu-pian": "이미지 복사",
+  "dao-chu-tu-pian": "이미지 내보내기",
+  "wen-jian-jia-jie-wei-xian-shi": "폴더 끝에 표시 /",
+  "zhong-zhi-fan-wei": "범위 재설정",
+  "huan-cun": "캐시",
+  "qing": "부탁드립니다",
+  "wen-jian-jia-lu-ru-shu-ju": "폴더 데이터 입력",
+  "she-zhi": "설정",
+  "que-ren-zhong-zhi-suo-you-shu-ju-ma": "모든 데이터를 재설정하시겠습니까?",
+  "zhong-zhi": "재설정",
+  "zhong-zhi-cheng-gong": "재설정 성공",
+  "que-ding": "확인",
+  "qu-xiao": "취소"
 }

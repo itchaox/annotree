@@ -78,5 +78,20 @@
   "p12": "Символы",
   "p13": "Флаги",
   "p14": "Настроить",
-  "gen-sui-xi-tong": "Следовать за системой"
+  "gen-sui-xi-tong": "Следовать за системой",
+  "tu-pian-yi-fu-zhi-dao-jian-tie-ban": "Изображение скопировано в буфер обмена",
+  "fu-zhi-wen-ben": "Копировать текст",
+  "fu-zhi-tu-pian": "Копировать изображение",
+  "dao-chu-tu-pian": "Экспортировать изображение",
+  "wen-jian-jia-jie-wei-xian-shi": "Показать конец папки /",
+  "zhong-zhi-fan-wei": "Сбросить диапазон",
+  "huan-cun": "Кэш",
+  "qing": "Пожалуйста",
+  "wen-jian-jia-lu-ru-shu-ju": "Ввести данные папки",
+  "she-zhi": "Настройки",
+  "que-ren-zhong-zhi-suo-you-shu-ju-ma": "Вы уверены, что хотите сбросить все данные?",
+  "zhong-zhi": "Сброс",
+  "zhong-zhi-cheng-gong": "Сброс выполнен успешно",
+  "que-ding": "Подтвердить",
+  "qu-xiao": "Отменить"
 }

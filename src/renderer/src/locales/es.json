@@ -78,5 +78,20 @@
   "p12": "Símbolos",
   "p13": "Banderas",
   "p14": "Personalizado",
-  "gen-sui-xi-tong": "Seguir el sistema"
+  "gen-sui-xi-tong": "Seguir el sistema",
+  "tu-pian-yi-fu-zhi-dao-jian-tie-ban": "Imagen copiada al portapapeles",
+  "fu-zhi-wen-ben": "Copiar texto",
+  "fu-zhi-tu-pian": "Copiar imagen",
+  "dao-chu-tu-pian": "Exportar imagen",
+  "wen-jian-jia-jie-wei-xian-shi": "Mostrar fin de carpeta /",
+  "zhong-zhi-fan-wei": "Restablecer rango",
+  "huan-cun": "Caché",
+  "qing": "Por favor",
+  "wen-jian-jia-lu-ru-shu-ju": "Ingresar datos de la carpeta",
+  "she-zhi": "Configuración",
+  "que-ren-zhong-zhi-suo-you-shu-ju-ma": "¿Estás seguro de que deseas restablecer todos los datos?",
+  "zhong-zhi": "Restablecer",
+  "zhong-zhi-cheng-gong": "Restablecimiento exitoso",
+  "que-ding": "Confirmar",
+  "qu-xiao": "Cancelar"
 }

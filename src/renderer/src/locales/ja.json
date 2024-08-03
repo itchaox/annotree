@@ -78,5 +78,20 @@
   "p12": "記号",
   "p13": "旗",
   "p14": "カスタム",
-  "gen-sui-xi-tong": "システムに従う"
+  "gen-sui-xi-tong": "システムに従う",
+  "tu-pian-yi-fu-zhi-dao-jian-tie-ban": "画像がクリップボードにコピーされました",
+  "fu-zhi-wen-ben": "テキストをコピー",
+  "fu-zhi-tu-pian": "画像をコピー",
+  "dao-chu-tu-pian": "画像をエクスポート",
+  "wen-jian-jia-jie-wei-xian-shi": "フォルダーの末尾に表示 /",
+  "zhong-zhi-fan-wei": "範囲をリセット",
+  "huan-cun": "キャッシュ",
+  "qing": "お願いします",
+  "wen-jian-jia-lu-ru-shu-ju": "フォルダーのデータを入力",
+  "she-zhi": "設定",
+  "que-ren-zhong-zhi-suo-you-shu-ju-ma": "すべてのデータをリセットしてもよろしいですか？",
+  "zhong-zhi": "リセット",
+  "zhong-zhi-cheng-gong": "リセット成功",
+  "que-ding": "確認",
+  "qu-xiao": "キャンセル"
 }

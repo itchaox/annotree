@@ -78,5 +78,20 @@
   "p12": "Symboles",
   "p13": "Drapeaux",
   "p14": "Personnalisé",
-  "gen-sui-xi-tong": "Suivre le système"
+  "gen-sui-xi-tong": "Suivre le système",
+  "tu-pian-yi-fu-zhi-dao-jian-tie-ban": "Image copiée dans le presse-papiers",
+  "fu-zhi-wen-ben": "Copier le texte",
+  "fu-zhi-tu-pian": "Copier l'image",
+  "dao-chu-tu-pian": "Exporter l'image",
+  "wen-jian-jia-jie-wei-xian-shi": "Afficher la fin du dossier /",
+  "zhong-zhi-fan-wei": "Réinitialiser la plage",
+  "huan-cun": "Cache",
+  "qing": "Veuillez",
+  "wen-jian-jia-lu-ru-shu-ju": "Saisir les données du dossier",
+  "she-zhi": "Paramètres",
+  "que-ren-zhong-zhi-suo-you-shu-ju-ma": "Êtes-vous sûr de vouloir réinitialiser toutes les données ?",
+  "zhong-zhi": "Réinitialiser",
+  "zhong-zhi-cheng-gong": "Réinitialisation réussie",
+  "que-ding": "Confirmer",
+  "qu-xiao": "Annuler"
 }
