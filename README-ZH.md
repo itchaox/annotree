@@ -34,7 +34,7 @@ Annotree 注释树
 
 ## 效果预览 🎉
 
-![demo](/resources/demo.gif)
+![demo](/resources/demo-zh.gif)
 
 ## 反馈渠道
 
