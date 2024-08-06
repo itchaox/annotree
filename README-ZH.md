@@ -97,7 +97,7 @@ Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设
 2. folder-explorer 需要导出后才能看到配置后的效果，我希望能够实现实时预览功能。
 3. folder-explorer 中编辑备注时，每次都需右键打开编辑菜单，这种操作方式不够方便。
 
-## Star History Chart ⭐️
+## Star 历史图表 ⭐️
 
 [![Star History Chart](https://api.star-history.com/svg?repos=itchaox/annotree&type=Date)](https://star-history.com/#itchaox/annotree&Date)
 
