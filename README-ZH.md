@@ -22,6 +22,8 @@ Annotree 注释树
 
 ## 项目介绍
 
+### 基本情况 📗
+
 > 本项目基于 [folder-explorer](https://github.com/d2-projects/folder-explorer) 进行二次开发，🙏🏻 非常感谢 [FairyEver](https://github.com/FairyEver) 的创意和贡献！
 
 Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设计的桌面软件，旨在简化技术文档的编写过程。通过直观的可视化操作界面，你可以轻松创建文件夹目录注释树。
@@ -33,15 +35,16 @@ Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设
 这是我的首个正式开源项目，如果它对你有帮助， 请给我一个 Star ⭐️ 并分享给你的朋友们，这对我意义重大，谢谢 💖！<br>
 你的反馈和支持 💯，是我不断改进和积极更新软件的最大动力~
 
-官方文档：https://annotree.com
+- 官方文档：https://annotree.com<br>
+- **软件最新版本下载地址，请访问 [Github Release](https://github.com/itchaox/annotree/releases)**
+
+### 视频教程 📽️
 
 > 我在 B 站发布了一些介绍 Annotree 功能的视频，欢迎大家前往观看。<br>
 > 第 1 期视频：https://www.bilibili.com/video/BV1fS421R7UM<br>
 > 第 2 期视频：https://www.bilibili.com/video/BV1Tz421B7AY<br>
 > 第 3 期视频：https://www.bilibili.com/video/BV1bXvoe4EUT<br>
-> 我还是 B 站的一位小 up，欢迎大家多多支持！如果这些视频对你有帮助，感谢你的一键三连和关注~
-
-**软件最新版本下载地址，请访问 [Github Release](https://github.com/itchaox/annotree/releases)**
+> 我还是 B 站的一位小 up，欢迎大家多多支持！如果这些视频对你有帮助，感谢你的一键三连和关注~ 🤩
 
 ## 效果预览 🎉
 
