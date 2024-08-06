@@ -50,25 +50,6 @@ Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设
 
 ![demo](/resources/demo-zh.gif)
 
-## 反馈渠道
-
-如果你有任何意见或建议，欢迎通过以下方式与我联系：
-
-- 提交 [GitHub Issue](https://github.com/itchaox/annotree/issues)
-- Annotree 微信交流群
-
-  > 欢迎添加微信群进行沟通~ 💗，在微信群中能够更加实时高效的沟通
-
-  ![](/resources//wechat.jpg)
-
-<!-- 官方文档： -->
-
-## 为何二次开发
-
-1. folder-explorer 的某些功能对我来说不必要，显得有些冗余，且不符合我的使用习惯。
-2. folder-explorer 需要导出后才能看到配置后的效果，我希望能够实现实时预览功能。
-3. folder-explorer 中编辑备注时，每次都需右键打开编辑菜单，这种操作方式不够方便。
-
 ## 功能特性
 
 1. ✨ 实时预览：修改配置后，实时预览文件夹目录树的效果。
@@ -98,6 +79,23 @@ Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设
 - 桥梁填充字符：输入一个单字节填充字符，比如：\*，\#，\$，\-，\@，\_ 等。
 - 始终显示桥梁：配置没有注释的地方是否显示桥梁。
 - 导出：设置好相关配置，编写好注释后，导出注释文件树形结构。
+
+## 反馈渠道
+
+如果你有任何意见或建议，欢迎通过以下方式与我联系：
+
+- 提交 [GitHub Issue](https://github.com/itchaox/annotree/issues)
+- Annotree 微信交流群
+
+  > 欢迎添加微信群进行沟通~ 💗，在微信群中能够更加实时高效的沟通
+
+  ![](/resources//wechat.jpg)
+
+## 为何二次开发
+
+1. folder-explorer 的某些功能对我来说不必要，显得有些冗余，且不符合我的使用习惯。
+2. folder-explorer 需要导出后才能看到配置后的效果，我希望能够实现实时预览功能。
+3. folder-explorer 中编辑备注时，每次都需右键打开编辑菜单，这种操作方式不够方便。
 
 ## Star History Chart ⭐️
 
