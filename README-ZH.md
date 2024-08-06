@@ -8,7 +8,7 @@ Annotree 注释树
 </h1>
 </div>
 
-<p align="center">一款生成带注释的目录树工具，大大方便技术文档的编写</p>
+<p align="center">生成文件夹目录注释树，让技术文档编写变得轻松高效！</p>
 
 <p align="center">
  <img  src="https://img.shields.io/github/v/tag/itchaox/annotree?label=version&color=90d799" alt="version" style="margin-right: 2px"/>
@@ -24,11 +24,16 @@ Annotree 注释树
 
 > 本项目基于 [folder-explorer](https://github.com/d2-projects/folder-explorer) 进行二次开发，🙏🏻 非常感谢 [FairyEver](https://github.com/FairyEver) 的创意和贡献！
 
-这是我的第一个正式开源项目，如果对你有帮助，感谢 Star ⭐️ 和分享给你的朋友们 ，这对我很重要，谢谢 💗！
+这是我的首个正式开源项目，如果它对你有帮助， 请给我一个 Star ⭐️ 并分享给你的朋友们，这对我意义重大，谢谢 💖！<br>
+你的反馈和支持 💯，是我不断改进和积极更新软件的最大动力~
 
 官方文档：https://annotree.com
 
-视频讲解：https://www.bilibili.com/video/BV1fS421R7UM
+> 我在 B 站发布了一些介绍 Annotree 功能的视频，欢迎大家前往观看。<br>
+> 第 1 期视频：https://www.bilibili.com/video/BV1fS421R7UM<br>
+> 第 2 期视频：https://www.bilibili.com/video/BV1Tz421B7AY<br>
+> 第 3 期视频：https://www.bilibili.com/video/BV1bXvoe4EUT<br>
+> 我还是 B 站的一位小 up，欢迎大家多多支持！如果这些视频对你有帮助，感谢你的一键三连和关注~
 
 **软件最新版本下载地址，请访问 [Github Release](https://github.com/itchaox/annotree/releases)**
 
@@ -38,7 +43,7 @@ Annotree 注释树
 
 ## 反馈渠道
 
-现在项目还处于 mvp（最简可行产品）阶段，如果你有任何意见或建议，欢迎通过以下方式与我联系：
+如果你有任何意见或建议，欢迎通过以下方式与我联系：
 
 - 提交 [GitHub Issue](https://github.com/itchaox/annotree/issues)
 - Annotree 微信交流群
@@ -51,16 +56,16 @@ Annotree 注释树
 
 ## 为何二次开发
 
-1.  folder-explorer 部分功能我用不上，对我而言比较冗余，不符合自己的使用习惯。
-2.  folder-explorer 每次配置后，都需要导出后才能看到配置的效果，我觉得使用起来不方便，我希望有实时预览效果。
-3.  folder-explorer 在编辑备注时，每次都需要右键打开编辑备注菜单，我个人使用起来觉得不是很方便。
+1. folder-explorer 的某些功能对我来说不必要，显得有些冗余，且不符合我的使用习惯。
+2. folder-explorer 需要导出后才能看到配置后的效果，我希望能够实现实时预览功能。
+3. folder-explorer 中编辑备注时，每次都需右键打开编辑菜单，这种操作方式不够方便。
 
 ## 功能特性
 
-1. ✨ 实时预览：无需导出文本，即可实时查看注释文件树的效果，让文档编写更加直观高效。
-2. 🖊️ 便捷注释：通过切换输入框轻松编写注释，避免繁琐的右键菜单操作，提高使用效率。
-3. 🚫 文件和文件夹忽略：支持忽略特定文件夹和文件类型，确保只展示你需要的文件结构，保持文件树的简洁。
-4. 📂 自动打开导出文件：导出文件后自动打开，无需手动查找文件，节省时间，让工作流程更加流畅。
+1. ✨ 实时预览：修改配置后，实时预览文件夹目录树的效果。
+2. 🖊️ 便捷注释：通过简单切换输入框来编写注释，显著提升使用效率。
+3. 🚫 文件和文件夹忽略：轻松忽略不需要的文件和文件夹，确保目录树只展示你关心的内容。
+4. 📂 自动打开导出文件：导出文件后自动打开，节省时间，让工作流程更加流畅。
 
 ## 功能介绍
 
