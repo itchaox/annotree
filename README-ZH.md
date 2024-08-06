@@ -24,6 +24,12 @@ Annotree 注释树
 
 > 本项目基于 [folder-explorer](https://github.com/d2-projects/folder-explorer) 进行二次开发，🙏🏻 非常感谢 [FairyEver](https://github.com/FairyEver) 的创意和贡献！
 
+Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设计的桌面软件，旨在简化技术文档的编写过程。通过直观的可视化操作界面，你可以轻松创建文件夹目录注释树。
+
+系统支持： Mac、Windows 和 Linux。
+
+> 如果你需要生成文件夹目录注释树，一定要试试 Annotree 🌲，它绝对不会让你失望 🥳。
+
 这是我的首个正式开源项目，如果它对你有帮助， 请给我一个 Star ⭐️ 并分享给你的朋友们，这对我意义重大，谢谢 💖！<br>
 你的反馈和支持 💯，是我不断改进和积极更新软件的最大动力~
 
