@@ -1168,6 +1168,7 @@ function nodeClick(index) {
                 <el-input
                   v-model="bridgeChar"
                   :placeholder="$t('qing-shu-ru-dan-zi-jie-tian-chong-zi-fu')"
+                  :maxLength="1"
                 ></el-input>
               </div>
             </div>
