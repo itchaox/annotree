@@ -1669,6 +1669,22 @@ function nodeClick(index) {
       padding: 0 10px 0 10px;
       height: calc(100% - 100px);
       overflow: auto;
+      // 溢出滚动样式
+      &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background-color: #b7bdc6;
+        cursor: pointer;
+      }
+
+      &::-webkit-scrollbar-track {
+        border-radius: 3px;
+        background-color: #f7f8f9;
+      }
     }
 
     .tree-node {
