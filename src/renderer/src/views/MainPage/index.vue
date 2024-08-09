@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-09 16:18
+ * @LastTime   : 2024-08-09 23:21
  * @desc       :
 -->
 <script setup lang="ts">
@@ -32,6 +32,7 @@ import { useI18n } from 'vue-i18n'
 import { i18n } from '../../locales/i18n.js'
 
 import html2canvas from 'html2canvas'
+import ConfigPreview from './components/ConfigPreview.vue'
 
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage, getSystemLanguage } = window.api as any
 
@@ -1145,7 +1146,15 @@ function nodeClick(index) {
     </div>
 
     <!-- 预览配置 -->
-    <el-drawer v-model="isPreview" direction="ltr" :modal="true" @close="isPreview = false">
+    <ConfigPreview
+      v-model:isPreview="isPreview"
+      v-model:noteFormat="noteFormat"
+      v-model:minBridge="minBridge"
+      v-model:bridgeChar="bridgeChar"
+      v-model:showBridge="showBridge"
+    />
+
+    <!-- <el-drawer v-model="isPreview" direction="ltr" :modal="true" @close="isPreview = false">
       <template #header>
         <h4>{{ $t('yu-lan-pei-zhi') }}</h4>
       </template>
@@ -1191,7 +1200,7 @@ function nodeClick(index) {
           </div>
         </div>
       </template>
-    </el-drawer>
+    </el-drawer> -->
 
     <!-- 全局配置 -->
     <el-dialog
