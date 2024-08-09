@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-09 23:58
+ * @LastTime   : 2024-08-10 00:25
  * @desc       :
 -->
 <script setup lang="ts">
@@ -18,6 +18,9 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 const emojiIndex = ref(new EmojiIndex(data))
 
 import { set } from 'lodash'
+import { exportImg } from '../../utils/exportImg.js'
+import { copyImg } from '../../utils/copyImg.js'
+import { copyTree } from '../../utils/copyTree.js'
 
 import width from 'string-width'
 
@@ -28,7 +31,6 @@ import { useI18n } from 'vue-i18n'
 
 import { i18n } from '../../locales/i18n.js'
 
-import html2canvas from 'html2canvas'
 import ConfigPreview from './components/ConfigPreview.vue'
 import ConfigGlobal from './components/ConfigGlobal.vue'
 
@@ -842,31 +844,6 @@ function foldNode(item) {
   getPreviewData()
 }
 
-// 复制树
-async function copyTree() {
-  // 直接拿到处理后的tree
-
-  // 显示图标
-  const result = previewList.value.map((item) => item?.value)
-
-  // 换行分割数组至字符串
-  const data = result.join('\n')
-
-  try {
-    // 复制
-    await toClipboard(data)
-    ElMessage({
-      message: t('copySuccess'),
-      type: 'success',
-      duration: 1500,
-      showClose: true
-    })
-    // 复制成功
-  } catch (e) {
-    // 复制失败
-  }
-}
-
 const scrollLeft = ref(null)
 const scrollRight = ref(null)
 
@@ -891,59 +868,6 @@ const handleScroll = (scrolledContainer, otherContainer) => {
   }
 }
 
-// 复制图片
-function copyImg() {
-  html2canvas(document.querySelector('#capture'), {
-    backgroundColor: '#f8f9fa',
-    useCORS: true, //支持图片跨域
-    scale: 1 //设置放大的倍数
-  }).then((canvas) => {
-    canvas.toBlob(async (blob) => {
-      try {
-        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
-        ElMessage({
-          message: t('tu-pian-yi-fu-zhi-dao-jian-tie-ban'),
-          type: 'success',
-          duration: 1500,
-          showClose: true
-        })
-      } catch (err) {
-        console.error('无法复制图片到剪贴板', err)
-      }
-    }, 'image/png')
-  })
-}
-
-// 导出图片
-function exportImg() {
-  html2canvas(document.querySelector('#capture'), {
-    backgroundColor: '#f8f9fa',
-    useCORS: true, //支持图片跨域
-    scale: 1 //设置放大的倍数
-  }).then((canvas) => {
-    // 获取当前时间
-    const now = new Date()
-    const year = now.getFullYear()
-    const month = String(now.getMonth() + 1).padStart(2, '0') // 月份从0开始，所以加1，并确保格式为两位数
-    const day = String(now.getDate()).padStart(2, '0')
-    const hours = String(now.getHours()).padStart(2, '0')
-    const minutes = String(now.getMinutes()).padStart(2, '0')
-    const seconds = String(now.getSeconds()).padStart(2, '0')
-
-    // 格式化时间字符串
-    const formattedDate = `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`
-
-    // 设置下载文件名
-    const filename = `Annotree ${formattedDate}.png`
-
-    const img = canvas.toDataURL('image/png')
-    const link = document.createElement('a')
-    link.href = img
-    link.download = filename
-    link.click()
-  })
-}
-
 // 点击树节点
 function nodeClick(index) {
   if (isShiftTab.value) {
@@ -960,6 +884,7 @@ function nodeClick(index) {
 
 <template>
   <div class="main-page" @click="isShowEmoji = false">
+    <!-- TODO 顶部操作区 -->
     <div class="operation">
       <div>
         <el-button type="primary" @click="scan">
@@ -975,61 +900,61 @@ function nodeClick(index) {
 
     <!-- 内容区 -->
     <div class="content" v-if="treeData.length > 0">
+      <!-- TODO 编辑区 -->
       <div class="left">
-        <div style="display: flex; align-items: center; justify-content: space-between">
-          <div
-            class="edit-tools"
-            style="display: flex; align-items: center; justify-content: space-between"
-            v-if="treeData.length > 0"
-          >
-            <div>
-              <el-icon
-                size="24"
-                class="tools-icon"
-                @click="refreshNote"
-                :title="$t('zhong-zhi-zhu-shi')"
-                ><Refresh
-              /></el-icon>
-            </div>
+        <div
+          class="edit-tools"
+          style="display: flex; align-items: center; justify-content: space-between"
+          v-if="treeData.length > 0"
+        >
+          <div>
+            <el-icon
+              size="24"
+              class="tools-icon"
+              @click="refreshNote"
+              :title="$t('zhong-zhi-zhu-shi')"
+              ><Refresh
+            /></el-icon>
+          </div>
 
-            <div style="position: relative">
-              <el-icon
-                size="24"
-                :title="$t('xuan-ze-biao-qing')"
-                @click.stop="isShowEmoji = !isShowEmoji"
-                class="tools-icon"
-                ><Star
-              /></el-icon>
-              <Picker
-                @click.stop="isShowEmoji = true"
-                v-if="isShowEmoji"
-                style="position: absolute; top: 45px; left: 20px; z-index: 2"
-                :data="emojiIndex"
-                set="google"
-                @select="selectEmoji"
-                :emojiSize="26"
-                :emojiTooltip="true"
-                :showPreview="false"
-                :i18n="{
-                  search: t('p1'),
-                  notfound: t('p2'),
-                  categories: {
-                    search: t('p3'),
-                    recent: t('p4'),
-                    smileys: t('p5'),
-                    people: t('p6'),
-                    nature: t('p7'),
-                    foods: t('p8'),
-                    activity: t('p9'),
-                    places: t('p10'),
-                    objects: t('p11'),
-                    symbols: t('p12'),
-                    flags: t('p13'),
-                    custom: t('p14')
-                  }
-                }"
-              />
-            </div>
+          <!-- TODO 表情 -->
+          <div style="position: relative">
+            <el-icon
+              size="24"
+              :title="$t('xuan-ze-biao-qing')"
+              @click.stop="isShowEmoji = !isShowEmoji"
+              class="tools-icon"
+              ><Star
+            /></el-icon>
+            <Picker
+              @click.stop="isShowEmoji = true"
+              v-if="isShowEmoji"
+              style="position: absolute; top: 45px; left: 20px; z-index: 2"
+              :data="emojiIndex"
+              set="google"
+              @select="selectEmoji"
+              :emojiSize="26"
+              :emojiTooltip="true"
+              :showPreview="false"
+              :i18n="{
+                search: t('p1'),
+                notfound: t('p2'),
+                categories: {
+                  search: t('p3'),
+                  recent: t('p4'),
+                  smileys: t('p5'),
+                  people: t('p6'),
+                  nature: t('p7'),
+                  foods: t('p8'),
+                  activity: t('p9'),
+                  places: t('p10'),
+                  objects: t('p11'),
+                  symbols: t('p12'),
+                  flags: t('p13'),
+                  custom: t('p14')
+                }
+              }"
+            />
           </div>
         </div>
 
@@ -1094,6 +1019,8 @@ function nodeClick(index) {
           </div>
         </div>
       </div>
+
+      <!-- TODO 预览区 -->
       <div class="right">
         <div class="preview-tools" v-if="previewList.length > 0">
           <div style="display: flex; align-items: center">
@@ -1106,7 +1033,11 @@ function nodeClick(index) {
             /></el-icon>
           </div>
           <div>
-            <el-icon class="tools-icon" size="24" @click="copyTree" :title="$t('fu-zhi-wen-ben')"
+            <el-icon
+              class="tools-icon"
+              size="24"
+              @click="copyTree(previewList, toClipboard)"
+              :title="$t('fu-zhi-wen-ben')"
               ><CopyDocument
             /></el-icon>
 
@@ -1114,11 +1045,19 @@ function nodeClick(index) {
               ><Download
             /></el-icon>
 
-            <el-icon class="tools-icon" size="24" @click="copyImg" :title="$t('fu-zhi-tu-pian')"
+            <el-icon
+              class="tools-icon"
+              size="24"
+              @click="copyImg('#capture')"
+              :title="$t('fu-zhi-tu-pian')"
               ><Picture
             /></el-icon>
 
-            <el-icon class="tools-icon" @click="exportImg" size="24" :title="$t('dao-chu-tu-pian')"
+            <el-icon
+              class="tools-icon"
+              @click="exportImg('#capture')"
+              size="24"
+              :title="$t('dao-chu-tu-pian')"
               ><Camera
             /></el-icon>
           </div>
@@ -1135,6 +1074,8 @@ function nodeClick(index) {
         </div>
       </div>
     </div>
+
+    <!-- TODO 无数据 -->
     <div class="no-data" v-else>
       <img src="../../assets/images/noData.png" alt="" />
       <div>

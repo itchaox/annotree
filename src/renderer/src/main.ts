@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-07-29 00:17
+ * @LastTime   : 2024-08-10 00:19
  * @desc       :
  */
 //全局初始化样式
@@ -46,6 +46,9 @@ app.use(ElementPlus, {
 })
 
 app.use(i18n)
+// 将 i18n 实例暴露到全局对象
+window.i18n = i18n
+
 app.use(store)
 app.use(VueVirtualScroller)
 app.mount('#app')
