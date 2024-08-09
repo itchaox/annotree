@@ -41,7 +41,7 @@ linux:
     - AppImage
     # - snap
     # - deb
-  maintainer: itchaox
+  maintainer: Wang Chao
   category: Utility
 appImage:
   artifactName: ${name}-${version}.${ext}
