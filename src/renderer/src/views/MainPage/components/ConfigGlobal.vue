@@ -3,11 +3,53 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-09 16:20
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-09 23:34
+ * @LastTime   : 2024-08-09 23:54
  * @desc       : 全局配置1
 -->
 <script setup lang="ts">
-console.log('ConfigCommon.vue')
+import { ref } from 'vue'
+import packageJson from '../../../../../../package.json'
+import { extList } from '../../../constants/constants.js'
+
+// Define models
+const isCommon = defineModel('isCommon')
+const languageId = defineModel('languageId')
+const autoOpenFile = defineModel('autoOpenFile')
+const isEggshell = defineModel('isEggshell')
+const syncScroll = defineModel('syncScroll')
+const showIcon = defineModel('showIcon')
+const folderSuffix = defineModel('folderSuffix')
+const isCache = defineModel('isCache')
+const isConfig = defineModel('isConfig')
+const ignoreFolderList = defineModel('ignoreFolderList')
+const ignoreDotFolder = defineModel('ignoreDotFolder')
+const onlyScanFolder = defineModel('onlyScanFolder')
+const ignoreDotFile = defineModel('ignoreDotFile')
+const ignoreFileList = defineModel('ignoreFileList')
+const scanDeep = defineModel('scanDeep')
+const defaultFileName = defineModel('defaultFileName')
+
+defineProps<{
+  folderList: any[] // 指定 folderList 是一个字符串数组
+}>()
+
+// 语言列表
+const languageList = ref([
+  {
+    id: 'en',
+    name: 'English'
+  },
+  {
+    id: 'zh',
+    name: '简体中文'
+  }
+])
+
+const emit = defineEmits(['resetCache'])
+
+function resetCache() {
+  emit('resetCache')
+}
 </script>
 
 <template>
@@ -371,7 +413,7 @@ console.log('ConfigCommon.vue')
               </div>
 
               <div class="tab-item-center">
-                <img src="../../assets/images/icon-128.png" alt="" />
+                <img src="../../../assets/images/icon-128.png" alt="" />
                 <div class="tab-item-center-title">Annotree</div>
                 <div class="tab-item-center-version">v{{ packageJson.version }}</div>
               </div>
@@ -386,5 +428,49 @@ console.log('ConfigCommon.vue')
 <style lang="scss" scoped>
 .home {
   font-size: 14px;
+  /* 全局配置 */
+  .dialog-body {
+    .custom-tabs-label {
+      display: flex;
+      align-items: center;
+      span {
+        margin-left: 5px;
+      }
+    }
+    .tab-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .tab-item-label {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        width: 188px;
+      }
+
+      .tab-item-value {
+        width: 400px;
+      }
+    }
+
+    .tab-item-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+
+      .tab-item-center-title {
+        padding: 10px;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .tab-item-center-version {
+        font-size: 20px;
+        color: #00000090;
+      }
+    }
+  }
 }
 </style>
