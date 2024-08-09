@@ -2,9 +2,9 @@
  * @Version    : v1.00
  * @Author     : Wang Chao
  * @Date       : 2024-08-09 16:20
- * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-09 16:29
- * @desc       : 全局配置
+ * @LastAuthor : itchaox
+ * @LastTime   : 2024-08-09 23:34
+ * @desc       : 全局配置1
 -->
 <script setup lang="ts">
 console.log('ConfigCommon.vue')

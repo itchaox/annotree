@@ -3,11 +3,10 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-09 16:20
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-09 23:23
- * @desc       : 预览配置
+ * @LastTime   : 2024-08-09 23:33
+ * @desc       : 预览配置1
 -->
 <script setup lang="ts">
-
 const isPreview = defineModel('isPreview')
 const noteFormat = defineModel('noteFormat')
 const minBridge = defineModel('minBridge')
