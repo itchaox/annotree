@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-01 01:00
+ * @LastTime   : 2024-08-10 09:36
  * @desc       :
  */
 
@@ -20,11 +20,8 @@ import translateFlat from '../renderer/src/utils/translate.flat.js'
 import { replace as elementReplace } from '../renderer/src/utils/replace.element.js'
 import { replace as noteReplace } from '../renderer/src/utils/replace.note.js'
 import { replace as nameReplace } from '../renderer/src/utils/replace.fileName.js'
-import { useTreeStoreHook } from '../renderer/src/store/modules/tree-store.ts'
 
 import { quickBurstConfetti } from '../renderer/src/utils/quickBurstConfetti.js'
-
-const treeStore = useTreeStoreHook()
 
 /**
  * 根据 isShow 和 isShowElements 过滤数据

@@ -255,3 +255,64 @@ export const extList = [
     ]
   }
 ]
+
+// 日语: ja
+// 西班牙语: es
+// 法语: fr
+// 德语: de
+// 韩语: ko
+// 俄语: ru
+// 葡萄牙语: pt
+// 意大利语: it
+// 中文: zh
+// 英文: en
+
+// 语言列表
+export const languageList = [
+  // {
+  //   id: 'system',
+  //   name: t('gen-sui-xi-tong')
+  // },
+  {
+    id: 'en',
+    name: 'English'
+  },
+  {
+    id: 'zh',
+    name: '简体中文'
+  }
+
+  // FIXME 暂时只支持中文和英文，后续项目稳定，再支持其他语言
+  // {
+  //   id: 'es',
+  //   name: 'Español'
+  // },
+  // {
+  //   id: 'fr',
+  //   name: 'Français'
+  // },
+  // {
+  //   id: 'de',
+  //   name: 'Deutsch'
+  // },
+  // {
+  //   id: 'ko',
+  //   name: '한국인'
+  // },
+  // {
+  //   id: 'ru',
+  //   name: 'Русский'
+  // },
+  // {
+  //   id: 'pt',
+  //   name: 'Português'
+  // },
+  // {
+  //   id: 'it',
+  //   name: 'Italiano'
+  // },
+  // {
+  //   id: 'ja',
+  //   name: '日本語'
+  // }
+]

@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-10 00:25
+ * @LastTime   : 2024-08-10 11:58
  * @desc       :
 -->
 <script setup lang="ts">
@@ -18,9 +18,12 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 const emojiIndex = ref(new EmojiIndex(data))
 
 import { set } from 'lodash'
+
 import { exportImg } from '../../utils/exportImg.js'
 import { copyImg } from '../../utils/copyImg.js'
 import { copyTree } from '../../utils/copyTree.js'
+
+import { languageList } from '../../constants/constants.js'
 
 import width from 'string-width'
 
@@ -39,6 +42,12 @@ const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage, getSystemLanguage } =
 const { t } = useI18n()
 
 const { toClipboard } = useClipboard()
+
+import { storeToRefs } from 'pinia'
+import { useConfigPreviewStore } from '../../store/modules/configPreview-store.js'
+const configPreviewStore = useConfigPreviewStore()
+
+const { PREVIEW } = storeToRefs(configPreviewStore)
 
 // 全局配置
 const isCommon = ref(false)
@@ -89,6 +98,8 @@ const isConfig = ref(false)
 // 文件夹显示 /
 const folderSuffix = ref(true)
 
+const common = JSON.parse(localStorage.getItem('annotree-common'))
+
 // 确定重置配置
 async function resetCache() {
   // 重置配置
@@ -100,12 +111,10 @@ async function resetCache() {
     // 获取系统语言
     const _languageId = await getSystemLanguage()
 
-    const common = JSON.parse(localStorage.getItem('annotree-common'))
-
     // 如果当前语言支持，则展示选中语言，否则默认展示英文
     languageId.value =
       common?.languageId ??
-      (languageList.value.find((item) => item.id === _languageId) ? _languageId : 'en')
+      (languageList?.find((item) => item.id === _languageId) ? _languageId : 'en')
 
     i18n.global.locale = languageId.value
   }
@@ -138,73 +147,10 @@ function clearNotes() {
   localStorage.setItem('annotree-notes', JSON.stringify(annotreeNotes))
 }
 
-// 日语: ja
-// 西班牙语: es
-// 法语: fr
-// 德语: de
-// 韩语: ko
-// 俄语: ru
-// 葡萄牙语: pt
-// 意大利语: it
-// 中文: zh
-// 英文: en
-
-// 语言列表
-const languageList = ref([
-  // {
-  //   id: 'system',
-  //   name: t('gen-sui-xi-tong')
-  // },
-  {
-    id: 'en',
-    name: 'English'
-  },
-  {
-    id: 'zh',
-    name: '简体中文'
-  }
-
-  // FIXME 暂时只支持中文和英文，后续项目稳定，再支持其他语言
-  // {
-  //   id: 'es',
-  //   name: 'Español'
-  // },
-  // {
-  //   id: 'fr',
-  //   name: 'Français'
-  // },
-  // {
-  //   id: 'de',
-  //   name: 'Deutsch'
-  // },
-  // {
-  //   id: 'ko',
-  //   name: '한국인'
-  // },
-  // {
-  //   id: 'ru',
-  //   name: 'Русский'
-  // },
-  // {
-  //   id: 'pt',
-  //   name: 'Português'
-  // },
-  // {
-  //   id: 'it',
-  //   name: 'Italiano'
-  // },
-  // {
-  //   id: 'ja',
-  //   name: '日本語'
-  // }
-])
-
 // 默认展示系统语言
 const languageId = ref('en')
 
 onMounted(async () => {
-  const common = JSON.parse(localStorage.getItem('annotree-common'))
-
   // 获取系统语言
   const _languageId = await getSystemLanguage()
 
@@ -220,7 +166,7 @@ onMounted(async () => {
   if (!languageToUse) {
     if (zhLanguages.includes(_languageId)) {
       languageToUse = 'zh'
-    } else if (languageList.value.some((item) => item.id === _languageId)) {
+    } else if (languageList.some((item) => item.id === _languageId)) {
       languageToUse = _languageId
     } else {
       languageToUse = defaultLanguage
@@ -240,8 +186,8 @@ watch([languageId], async () => {
 
 // 加载本地存储的数据
 const loadLocalStorage = () => {
-  // 通用
   const common = JSON.parse(localStorage.getItem('annotree-common'))
+  // 通用
   languageId.value = common?.languageId ?? 'en'
   autoOpenFile.value = common?.autoOpenFile ?? true
   isEggshell.value = common?.isEggshell ?? true
@@ -265,10 +211,10 @@ const loadLocalStorage = () => {
 
   // 预览区
   const preview = JSON.parse(localStorage.getItem('annotree-preview'))
-  bridgeChar.value = preview?.bridgeChar ?? '-'
-  minBridge.value = preview?.minBridge ?? 4
-  noteFormat.value = preview?.noteFormat ?? ' # {note}'
-  showBridge.value = preview?.showBridge ?? false
+  PREVIEW.value.bridgeChar = preview?.bridgeChar ?? '-'
+  PREVIEW.value.minBridge = preview?.minBridge ?? 4
+  PREVIEW.value.noteFormat = preview?.noteFormat ?? ' # {note}'
+  PREVIEW.value.showBridge = preview?.showBridge ?? false
 }
 
 async function copy() {
@@ -376,18 +322,14 @@ function getIgnoreFolderList() {
   folderList.value = uniquePaths
 }
 
-// 设置
-function setCommon() {
-  isCommon.value = true
-}
-
 // 导出
 function exportFile() {
   const params = {
-    bridgeChar: bridgeChar.value,
-    minBridge: minBridge.value,
-    noteFormat: noteFormat.value,
-    showBridge: showBridge.value,
+    bridgeChar: PREVIEW.value.bridgeChar,
+    minBridge: PREVIEW.value.minBridge,
+    noteFormat: PREVIEW.value.noteFormat,
+    showBridge: PREVIEW.value.showBridge,
+
     isRight: isRight.value,
     autoOpenFile: autoOpenFile.value,
     autoOpenFolder: autoOpenFolder.value,
@@ -417,7 +359,7 @@ function bridgeAuto({ element, note }, max) {
       length += max - width(element)
     }
 
-    return bridgeChar.value.repeat(length)
+    return PREVIEW.value.bridgeChar.repeat(length)
   }
 
   return ''
@@ -425,21 +367,6 @@ function bridgeAuto({ element, note }, max) {
 
 // 获取最大宽度
 function getMaxWidth(result) {
-  // 第一步 转换 element 和 note
-  // const result = data.map((item) => {
-  //   const element = elementReplace('{tree}{name}{ext}', {
-  //     data: item
-  //   })
-  //   const bridge = ''
-
-  //   const note = item.note
-  //     ? noteReplace(noteFormat.value, {
-  //         data: item
-  //       })
-  //     : ''
-  //   return { element, bridge, note }
-  // })
-
   // 右边对齐
   if (isRight.value) {
     // 计算result中每个对象的element属性的最大宽度
@@ -551,7 +478,7 @@ function getPreviewData() {
     const bridge = ''
 
     const note = item.note
-      ? noteReplace(noteFormat.value, {
+      ? noteReplace(PREVIEW.value.noteFormat, {
           data: item
         })
       : ''
@@ -564,12 +491,14 @@ function getPreviewData() {
   result = result.map((item) => ({ ...item, bridge: bridgeAuto(item, max) }))
 
   // 转换为字符串
-  // result = result.map((e) => `${e.element}${e.bridge}${e.note}`)
   result = result.map((e) => ({
     value: `${e.element}${e.bridge}${e.note}`,
     id: Math.random()
   }))
 
+  // console.log(333)
+
+  // 更新预览区数据
   previewList.value = result
 }
 
@@ -583,7 +512,7 @@ const noteFormat = ref(' # {note}')
 const minBridge = ref(4)
 
 // 桥梁字符
-const bridgeChar = ref('-')
+// const bridgeChar = ref('-')
 
 // 始终显示桥梁
 const showBridge = ref(false)
@@ -593,16 +522,14 @@ const isRight = ref(false)
 
 function inputChange(item) {
   //  缓存 note
-  cacheNoteList.value = cacheNoteList.value.map((i) => {
-    if (i?.id === item.id) {
-      return {
-        id: i?.id,
-        note: item.note
-      }
-    } else {
-      return i
+  const itemIndex = cacheNoteList.value.findIndex((i) => i?.id === item.id)
+
+  if (itemIndex !== -1) {
+    cacheNoteList.value[itemIndex] = {
+      id: cacheNoteList.value[itemIndex]?.id,
+      note: item.note
     }
-  })
+  }
 
   getPreviewData()
 }
@@ -719,42 +646,36 @@ watch([defaultFileName], () => {
 })
 
 // 预览区配置
-watch([bridgeChar, minBridge, noteFormat, showBridge, isRight, showIcon], () => {
-  //  存储数据
-  localStorage.setItem(
-    'annotree-preview',
-    JSON.stringify({
-      bridgeChar: bridgeChar.value,
-      minBridge: minBridge.value,
-      noteFormat: noteFormat.value,
-      showBridge: showBridge.value
-    })
-  )
+watch(
+  [
+    () => PREVIEW.value.bridgeChar,
+    () => PREVIEW.value.minBridge,
+    () => PREVIEW.value.noteFormat,
+    () => PREVIEW.value.showBridge,
+    isRight,
+    showIcon
+  ],
+  () => {
+    //  存储数据
+    localStorage.setItem(
+      'annotree-preview',
+      JSON.stringify({
+        bridgeChar: PREVIEW.value.bridgeChar,
+        minBridge: PREVIEW.value.minBridge,
+        noteFormat: PREVIEW.value.noteFormat,
+        showBridge: PREVIEW.value.showBridge
+      })
+    )
 
-  getPreviewData()
-})
+    getPreviewData()
+  }
+)
 
 // 更新 emoji
 function selectEmoji(emoji) {
   emojisOutput.value = emoji.native
 
   copy()
-}
-
-// 重置数据
-function refreshData() {
-  clearNotes()
-
-  treeData.value = []
-  previewList.value = []
-  folderPath.value = ''
-
-  ElMessage({
-    message: t('zhong-zhi-shu-ju-cheng-gong'),
-    type: 'success',
-    duration: 1500,
-    showClose: true
-  })
 }
 
 // 重置注释
@@ -891,7 +812,7 @@ function nodeClick(index) {
           <el-icon><Search /></el-icon>
           <span> {{ $t('sao-miao') }} </span>
         </el-button>
-        <el-button type="success" plain @click="setCommon">
+        <el-button type="success" plain @click="isCommon = true">
           <el-icon size="16"><Setting /></el-icon>
           <span> {{ $t('quan-ju-pei-zhi') }} </span>
         </el-button>
@@ -1085,13 +1006,12 @@ function nodeClick(index) {
     </div>
 
     <!-- TODO 预览配置 -->
-    <ConfigPreview
-      v-model:isPreview="isPreview"
-      v-model:noteFormat="noteFormat"
+    <ConfigPreview v-model:isPreview="isPreview" />
+
+    <!-- v-model:noteFormat="noteFormat"
       v-model:minBridge="minBridge"
       v-model:bridgeChar="bridgeChar"
-      v-model:showBridge="showBridge"
-    />
+      v-model:showBridge="showBridge" -->
 
     <!-- TODO 全局配置 -->
     <ConfigGlobal
@@ -1115,7 +1035,7 @@ function nodeClick(index) {
       v-model:defaultFileName="defaultFileName"
     />
 
-    <!-- 底部 -->
+    <!-- TODO 底部 -->
     <div class="info" v-if="treeData?.length > 0">
       <div class="dir" v-if="folderPath">
         <div>{{ $t('sco-miao-mu-lu') }}：{{ folderPath }}</div>
@@ -1274,23 +1194,6 @@ function nodeClick(index) {
       display: inline-flex;
       justify-content: space-between;
       margin-left: 2px;
-    }
-  }
-
-  /* 预览配置 */
-  .preview-config {
-    .preview-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-
-      .preview-label {
-        width: 125px;
-      }
-
-      .preview-value {
-        margin-left: 15px;
-      }
     }
   }
 
