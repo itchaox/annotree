@@ -3,14 +3,14 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-14 22:08
- * @desc       :
+ * @LastTime   : 2024-08-14 22:14
+ * @desc       : 主页面
 -->
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
-import { replace as elementReplace } from '../utils/replace.element.js'
-import { replace as noteReplace } from '../utils/replace.note.js'
-import translateFlat from '../utils/translate.flat.js'
+import { replace as elementReplace } from '@renderer/utils/replace.element.js'
+import { replace as noteReplace } from '@renderer/utils/replace.note.js'
+import translateFlat from '@renderer/utils/translate.flat.js'
 import data from 'emoji-mart-vue-fast/data/all.json'
 
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
@@ -18,9 +18,9 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 const emojiIndex = ref(new EmojiIndex(data))
 
 import { set } from 'lodash'
-import { extList } from '../constants/constants.js'
+import { extList } from '@renderer/constants/constants.js'
 
-import packageJson from '../../../../package.json'
+import packageJson from '@/package.json'
 
 import width from 'string-width'
 
@@ -29,7 +29,7 @@ import useClipboard from 'vue-clipboard3'
 
 import { useI18n } from 'vue-i18n'
 
-import { i18n } from '../locales/i18n.js'
+import { i18n } from '@renderer/locales/i18n.js'
 
 import html2canvas from 'html2canvas'
 
@@ -1183,7 +1183,7 @@ function nodeClick(index) {
       </el-drawer>
     </div>
     <div class="no-data" v-else>
-      <img src="../assets/images/noData.png" alt="" />
+      <img src="@renderer/assets/images/noData.png" alt="" />
       <div>
         {{ $t('qing') }} <span class="no-data-btn" @click="scan">{{ $t('sao-miao') }}</span>
         {{ $t('wen-jian-jia-lu-ru-shu-ju') }}
@@ -1549,7 +1549,7 @@ function nodeClick(index) {
               </div>
 
               <div class="tab-item-center">
-                <img src="../assets/images/icon-128.png" alt="" />
+                <img src="@renderer/assets/images/icon-128.png" alt="" />
                 <div class="tab-item-center-title">Annotree</div>
                 <div class="tab-item-center-version">v{{ packageJson.version }}</div>
               </div>
