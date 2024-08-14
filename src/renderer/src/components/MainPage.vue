@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-14 22:14
+ * @LastTime   : 2024-08-14 22:26
  * @desc       : 主页面
 -->
 <script setup lang="ts">
@@ -959,6 +959,7 @@ function nodeClick(index) {
 
 <template>
   <div class="main-page" @click="isShowEmoji = false">
+    <!-- TODO 顶部按钮 -->
     <div class="operation">
       <div>
         <el-button type="primary" @click="scan">
@@ -972,7 +973,7 @@ function nodeClick(index) {
       </div>
     </div>
 
-    <!-- 内容区 -->
+    <!-- TODO 内容区 -->
     <div class="content" v-if="treeData.length > 0">
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
@@ -1133,55 +1134,9 @@ function nodeClick(index) {
           </div>
         </div>
       </div>
-
-      <!-- 预览配置 -->
-      <el-drawer v-model="isPreview" direction="ltr" :modal="true" @close="isPreview = false">
-        <template #header>
-          <h4>{{ $t('yu-lan-pei-zhi') }}</h4>
-        </template>
-        <template #default>
-          <div class="preview-config">
-            <div class="preview-item">
-              <div class="preview-label">{{ $t('zhu-shi-ge-shi-hua') }}</div>
-              <div class="preview-value">
-                <el-input
-                  v-model="noteFormat"
-                  :placeholder="$t('qing-shu-ru-ge-shi-hua-zi-fu-chuan')"
-                ></el-input>
-              </div>
-            </div>
-
-            <div class="preview-item">
-              <div class="preview-label">{{ $t('qiao-liang-zui-duan-zi-fu-shu') }}</div>
-              <div class="preview-value">
-                <el-input-number
-                  v-model="minBridge"
-                  :placeholder="$t('qing-shu-ru-qiao-liang-zui-duan-zi-fu-shu')"
-                  :min="0"
-                ></el-input-number>
-              </div>
-            </div>
-
-            <div class="preview-item">
-              <div class="preview-label">{{ $t('qiao-liang-tian-chong-zi-fu') }}</div>
-              <div class="preview-value">
-                <el-input
-                  v-model="bridgeChar"
-                  :placeholder="$t('qing-shu-ru-dan-zi-jie-tian-chong-zi-fu')"
-                ></el-input>
-              </div>
-            </div>
-
-            <div class="preview-item">
-              <div class="preview-label">{{ $t('shi-zhong-xian-shi-qiao-liang') }}</div>
-              <div class="preview-value">
-                <el-switch size="large" v-model="showBridge"></el-switch>
-              </div>
-            </div>
-          </div>
-        </template>
-      </el-drawer>
     </div>
+
+    <!-- TODO 无数据 -->
     <div class="no-data" v-else>
       <img src="@renderer/assets/images/noData.png" alt="" />
       <div>
@@ -1190,7 +1145,56 @@ function nodeClick(index) {
       </div>
     </div>
 
-    <!-- 全局配置 -->
+    <!-- TODO 预览配置 -->
+    <el-drawer v-model="isPreview" direction="ltr" :modal="true" @close="isPreview = false">
+      <template #header>
+        <h4>{{ $t('yu-lan-pei-zhi') }}</h4>
+      </template>
+      <template #default>
+        <div class="preview-config">
+          <div class="preview-item">
+            <div class="preview-label">{{ $t('zhu-shi-ge-shi-hua') }}</div>
+            <div class="preview-value">
+              <el-input
+                v-model="noteFormat"
+                :placeholder="$t('qing-shu-ru-ge-shi-hua-zi-fu-chuan')"
+              ></el-input>
+            </div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">{{ $t('qiao-liang-zui-duan-zi-fu-shu') }}</div>
+            <div class="preview-value">
+              <el-input-number
+                v-model="minBridge"
+                :placeholder="$t('qing-shu-ru-qiao-liang-zui-duan-zi-fu-shu')"
+                :min="0"
+              ></el-input-number>
+            </div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">{{ $t('qiao-liang-tian-chong-zi-fu') }}</div>
+            <div class="preview-value">
+              <el-input
+                v-model="bridgeChar"
+                :placeholder="$t('qing-shu-ru-dan-zi-jie-tian-chong-zi-fu')"
+                maxlength="1"
+              ></el-input>
+            </div>
+          </div>
+
+          <div class="preview-item">
+            <div class="preview-label">{{ $t('shi-zhong-xian-shi-qiao-liang') }}</div>
+            <div class="preview-value">
+              <el-switch size="large" v-model="showBridge"></el-switch>
+            </div>
+          </div>
+        </div>
+      </template>
+    </el-drawer>
+
+    <!-- TODO 全局配置 -->
     <el-dialog
       v-model="isCommon"
       :title="$t('quan-ju-pei-zhi')"
@@ -1559,6 +1563,7 @@ function nodeClick(index) {
       </div>
     </el-dialog>
 
+    <!-- TODO 底部信息 -->
     <div class="info" v-if="treeData?.length > 0">
       <div class="dir" v-if="folderPath">
         <div>{{ $t('sco-miao-mu-lu') }}：{{ folderPath }}</div>
@@ -1701,20 +1706,20 @@ function nodeClick(index) {
       justify-content: space-between;
       margin-left: 2px;
     }
+  }
 
-    .preview-config {
-      .preview-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
+  .preview-config {
+    .preview-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
 
-        .preview-label {
-          width: 125px;
-        }
+      .preview-label {
+        width: 125px;
+      }
 
-        .preview-value {
-          margin-left: 15px;
-        }
+      .preview-value {
+        margin-left: 15px;
       }
     }
   }
