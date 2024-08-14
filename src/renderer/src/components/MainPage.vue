@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : itchaox
- * @LastTime   : 2024-08-03 15:19
+ * @LastTime   : 2024-08-14 22:08
  * @desc       :
 -->
 <script setup lang="ts">
@@ -161,39 +161,39 @@ const languageList = ref([
   {
     id: 'zh',
     name: '简体中文'
-  },
-  {
-    id: 'es',
-    name: 'Español'
-  },
-  {
-    id: 'fr',
-    name: 'Français'
-  },
-  {
-    id: 'de',
-    name: 'Deutsch'
-  },
-  {
-    id: 'ko',
-    name: '한국인'
-  },
-  {
-    id: 'ru',
-    name: 'Русский'
-  },
-  {
-    id: 'pt',
-    name: 'Português'
-  },
-  {
-    id: 'it',
-    name: 'Italiano'
-  },
-  {
-    id: 'ja',
-    name: '日本語'
   }
+  // {
+  //   id: 'es',
+  //   name: 'Español'
+  // },
+  // {
+  //   id: 'fr',
+  //   name: 'Français'
+  // },
+  // {
+  //   id: 'de',
+  //   name: 'Deutsch'
+  // },
+  // {
+  //   id: 'ko',
+  //   name: '한국인'
+  // },
+  // {
+  //   id: 'ru',
+  //   name: 'Русский'
+  // },
+  // {
+  //   id: 'pt',
+  //   name: 'Português'
+  // },
+  // {
+  //   id: 'it',
+  //   name: 'Italiano'
+  // },
+  // {
+  //   id: 'ja',
+  //   name: '日本語'
+  // }
 ])
 
 // 默认展示系统语言
