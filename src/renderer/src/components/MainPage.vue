@@ -2,8 +2,8 @@
  * @Version    : v1.00
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
- * @LastAuthor : itchaox
- * @LastTime   : 2024-08-14 23:15
+ * @LastAuthor : Wang Chao
+ * @LastTime   : 2024-08-21 22:42
  * @desc       : 主页面
 -->
 <script setup lang="ts">
@@ -960,14 +960,14 @@ function nodeClick(index) {
 const onlyEdit = ref(false)
 function handleOnlyEdit() {
   onlyEdit.value = !onlyEdit.value
-  onlyPreview.value = true
+  onlyPreview.value = false
 }
 
 // 仅预览区
 const onlyPreview = ref(false)
 function handleOnlyPreview() {
   onlyPreview.value = !onlyPreview.value
-  onlyEdit.value = true
+  onlyEdit.value = false
 }
 </script>
 
@@ -1052,7 +1052,7 @@ function handleOnlyPreview() {
             /></el-icon>
           </div>
           <div>
-            <span :title="onlyEdit ? '仅编辑区' : '恢复默认'" @click="handleOnlyEdit">
+            <span :title="onlyEdit ? '恢复默认' : '仅编辑区'" @click="handleOnlyEdit">
               <svg
                 class="tools-icon"
                 width="24"
@@ -1068,14 +1068,14 @@ function handleOnlyPreview() {
                   height="36"
                   rx="2"
                   fill="none"
-                  :stroke="onlyEdit ? 'currentColor' : '#5a9cf8'"
+                  :stroke="onlyEdit ? '#5a9cf8' : 'currentColor'"
                   stroke-width="4"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
                 <path
                   d="M42 6V42"
-                  :stroke="onlyEdit ? 'currentColor' : '#5a9cf8'"
+                  :stroke="onlyEdit ? '#5a9cf8' : 'currentColor'"
                   stroke-width="4"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1083,7 +1083,7 @@ function handleOnlyPreview() {
               </svg>
             </span>
 
-            <span :title="onlyPreview ? '仅预览区' : '恢复默认'" @click="handleOnlyPreview">
+            <span :title="onlyPreview ? '恢复默认' : '仅预览区'" @click="handleOnlyPreview">
               <svg
                 class="tools-icon"
                 width="24"
@@ -1099,14 +1099,14 @@ function handleOnlyPreview() {
                   height="36"
                   rx="2"
                   fill="none"
-                  :stroke="onlyPreview ? 'currentColor' : '#5a9cf8'"
+                  :stroke="onlyPreview ? '#5a9cf8' : 'currentColor'"
                   stroke-width="4"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
                 <path
                   d="M6 6V42"
-                  :stroke="onlyPreview ? 'currentColor' : '#5a9cf8'"
+                  :stroke="onlyPreview ? '#5a9cf8' : 'currentColor'"
                   stroke-width="4"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1126,7 +1126,7 @@ function handleOnlyPreview() {
               ><Picture
             /></el-icon>
 
-            <el-icon class="tools-icon" @click="exportImg" size="24" :title="$t('dao-chu-tu-pian')"
+            <el-icon class="tools-icon" size="24" @click="exportImg" :title="$t('dao-chu-tu-pian')"
               ><Camera
             /></el-icon>
           </div>
@@ -1134,7 +1134,7 @@ function handleOnlyPreview() {
       </div>
 
       <div class="tree-container">
-        <div class="left" :class="{ 'left-none': !onlyPreview }">
+        <div class="left" :class="{ 'left-none': onlyPreview }">
           <!-- TODO 编辑器树 -->
           <div
             @scroll="handleScroll(scrollLeft, scrollRight)"
@@ -1202,7 +1202,7 @@ function handleOnlyPreview() {
           </div>
         </div>
 
-        <div class="right" :class="{ 'right-none': !onlyEdit }">
+        <div class="right" :class="{ 'right-none': onlyEdit }">
           <div
             class="tree-scroller preview-tree"
             ref="scrollRight"
