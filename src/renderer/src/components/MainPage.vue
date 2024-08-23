@@ -1,9 +1,17 @@
 <!--
  * @Version    : v1.00
+ * @Author     : Wang Chao
+ * @Date       : 2024-08-21 22:29
+ * @LastAuthor : Wang Chao
+ * @LastTime   : 2024-08-23 23:04
+ * @desc       :
+-->
+<!--
+ * @Version    : v1.00
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:57
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-21 22:42
+ * @LastTime   : 2024-08-23 22:25
  * @desc       : 主页面
 -->
 <script setup lang="ts">
@@ -32,6 +40,20 @@ import { useI18n } from 'vue-i18n'
 import { i18n } from '@renderer/locales/i18n.js'
 
 import html2canvas from 'html2canvas'
+
+import { Icon } from '@iconify/vue'
+import { fileIconMap } from '@renderer/constants/fileIconMap.js'
+import { folderIconMap } from '@renderer/constants/folderIconMap.js'
+
+// 根据文件后缀返回对应的图标名
+const getIconByFolder = (name) => {
+  return folderIconMap[name] || 'flat-color-icons:opened-folder' // 默认图标
+}
+
+// 根据文件后缀返回对应的图标名
+const getIconByExtension = (extension) => {
+  return fileIconMap[extension.split('.')[1]] || 'flat-color-icons:file' // 默认图标
+}
 
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage, getSystemLanguage } = window.api as any
 
@@ -1172,7 +1194,19 @@ function handleOnlyPreview() {
                   <span class="row-info">
                     <!-- 文件名 -->
                     <div style="display: flex">
-                      <pre>{{ showIcon ? (item?.isDirectory ? '📁 ' : '📄 ') : '' }}</pre>
+                      <!-- <pre>{{ showIcon ? (item?.isDirectory ? '📁 ' : '') : '' }}</pre> -->
+                      <icon
+                        v-if="item?.isDirectory"
+                        :icon="getIconByFolder(item.name)"
+                        :style="{ fontSize: '18px' }"
+                      />
+                      <!-- 根据文件后缀动态显示图标 -->
+                      <icon
+                        v-if="!item?.isDirectory"
+                        :icon="getIconByExtension(item.ext)"
+                        :style="{ fontSize: '18px' }"
+                      />
+                      {{ ' ' }}
                       <pre>{{ item.name }}</pre>
                       <!-- 扩展名 -->
                       <pre v-if="item.ext">{{ item.ext }}</pre>
