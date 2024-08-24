@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-24 09:03
+ * @LastTime   : 2024-08-24 09:53
  * @desc       :
 -->
 <!--
@@ -575,7 +575,15 @@ function getPreviewData() {
           data: item
         })
       : ''
-    return { element, bridge, note, type: item?.isFile ? 'file' : 'folder' }
+    return {
+      element,
+      tree: item.tree,
+      name: item.name,
+      ext: item.ext,
+      bridge,
+      note,
+      type: item?.isFile ? 'file' : 'folder'
+    }
   })
 
   const max = getMaxWidth(result)
@@ -587,6 +595,11 @@ function getPreviewData() {
   // result = result.map((e) => `${e.element}${e.bridge}${e.note}`)
   result = result.map((e) => ({
     value: `${e.element}${e.bridge}${e.note}`,
+    tree: e.tree,
+    name: e.name,
+    ext: e.ext,
+    bridge: e.bridge,
+    note: e.note,
     id: Math.random()
   }))
 
@@ -938,7 +951,7 @@ function copyImg() {
 
 // 导出图片
 function exportImg() {
-  html2canvas(document.querySelector('#left'), {
+  html2canvas(document.querySelector('#capture'), {
     backgroundColor: '#f8f9fa',
     useCORS: true, //支持图片跨域
     scale: 1 //设置放大的倍数
@@ -1157,7 +1170,7 @@ function handleOnlyPreview() {
       </div>
 
       <div class="tree-container">
-        <div id="left" class="left" :class="{ 'left-none': onlyPreview }">
+        <div class="left" :class="{ 'left-none': onlyPreview }">
           <!-- TODO 编辑器树 -->
           <div
             @scroll="handleScroll(scrollLeft, scrollRight)"
@@ -1207,7 +1220,7 @@ function handleOnlyPreview() {
                         :icon="getIconByExtension(item.ext)"
                         :style="{ fontSize: '18px' }"
                       />
-                      {{ ' ' }}
+                      <span style="margin-right: 5px"></span>
                       <pre>{{ item.name }}</pre>
                       <!-- 扩展名 -->
                       <pre v-if="item.ext">{{ item.ext }}</pre>
@@ -1244,9 +1257,38 @@ function handleOnlyPreview() {
             @scroll="handleScroll(scrollRight, scrollLeft)"
           >
             <div id="capture">
-              <pre class="tree-node" v-for="item in previewList" :key="item.id">{{
-                item.value
-              }}</pre>
+              <div class="tree-node" v-for="item in previewList" :key="item.id">
+                <span style="display: inline-block">
+                  <pre>{{ item.tree }}</pre>
+                </span>
+
+                <icon
+                  v-if="item?.isDirectory"
+                  :icon="getIconByFolder(item.name)"
+                  :style="{ fontSize: '18px' }"
+                />
+                <!-- 根据文件后缀动态显示图标 -->
+                <icon
+                  v-if="!item?.isDirectory"
+                  :icon="getIconByExtension(item.ext)"
+                  :style="{ fontSize: '18px' }"
+                />
+                <span style="margin-right: 5px"></span>
+                <span style="display: inline-block">
+                  <pre>{{ item.name }}</pre>
+                </span>
+                <span style="display: inline-block">
+                  <pre>{{ item.ext }}</pre>
+                </span>
+                <span style="display: inline-block">
+                  <pre>{{ item.bridge }}</pre>
+                </span>
+                <span style="display: inline-block">
+                  <pre>{{ item.note }}</pre>
+                </span>
+                <!-- {{ '' }} -->
+                <!-- {{ item.value }} -->
+              </div>
             </div>
           </div>
         </div>
