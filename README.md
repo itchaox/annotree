@@ -72,6 +72,10 @@ The project is currently in the MVP (Minimum Viable Product) stage. If you have 
 - Always show bridges: configure whether to show bridges where there are no comments.
 - Export: set the relevant configuration, write the comments, and export the annotation file tree structure.
 
+## Project Structure 📇
+
+![](/resources//Project%20Structure.jpeg)
+
 ## Star History Chart ⭐️
 
 [![Star History Chart](https://api.star-history.com/svg?repos=itchaox/annotree&type=Date)](https://star-history.com/#itchaox/annotree&Date)
