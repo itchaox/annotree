@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-24 09:53
+ * @LastTime   : 2024-08-24 10:56
  * @desc       :
 -->
 <!--
@@ -576,6 +576,7 @@ function getPreviewData() {
         })
       : ''
     return {
+      ...item,
       element,
       tree: item.tree,
       name: item.name,
@@ -594,6 +595,7 @@ function getPreviewData() {
   // 转换为字符串
   // result = result.map((e) => `${e.element}${e.bridge}${e.note}`)
   result = result.map((e) => ({
+    ...e,
     value: `${e.element}${e.bridge}${e.note}`,
     tree: e.tree,
     name: e.name,
@@ -1005,6 +1007,11 @@ function handleOnlyPreview() {
   onlyPreview.value = !onlyPreview.value
   onlyEdit.value = false
 }
+
+const isSpecialIcon = ref(false)
+function handleSpecialIcon() {
+  isSpecialIcon.value = !isSpecialIcon.value
+}
 </script>
 
 <template>
@@ -1078,100 +1085,151 @@ function handleOnlyPreview() {
         </div>
 
         <div class="preview-tools" v-if="previewList.length > 0">
-          <div style="display: flex; align-items: center">
-            <el-icon
+          <el-icon
+            class="tools-icon"
+            size="24"
+            @click="isPreview = true"
+            :title="$t('yu-lan-qu-pei-zhi')"
+            ><Setting
+          /></el-icon>
+
+          <span
+            v-if="showIcon"
+            :title="isSpecialIcon ? '默认图标' : '特殊图标'"
+            @click="handleSpecialIcon"
+          >
+            <svg
               class="tools-icon"
-              size="24"
-              @click="isPreview = true"
-              :title="$t('yu-lan-qu-pei-zhi')"
-              ><Setting
-            /></el-icon>
-          </div>
-          <div>
-            <span :title="onlyEdit ? '恢复默认' : '仅编辑区'" @click="handleOnlyEdit">
-              <svg
-                class="tools-icon"
-                width="24"
-                height="24"
-                viewBox="0 0 48 48"
+              width="24"
+              height="24"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M36 4H12C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20H36C40.4183 20 44 16.4183 44 12C44 7.58172 40.4183 4 36 4Z"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect
-                  x="6"
-                  y="6"
-                  width="28"
-                  height="36"
-                  rx="2"
-                  fill="none"
-                  :stroke="onlyEdit ? '#5a9cf8' : 'currentColor'"
-                  stroke-width="4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M42 6V42"
-                  :stroke="onlyEdit ? '#5a9cf8' : 'currentColor'"
-                  stroke-width="4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-
-            <span :title="onlyPreview ? '恢复默认' : '仅预览区'" @click="handleOnlyPreview">
-              <svg
-                class="tools-icon"
-                width="24"
-                height="24"
-                viewBox="0 0 48 48"
+                :stroke="isSpecialIcon ? '#5a9cf8' : 'currentColor'"
+                stroke-width="4"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M36 28H12C7.58172 28 4 31.5817 4 36C4 40.4183 7.58172 44 12 44H36C40.4183 44 44 40.4183 44 36C44 31.5817 40.4183 28 36 28Z"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect
-                  x="14"
-                  y="6"
-                  width="28"
-                  height="36"
-                  rx="2"
-                  fill="none"
-                  :stroke="onlyPreview ? '#5a9cf8' : 'currentColor'"
-                  stroke-width="4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M6 6V42"
-                  :stroke="onlyPreview ? '#5a9cf8' : 'currentColor'"
-                  stroke-width="4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
+                :stroke="isSpecialIcon ? '#5a9cf8' : 'currentColor'"
+                stroke-width="4"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M36 14C37.1046 14 38 13.1046 38 12C38 10.8954 37.1046 10 36 10C34.8954 10 34 10.8954 34 12C34 13.1046 34.8954 14 36 14Z"
+                fill="none"
+                :stroke="isSpecialIcon ? '#5a9cf8' : 'currentColor'"
+                stroke-width="4"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12 38C13.1046 38 14 37.1046 14 36C14 34.8954 13.1046 34 12 34C10.8954 34 10 34.8954 10 36C10 37.1046 10.8954 38 12 38Z"
+                fill="none"
+                :stroke="isSpecialIcon ? '#5a9cf8' : 'currentColor'"
+                stroke-width="4"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
 
-            <el-icon class="tools-icon" size="24" @click="copyTree" :title="$t('fu-zhi-wen-ben')"
-              ><CopyDocument
-            /></el-icon>
+          <span :title="onlyEdit ? '恢复默认' : '仅编辑区'" @click="handleOnlyEdit">
+            <svg
+              class="tools-icon"
+              width="24"
+              height="24"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="6"
+                y="6"
+                width="28"
+                height="36"
+                rx="2"
+                fill="none"
+                :stroke="onlyEdit ? '#5a9cf8' : 'currentColor'"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M42 6V42"
+                :stroke="onlyEdit ? '#5a9cf8' : 'currentColor'"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
 
-            <el-icon class="tools-icon" size="24" @click="exportFile" :title="$t('dao-chu-wen-ben')"
-              ><Download
-            /></el-icon>
+          <span :title="onlyPreview ? '恢复默认' : '仅预览区'" @click="handleOnlyPreview">
+            <svg
+              class="tools-icon"
+              width="24"
+              height="24"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="14"
+                y="6"
+                width="28"
+                height="36"
+                rx="2"
+                fill="none"
+                :stroke="onlyPreview ? '#5a9cf8' : 'currentColor'"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M6 6V42"
+                :stroke="onlyPreview ? '#5a9cf8' : 'currentColor'"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
 
-            <el-icon class="tools-icon" size="24" @click="copyImg" :title="$t('fu-zhi-tu-pian')"
-              ><Picture
-            /></el-icon>
+          <el-icon
+            v-if="!isSpecialIcon"
+            class="tools-icon"
+            size="24"
+            @click="copyTree"
+            :title="$t('fu-zhi-wen-ben')"
+            ><CopyDocument
+          /></el-icon>
 
-            <el-icon class="tools-icon" size="24" @click="exportImg" :title="$t('dao-chu-tu-pian')"
-              ><Camera
-            /></el-icon>
-          </div>
+          <el-icon
+            v-if="!isSpecialIcon"
+            class="tools-icon"
+            size="24"
+            @click="exportFile"
+            :title="$t('dao-chu-wen-ben')"
+            ><Download
+          /></el-icon>
+
+          <el-icon class="tools-icon" size="24" @click="copyImg" :title="$t('fu-zhi-tu-pian')"
+            ><Picture
+          /></el-icon>
+
+          <el-icon class="tools-icon" size="24" @click="exportImg" :title="$t('dao-chu-tu-pian')"
+            ><Camera
+          /></el-icon>
         </div>
       </div>
 
       <div class="tree-container">
+        <!-- TODO 编辑器树 -->
         <div class="left" :class="{ 'left-none': onlyPreview }">
-          <!-- TODO 编辑器树 -->
           <div
             @scroll="handleScroll(scrollLeft, scrollRight)"
             ref="scrollLeft"
@@ -1208,18 +1266,24 @@ function handleOnlyPreview() {
                   <span class="row-info">
                     <!-- 文件名 -->
                     <div style="display: flex">
-                      <!-- <pre>{{ showIcon ? (item?.isDirectory ? '📁 ' : '') : '' }}</pre> -->
-                      <icon
-                        v-if="item?.isDirectory"
-                        :icon="getIconByFolder(item.name)"
-                        :style="{ fontSize: '18px' }"
-                      />
-                      <!-- 根据文件后缀动态显示图标 -->
-                      <icon
-                        v-if="!item?.isDirectory"
-                        :icon="getIconByExtension(item.ext)"
-                        :style="{ fontSize: '18px' }"
-                      />
+                      <span v-if="showIcon">
+                        <pre v-if="!isSpecialIcon">{{ item?.isDirectory ? '📁' : '📄' }}</pre>
+
+                        <span v-if="isSpecialIcon">
+                          <icon
+                            v-if="item?.isDirectory"
+                            :icon="getIconByFolder(item.name)"
+                            :style="{ fontSize: '18px' }"
+                          />
+                          <!-- 根据文件后缀动态显示图标 -->
+                          <icon
+                            v-if="!item?.isDirectory"
+                            :icon="getIconByExtension(item.ext)"
+                            :style="{ fontSize: '18px' }"
+                          />
+                        </span>
+                      </span>
+
                       <span style="margin-right: 5px"></span>
                       <pre>{{ item.name }}</pre>
                       <!-- 扩展名 -->
@@ -1249,7 +1313,7 @@ function handleOnlyPreview() {
             </div>
           </div>
         </div>
-
+        <!-- TODO 预览树 -->
         <div class="right" :class="{ 'right-none': onlyEdit }">
           <div
             class="tree-scroller preview-tree"
@@ -1257,22 +1321,34 @@ function handleOnlyPreview() {
             @scroll="handleScroll(scrollRight, scrollLeft)"
           >
             <div id="capture">
-              <div class="tree-node" v-for="item in previewList" :key="item.id">
+              <div
+                class="tree-node"
+                style="display: flex"
+                v-for="item in previewList"
+                :key="item.id"
+              >
                 <span style="display: inline-block">
                   <pre>{{ item.tree }}</pre>
                 </span>
 
-                <icon
-                  v-if="item?.isDirectory"
-                  :icon="getIconByFolder(item.name)"
-                  :style="{ fontSize: '18px' }"
-                />
-                <!-- 根据文件后缀动态显示图标 -->
-                <icon
-                  v-if="!item?.isDirectory"
-                  :icon="getIconByExtension(item.ext)"
-                  :style="{ fontSize: '18px' }"
-                />
+                <span v-if="showIcon">
+                  <pre v-if="!isSpecialIcon">{{ item?.isDirectory ? '📁' : '📄' }}</pre>
+
+                  <span v-if="isSpecialIcon">
+                    <icon
+                      v-if="item?.isDirectory"
+                      :icon="getIconByFolder(item.name)"
+                      :style="{ fontSize: '18px' }"
+                    />
+                    <!-- 根据文件后缀动态显示图标 -->
+                    <icon
+                      v-if="!item?.isDirectory"
+                      :icon="getIconByExtension(item.ext)"
+                      :style="{ fontSize: '18px' }"
+                    />
+                  </span>
+                </span>
+
                 <span style="margin-right: 5px"></span>
                 <span style="display: inline-block">
                   <pre>{{ item.name }}</pre>
