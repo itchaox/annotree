@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-23 23:04
+ * @LastTime   : 2024-08-24 09:03
  * @desc       :
 -->
 <!--
@@ -47,7 +47,8 @@ import { folderIconMap } from '@renderer/constants/folderIconMap.js'
 
 // 根据文件后缀返回对应的图标名
 const getIconByFolder = (name) => {
-  return folderIconMap[name] || 'flat-color-icons:opened-folder' // 默认图标
+  const _name = name && name.split('/')[0]
+  return folderIconMap[_name] || 'flat-color-icons:opened-folder' // 默认图标
 }
 
 // 根据文件后缀返回对应的图标名
@@ -937,7 +938,7 @@ function copyImg() {
 
 // 导出图片
 function exportImg() {
-  html2canvas(document.querySelector('#capture'), {
+  html2canvas(document.querySelector('#left'), {
     backgroundColor: '#f8f9fa',
     useCORS: true, //支持图片跨域
     scale: 1 //设置放大的倍数
@@ -1156,7 +1157,7 @@ function handleOnlyPreview() {
       </div>
 
       <div class="tree-container">
-        <div class="left" :class="{ 'left-none': onlyPreview }">
+        <div id="left" class="left" :class="{ 'left-none': onlyPreview }">
           <!-- TODO 编辑器树 -->
           <div
             @scroll="handleScroll(scrollLeft, scrollRight)"

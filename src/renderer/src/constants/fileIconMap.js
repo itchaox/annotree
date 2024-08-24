@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-23 18:24
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-23 22:45
+ * @LastTime   : 2024-08-24 09:28
  * @desc       :
  */
 
@@ -16,16 +16,17 @@ export const fileIconMap = {
   md: 'catppuccin:markdown',
   txt: 'icon-park:file-txt',
 
-  png: 'teenyicons:png-outline',
-  gif: 'teenyicons:gif-outline',
-  jpeg: 'iconoir:jpeg-format',
-  jpg: 'teenyicons:jpg-outline',
-  tiff: 'iconoir:tiff-format',
-  tif: 'iconoir:tif-format',
-  webp: 'iconoir:webp-format',
+  png: 'flat-color-icons:image-file',
+  gif: 'flat-color-icons:image-file',
+  jpeg: 'flat-color-icons:image-file',
+  jpg: 'flat-color-icons:image-file',
+  tiff: 'flat-color-icons:image-file',
+  tif: 'flat-color-icons:image-file',
+  webp: 'flat-color-icons:image-file',
   svg: 'logos:svg',
 
-  mp4: 'teenyicons:mp4-outline',
+  mp4: 'catppuccin:video',
+  mp3: 'emojione-v1:music-ascend',
 
   jsx: 'vscode-icons:file-type-reactjs',
   tsx: 'vscode-icons:file-type-reactts',
@@ -44,6 +45,6 @@ export const fileIconMap = {
   swift: 'vscode-icons:file-type-swift',
   dart: 'vscode-icons: file-type-dartlang',
   json: 'vscode-icons:file-type-light-json',
-  yml: 'vscode-icons:file-type-light-yaml',
-  yaml: 'vscode-icons:file-type-light-yaml'
+  yml: 'catppuccin:yaml',
+  yaml: 'catppuccin:yaml'
 }
