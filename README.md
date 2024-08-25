@@ -30,6 +30,10 @@ Official documentation: https://annotree.com
 
 ![demo](/resources/demo-en.gif)
 
+## Project Structure 📇
+
+![](/resources//Project%20Structure.jpeg)
+
 ## Feedback Channels
 
 The project is currently in the MVP (Minimum Viable Product) stage. If you have any opinions or suggestions, please feel free to contact me through the following ways:
@@ -71,10 +75,6 @@ The project is currently in the MVP (Minimum Viable Product) stage. If you have 
 - Bridge fill character: enter a single-byte fill character, such as: \*, \#, \$, \-, \@, \_, etc.
 - Always show bridges: configure whether to show bridges where there are no comments.
 - Export: set the relevant configuration, write the comments, and export the annotation file tree structure.
-
-## Project Structure 📇
-
-![](/resources//Project%20Structure.jpeg)
 
 ## Star History Chart ⭐️
 

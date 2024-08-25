@@ -50,6 +50,10 @@ Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设
 
 ![demo](/resources/demo-zh.gif)
 
+## 项目结构 📇
+
+![](/resources//Project%20Structure.jpeg)
+
 ## 功能特性
 
 1. ✨ 实时预览：修改配置后，实时预览文件夹目录树的效果。
@@ -96,10 +100,6 @@ Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设
 1. folder-explorer 的某些功能对我来说不必要，显得有些冗余，且不符合我的使用习惯。
 2. folder-explorer 需要导出后才能看到配置后的效果，我希望能够实现实时预览功能。
 3. folder-explorer 中编辑备注时，每次都需右键打开编辑菜单，这种操作方式不够方便。
-
-## 项目结构 📇
-
-![](/resources//Project%20Structure.jpeg)
 
 ## Star 历史图表 ⭐️
 
