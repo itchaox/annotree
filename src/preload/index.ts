@@ -2,8 +2,8 @@
  * @Version    : v1.00
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
- * @LastAuthor : itchaox
- * @LastTime   : 2024-08-10 09:36
+ * @LastAuthor : Wang Chao
+ * @LastTime   : 2024-08-25 18:22
  * @desc       :
  */
 
@@ -107,11 +107,6 @@ const api = {
           flatData,
           folderPath: arg
         })
-
-        // 存储处理后的数据
-
-        // store.commit('SCAN_FOLDER_PATH_UPDATE', arg)
-        // store.commit('IPC_FOLDER_SCAN')
       })
     })
   },
