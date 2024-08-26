@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-24 10:56
+ * @LastTime   : 2024-08-26 15:51
  * @desc       :
 -->
 <!--
@@ -1874,10 +1874,11 @@ function handleSpecialIcon() {
       flex: 1;
 
       background-color: #f7f8f9;
-      height: 88vh;
+      height: 83vh;
       border-radius: 4px;
       border: 1px solid #dee2e6;
       border-right: none;
+      border-top: none;
     }
 
     .left-none {
@@ -1906,19 +1907,19 @@ function handleSpecialIcon() {
         justify-content: flex-end;
 
         width: 100%;
-        border-bottom: 1px solid dd#dee2e6;
         padding: 5px 10px;
       }
     }
 
     .right {
       flex: 1;
-      height: 88vh;
+      height: 83vh;
       border-radius: 4px;
       padding-left: 10px;
 
       background-color: #fff;
       border: 1px solid #dee2e6;
+      border-top: none;
     }
 
     .right-none {
@@ -1926,9 +1927,8 @@ function handleSpecialIcon() {
     }
 
     .tree-scroller {
-      margin-top: 20px;
-      padding: 0 10px 0 10px;
-      height: calc(100% - 100px);
+      padding: 20px;
+      height: 100%;
       overflow: auto;
     }
 
