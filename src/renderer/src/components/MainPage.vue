@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-28 14:14
+ * @LastTime   : 2024-08-28 15:56
  * @desc       :
 -->
 <!--
@@ -1095,7 +1095,7 @@ function handleSpecialIcon() {
 
           <span
             v-if="showIcon"
-            :title="isSpecialIcon ? '默认图标' : '特殊图标'"
+            :title="isSpecialIcon ? t('tong-yong-tu-biao') : t('bian-cheng-tu-biao')"
             @click="handleSpecialIcon"
           >
             <svg
@@ -1137,7 +1137,10 @@ function handleSpecialIcon() {
             </svg>
           </span>
 
-          <span :title="onlyEdit ? '恢复默认' : '仅编辑区'" @click="handleOnlyEdit">
+          <span
+            :title="onlyEdit ? t('hui-fu-mo-ren') : t('jin-bian-ji-qu')"
+            @click="handleOnlyEdit"
+          >
             <svg
               class="tools-icon"
               width="24"
@@ -1168,7 +1171,10 @@ function handleSpecialIcon() {
             </svg>
           </span>
 
-          <span :title="onlyPreview ? '恢复默认' : '仅预览区'" @click="handleOnlyPreview">
+          <span
+            :title="onlyPreview ? t('hui-fu-mo-ren') : t('jin-yu-lan-qu')"
+            @click="handleOnlyPreview"
+          >
             <svg
               class="tools-icon"
               width="24"

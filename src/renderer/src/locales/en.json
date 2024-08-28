@@ -93,5 +93,10 @@
   "zhong-zhi": "Reset",
   "zhong-zhi-cheng-gong": "Reset successful",
   "que-ding": "Confirm",
-  "qu-xiao": "Cancel"
+  "qu-xiao": "Cancel",
+  "tong-yong-tu-biao": "Universal Icons",
+  "bian-cheng-tu-biao": "Programming Icons",
+  "hui-fu-mo-ren": "Restore Defaults",
+  "jin-bian-ji-qu": "Edit area only",
+  "jin-yu-lan-qu": "Preview area only"
 }
