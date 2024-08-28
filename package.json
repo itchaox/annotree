@@ -1,6 +1,6 @@
 {
   "name": "Annotree",
-  "version": "0.2.3",
+  "version": "0.2.31",
   "description": "A tool designed to assist in generating annotated folder trees",
   "main": "./out/main/index.js",
   "author": "Wang Chao",
@@ -26,7 +26,11 @@
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
-    "@electron-toolkit/utils": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0"
+  },
+  "devDependencies": {
+    "electron": "^31.0.2",
+    "electron-builder": "^24.13.3",
     "@element-plus/icons-vue": "^2.3.1",
     "@iconify/vue": "^4.1.2",
     "@rushstack/eslint-patch": "^1.10.3",
@@ -60,9 +64,5 @@
     "vue-i18n": "^9.13.1",
     "vue-tsc": "^2.0.22",
     "vue-virtual-scroller": "2.0.0-beta.8"
-  },
-  "devDependencies": {
-    "electron": "^31.0.2",
-    "electron-builder": "^24.13.3"
   }
 }
