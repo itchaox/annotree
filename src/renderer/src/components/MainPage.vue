@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-26 15:51
+ * @LastTime   : 2024-08-28 14:14
  * @desc       :
 -->
 <!--
@@ -1930,6 +1930,23 @@ function handleSpecialIcon() {
       padding: 20px;
       height: 100%;
       overflow: auto;
+
+      // 溢出滚动样式
+      &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background-color: #b7bdc6;
+        cursor: pointer;
+      }
+
+      &::-webkit-scrollbar-track {
+        border-radius: 3px;
+        background-color: #f7f8f9;
+      }
     }
 
     .tree-node {
