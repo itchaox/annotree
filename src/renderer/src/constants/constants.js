@@ -255,3 +255,51 @@ export const extList = [
     ]
   }
 ]
+
+// 语言列表
+export const languageList = [
+  // {
+  //   id: 'system',
+  //   name: t('gen-sui-xi-tong')
+  // },
+  {
+    id: 'en',
+    name: 'English'
+  },
+  {
+    id: 'zh',
+    name: '简体中文'
+  },
+  {
+    id: 'es',
+    name: 'Español'
+  },
+  {
+    id: 'fr',
+    name: 'Français'
+  },
+  {
+    id: 'de',
+    name: 'Deutsch'
+  },
+  {
+    id: 'ko',
+    name: '한국인'
+  },
+  {
+    id: 'ru',
+    name: 'Русский'
+  },
+  {
+    id: 'pt',
+    name: 'Português'
+  },
+  {
+    id: 'it',
+    name: 'Italiano'
+  },
+  {
+    id: 'ja',
+    name: '日本語'
+  }
+]

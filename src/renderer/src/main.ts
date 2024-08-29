@@ -33,7 +33,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 let lang = 'en'
 // 根据缓存语言，修改语言环境
 const common =
-  localStorage.getItem('annotree-common') && JSON.parse(localStorage.getItem('annotree-common'))
+  localStorage.getItem('annotree-common') && JSON.parse(localStorage.getItem('annotree-common') ?? '')
 if (common) {
   lang = common.languageId ?? 'en'
 }

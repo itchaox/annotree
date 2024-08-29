@@ -18,7 +18,7 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 const emojiIndex = ref(new EmojiIndex(data))
 
 import { set } from 'lodash'
-import { extList } from '../constants/constants.js'
+import { extList, languageList } from '../constants/constants.js'
 
 import packageJson from '../../../../package.json'
 
@@ -32,6 +32,7 @@ import { useI18n } from 'vue-i18n'
 import { i18n } from '../locales/i18n.js'
 
 import html2canvas from 'html2canvas'
+import { AllDataType, CacheNoteListType, FileTreeItem } from '@renderer/typing'
 
 const { IPC_FOLDER_SELECT, EXPORT_TREE_TEXT, localStorage, getSystemLanguage } = window.api as any
 
@@ -104,7 +105,7 @@ async function resetCache() {
     // 如果当前语言支持，则展示选中语言，否则默认展示英文
     languageId.value =
       common?.languageId ??
-      (languageList.value.find((item) => item.id === _languageId) ? _languageId : 'en')
+      (languageList.find((item) => item.id === _languageId) ? _languageId : 'en')
 
     i18n.global.locale = languageId.value
   }
@@ -129,7 +130,7 @@ async function resetCache() {
 
 // 清除当前文件夹缓存的 note
 function clearNotes() {
-  const annotreeNotes = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
+  const annotreeNotes: Record<string, any> = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
   for (const item of treeData.value) {
     delete annotreeNotes[item.id]
   }
@@ -147,54 +148,6 @@ function clearNotes() {
 // 意大利语: it
 // 中文: zh
 // 英文: en
-
-// 语言列表
-const languageList = ref([
-  // {
-  //   id: 'system',
-  //   name: t('gen-sui-xi-tong')
-  // },
-  {
-    id: 'en',
-    name: 'English'
-  },
-  {
-    id: 'zh',
-    name: '简体中文'
-  },
-  {
-    id: 'es',
-    name: 'Español'
-  },
-  {
-    id: 'fr',
-    name: 'Français'
-  },
-  {
-    id: 'de',
-    name: 'Deutsch'
-  },
-  {
-    id: 'ko',
-    name: '한국인'
-  },
-  {
-    id: 'ru',
-    name: 'Русский'
-  },
-  {
-    id: 'pt',
-    name: 'Português'
-  },
-  {
-    id: 'it',
-    name: 'Italiano'
-  },
-  {
-    id: 'ja',
-    name: '日本語'
-  }
-])
 
 // 默认展示系统语言
 const languageId = ref('en')
@@ -217,7 +170,7 @@ onMounted(async () => {
   if (!languageToUse) {
     if (zhLanguages.includes(_languageId)) {
       languageToUse = 'zh'
-    } else if (languageList.value.some((item) => item.id === _languageId)) {
+    } else if (languageList.some((item) => item.id === _languageId)) {
       languageToUse = _languageId
     } else {
       languageToUse = defaultLanguage
@@ -284,7 +237,7 @@ async function copy() {
   }
 }
 
-const treeData = ref([])
+const treeData = ref<FileTreeItem[]>([])
 
 // 忽略文件夹列表
 const folderList: any = ref([])
@@ -308,7 +261,7 @@ async function scan() {
 
   try {
     // 更新数据
-    const allData = await IPC_FOLDER_SELECT(JSON.stringify(params))
+    const allData: AllDataType = await IPC_FOLDER_SELECT(JSON.stringify(params))
     const result = allData.flatData
     noFlatData.value = allData?.noFlatData
     folderPath.value = allData.folderPath
@@ -357,7 +310,7 @@ async function scan() {
 
 // 获取忽略的目录
 function getIgnoreFolderList() {
-  let result = []
+  let result: string[] = []
   function isFolderAndPush(elements, level = 1) {
     if (level > 2) return
     for (const item of elements) {
@@ -471,7 +424,8 @@ const isShiftTab = ref(false)
 document.addEventListener('keydown', function (event) {
   nextTick(() => {
     if (event.key === 'Tab') {
-      const activeElement = document.activeElement
+      const activeElement = document.activeElement as HTMLInputElement
+      if (!activeElement) return
       const inputs = document.querySelectorAll('input')
       currentIndex.value = Array.from(inputs).indexOf(activeElement)
 
@@ -531,11 +485,11 @@ document.addEventListener('keydown', function (event) {
 })
 
 // 预览数据
-const previewList = ref([])
+const previewList = ref<{ value: string; id: string }[]>([])
 
 // 处理预览区域展示
 function getPreviewData() {
-  let result = treeData.value
+  let result: any[] = treeData.value
 
   // 第一步 转换 element 和 note
   result = result?.map((item) => {
@@ -549,8 +503,8 @@ function getPreviewData() {
 
     const note = item.note
       ? noteReplace(noteFormat.value, {
-          data: item
-        })
+        data: item
+      })
       : ''
     return { element, bridge, note, type: item?.isFile ? 'file' : 'folder' }
   })
@@ -816,7 +770,7 @@ function removeNode(item) {
 }
 
 // 缓存 note 列表
-const cacheNoteList = ref([])
+const cacheNoteList = ref<CacheNoteListType[]>([])
 
 // 折叠节点
 function foldNode(item) {
@@ -892,33 +846,47 @@ const handleScroll = (scrolledContainer, otherContainer) => {
 
 // 复制图片
 function copyImg() {
-  html2canvas(document.querySelector('#capture'), {
+  const captureElement = document.querySelector('#capture');
+  if (!captureElement) {
+    console.error('无法找到要复制的元素');
+    return;
+  }
+
+  html2canvas(captureElement as HTMLElement, {
     backgroundColor: '#f8f9fa',
-    useCORS: true, //支持图片跨域
-    scale: 1 //设置放大的倍数
+    useCORS: true, // 支持图片跨域
+    scale: 1 // 设置放大的倍数
   }).then((canvas) => {
     canvas.toBlob(async (blob) => {
-      try {
-        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
-        ElMessage({
-          message: t('tu-pian-yi-fu-zhi-dao-jian-tie-ban'),
-          type: 'success',
-          duration: 1500,
-          showClose: true
-        })
-      } catch (err) {
-        console.error('无法复制图片到剪贴板', err)
+      if (blob) {
+        try {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+          ElMessage({
+            message: t('tu-pian-yi-fu-zhi-dao-jian-tie-ban'),
+            type: 'success',
+            duration: 1500,
+            showClose: true
+          })
+        } catch (err) {
+          console.error('无法复制图片到剪贴板', err)
+        }
       }
-    }, 'image/png')
+    })
   })
 }
 
 // 导出图片
 function exportImg() {
-  html2canvas(document.querySelector('#capture'), {
+  const captureElement = document.querySelector('#capture');
+  if (!captureElement) {
+    console.error('无法找到要导出的元素');
+    return;
+  }
+
+  html2canvas(captureElement as HTMLElement, {
     backgroundColor: '#f8f9fa',
-    useCORS: true, //支持图片跨域
-    scale: 1 //设置放大的倍数
+    useCORS: true, // 支持图片跨域
+    scale: 1 // 设置放大的倍数
   }).then((canvas) => {
     // 获取当前时间
     const now = new Date()
@@ -962,11 +930,15 @@ function nodeClick(index) {
     <div class="operation">
       <div>
         <el-button type="primary" @click="scan">
-          <el-icon><Search /></el-icon>
+          <el-icon>
+            <Search />
+          </el-icon>
           <span> {{ $t('sao-miao') }} </span>
         </el-button>
         <el-button type="success" plain @click="setCommon">
-          <el-icon size="16"><Setting /></el-icon>
+          <el-icon size="16">
+            <Setting />
+          </el-icon>
           <span> {{ $t('quan-ju-pei-zhi') }} </span>
         </el-button>
       </div>
@@ -976,40 +948,22 @@ function nodeClick(index) {
     <div class="content" v-if="treeData.length > 0">
       <div class="left">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <div
-            class="edit-tools"
-            style="display: flex; align-items: center; justify-content: space-between"
-            v-if="treeData.length > 0"
-          >
+          <div class="edit-tools" style="display: flex; align-items: center; justify-content: space-between"
+            v-if="treeData.length > 0">
             <div>
-              <el-icon
-                size="24"
-                class="tools-icon"
-                @click="refreshNote"
-                :title="$t('zhong-zhi-zhu-shi')"
-                ><Refresh
-              /></el-icon>
+              <el-icon size="24" class="tools-icon" @click="refreshNote" :title="$t('zhong-zhi-zhu-shi')">
+                <Refresh />
+              </el-icon>
             </div>
 
             <div style="position: relative">
-              <el-icon
-                size="24"
-                :title="$t('xuan-ze-biao-qing')"
-                @click.stop="isShowEmoji = !isShowEmoji"
-                class="tools-icon"
-                ><Star
-              /></el-icon>
-              <Picker
-                @click.stop="isShowEmoji = true"
-                v-if="isShowEmoji"
-                style="position: absolute; top: 45px; left: 20px; z-index: 2"
-                :data="emojiIndex"
-                set="google"
-                @select="selectEmoji"
-                :emojiSize="26"
-                :emojiTooltip="true"
-                :showPreview="false"
-                :i18n="{
+              <el-icon size="24" :title="$t('xuan-ze-biao-qing')" @click.stop="isShowEmoji = !isShowEmoji"
+                class="tools-icon">
+                <Star />
+              </el-icon>
+              <Picker @click.stop="isShowEmoji = true" v-if="isShowEmoji"
+                style="position: absolute; top: 45px; left: 20px; z-index: 2" :data="emojiIndex" set="google"
+                @select="selectEmoji" :emojiSize="26" :emojiTooltip="true" :showPreview="false" :i18n="{
                   search: t('p1'),
                   notfound: t('p2'),
                   categories: {
@@ -1026,34 +980,26 @@ function nodeClick(index) {
                     flags: t('p13'),
                     custom: t('p14')
                   }
-                }"
-              />
+                }" />
             </div>
           </div>
         </div>
 
         <div @scroll="handleScroll(scrollLeft, scrollRight)" ref="scrollLeft" class="tree-scroller">
-          <div
-            v-for="(item, index) in treeData"
-            :class="{
-              'tree-node-active': isShiftTab
-                ? currentIndex - 1 === index
-                : currentIndex + 1 === index
-            }"
-            :key="item.id"
-            class="tree-node"
-            @click="nodeClick(index)"
-          >
+          <div v-for="(item, index) in treeData" :class="{
+            'tree-node-active': isShiftTab
+              ? currentIndex - 1 === index
+              : currentIndex + 1 === index
+          }" :key="item.id" class="tree-node" @click="nodeClick(index)">
             <div style="display: flex">
               <div style="display: flex; flex: 1">
-                <div
-                  class="folder-icon"
-                  style="width: 15px"
-                  v-if="item?.isDirectory"
-                  @click="foldNode(item)"
-                >
-                  <el-icon color="#00000088" v-if="item.isShowElements"><CaretBottom /></el-icon>
-                  <el-icon color="#00000088" v-else><CaretRight /></el-icon>
+                <div class="folder-icon" style="width: 15px" v-if="item?.isDirectory" @click="foldNode(item)">
+                  <el-icon color="#00000088" v-if="item.isShowElements">
+                    <CaretBottom />
+                  </el-icon>
+                  <el-icon color="#00000088" v-else>
+                    <CaretRight />
+                  </el-icon>
                 </div>
                 <div v-else style="width: 15px"></div>
                 <!-- 树枝 -->
@@ -1074,20 +1020,13 @@ function nodeClick(index) {
 
               <div>
                 <!-- 注释 -->
-                <el-input
-                  style="height: 20px; width: 120px; margin-right: 2px"
-                  v-model="item.note"
-                  size="small"
-                  :placeholder="$t('qing-shu-ru-zhu-shi')"
-                  clearable
-                  :tabindex="index + 1"
-                  @change="inputChange(item)"
-                  @input="handleInputChange(item)"
-                ></el-input>
+                <el-input style="height: 20px; width: 120px; margin-right: 2px" v-model="item.note" size="small"
+                  :placeholder="$t('qing-shu-ru-zhu-shi')" clearable :tabindex="index + 1" @change="inputChange(item)"
+                  @input="handleInputChange(item)"></el-input>
 
-                <el-button link type="danger" @click="removeNode(item)"
-                  ><el-icon><Delete /></el-icon
-                ></el-button>
+                <el-button link type="danger" @click="removeNode(item)"><el-icon>
+                    <Delete />
+                  </el-icon></el-button>
               </div>
             </div>
           </div>
@@ -1096,38 +1035,30 @@ function nodeClick(index) {
       <div class="right">
         <div class="preview-tools" v-if="previewList.length > 0">
           <div style="display: flex; align-items: center">
-            <el-icon
-              class="tools-icon"
-              size="24"
-              @click="isPreview = true"
-              :title="$t('yu-lan-qu-pei-zhi')"
-              ><Setting
-            /></el-icon>
+            <el-icon class="tools-icon" size="24" @click="isPreview = true" :title="$t('yu-lan-qu-pei-zhi')">
+              <Setting />
+            </el-icon>
           </div>
           <div>
-            <el-icon class="tools-icon" size="24" @click="copyTree" :title="$t('fu-zhi-wen-ben')"
-              ><CopyDocument
-            /></el-icon>
+            <el-icon class="tools-icon" size="24" @click="copyTree" :title="$t('fu-zhi-wen-ben')">
+              <CopyDocument />
+            </el-icon>
 
-            <el-icon class="tools-icon" size="24" @click="exportFile" :title="$t('dao-chu-wen-ben')"
-              ><Download
-            /></el-icon>
+            <el-icon class="tools-icon" size="24" @click="exportFile" :title="$t('dao-chu-wen-ben')">
+              <Download />
+            </el-icon>
 
-            <el-icon class="tools-icon" size="24" @click="copyImg" :title="$t('fu-zhi-tu-pian')"
-              ><Picture
-            /></el-icon>
+            <el-icon class="tools-icon" size="24" @click="copyImg" :title="$t('fu-zhi-tu-pian')">
+              <Picture />
+            </el-icon>
 
-            <el-icon class="tools-icon" @click="exportImg" size="24" :title="$t('dao-chu-tu-pian')"
-              ><Camera
-            /></el-icon>
+            <el-icon class="tools-icon" @click="exportImg" size="24" :title="$t('dao-chu-tu-pian')">
+              <Camera />
+            </el-icon>
           </div>
         </div>
 
-        <div
-          class="tree-scroller"
-          ref="scrollRight"
-          @scroll="handleScroll(scrollRight, scrollLeft)"
-        >
+        <div class="tree-scroller" ref="scrollRight" @scroll="handleScroll(scrollRight, scrollLeft)">
           <div id="capture">
             <pre class="tree-node" v-for="item in previewList" :key="item.id">{{ item.value }}</pre>
           </div>
@@ -1144,31 +1075,22 @@ function nodeClick(index) {
             <div class="preview-item">
               <div class="preview-label">{{ $t('zhu-shi-ge-shi-hua') }}</div>
               <div class="preview-value">
-                <el-input
-                  v-model="noteFormat"
-                  :placeholder="$t('qing-shu-ru-ge-shi-hua-zi-fu-chuan')"
-                ></el-input>
+                <el-input v-model="noteFormat" :placeholder="$t('qing-shu-ru-ge-shi-hua-zi-fu-chuan')"></el-input>
               </div>
             </div>
 
             <div class="preview-item">
               <div class="preview-label">{{ $t('qiao-liang-zui-duan-zi-fu-shu') }}</div>
               <div class="preview-value">
-                <el-input-number
-                  v-model="minBridge"
-                  :placeholder="$t('qing-shu-ru-qiao-liang-zui-duan-zi-fu-shu')"
-                  :min="0"
-                ></el-input-number>
+                <el-input-number v-model="minBridge" :placeholder="$t('qing-shu-ru-qiao-liang-zui-duan-zi-fu-shu')"
+                  :min="0"></el-input-number>
               </div>
             </div>
 
             <div class="preview-item">
               <div class="preview-label">{{ $t('qiao-liang-tian-chong-zi-fu') }}</div>
               <div class="preview-value">
-                <el-input
-                  v-model="bridgeChar"
-                  :placeholder="$t('qing-shu-ru-dan-zi-jie-tian-chong-zi-fu')"
-                ></el-input>
+                <el-input v-model="bridgeChar" :placeholder="$t('qing-shu-ru-dan-zi-jie-tian-chong-zi-fu')"></el-input>
               </div>
             </div>
 
@@ -1191,21 +1113,17 @@ function nodeClick(index) {
     </div>
 
     <!-- 全局配置 -->
-    <el-dialog
-      v-model="isCommon"
-      :title="$t('quan-ju-pei-zhi')"
-      width="40vw"
-      :close-on-click-modal="true"
-      :close-on-press-escape="true"
-      @close="isCommon = false"
-    >
+    <el-dialog v-model="isCommon" :title="$t('quan-ju-pei-zhi')" width="40vw" :close-on-click-modal="true"
+      :close-on-press-escape="true" @close="isCommon = false">
       <div class="dialog-body">
         <el-tabs type="border-card" class="demo-tabs">
           <!-- 通用 -->
           <el-tab-pane>
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon><house /></el-icon>
+                <el-icon>
+                  <house />
+                </el-icon>
                 <span>{{ $t('tong-yong') }}</span>
               </span>
             </template>
@@ -1213,38 +1131,26 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('yu-yan') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="$t('pei-zhi-ruan-jian-xian-shi-yu-yan')"
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t('pei-zhi-ruan-jian-xian-shi-yu-yan')" placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value">
-                  <el-select
-                    v-model="languageId"
-                    :placeholder="$t('qing-xuan-ze-yu-yan')"
-                    style="width: 110px"
-                  >
-                    <el-option
-                      v-for="item in languageList"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id"
-                    ></el-option>
+                  <el-select v-model="languageId" :placeholder="$t('qing-xuan-ze-yu-yan')" style="width: 110px">
+                    <el-option v-for="item in languageList" :key="item.id" :label="item.name"
+                      :value="item.id"></el-option>
                   </el-select>
                 </div>
               </div>
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('zi-dong-da-kai-wen-jian') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="$t('dao-chu-wen-jian-hou-zi-dong-da-kai')"
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t('dao-chu-wen-jian-hou-zi-dong-da-kai')" placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value"><el-switch v-model="autoOpenFile"></el-switch></div>
@@ -1252,12 +1158,11 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('dao-chu-hou-zhan-shi-cai-dai') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="$t('dao-chu-cheng-gong-hou-zi-dong-zhan-shi-cai-dan')"
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t('dao-chu-cheng-gong-hou-zi-dong-zhan-shi-cai-dan')"
+                    placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value"><el-switch v-model="isEggshell"></el-switch></div>
@@ -1265,12 +1170,11 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('tong-bu-gun-dong') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="$t('bian-ji-qu-he-yu-lan-qu-shi-fou-tong-bu-gun-dong')"
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t('bian-ji-qu-he-yu-lan-qu-shi-fou-tong-bu-gun-dong')"
+                    placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value"><el-switch v-model="syncScroll"></el-switch></div>
@@ -1278,12 +1182,11 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('xian-shi-tu-biao') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="$t('shi-fou-xian-shi-wen-jian-jia-he-wen-jian-de-tu-biao')"
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t('shi-fou-xian-shi-wen-jian-jia-he-wen-jian-de-tu-biao')"
+                    placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value"><el-switch v-model="showIcon"></el-switch></div>
@@ -1300,17 +1203,14 @@ function nodeClick(index) {
                     <el-checkbox v-model="isConfig" :label="$t('she-zhi')" />
                   </div>
                   <div>
-                    <el-popconfirm
-                      :title="$t('que-ren-zhong-zhi-suo-you-shu-ju-ma')"
-                      @confirm="resetCache"
-                      confirm-button-type="danger"
-                      width="210"
-                      :confirm-button-text="$t('que-ding')"
-                      :cancel-button-text="$t('qu-xiao')"
-                    >
+                    <el-popconfirm :title="$t('que-ren-zhong-zhi-suo-you-shu-ju-ma')" @confirm="resetCache"
+                      confirm-button-type="danger" width="210" :confirm-button-text="$t('que-ding')"
+                      :cancel-button-text="$t('qu-xiao')">
                       <template #reference>
                         <el-button type="danger" :disabled="!isCache && !isConfig">
-                          <el-icon><Refresh /></el-icon>
+                          <el-icon>
+                            <Refresh />
+                          </el-icon>
                           <span> {{ $t('zhong-zhi') }} </span>
                         </el-button>
                       </template>
@@ -1329,7 +1229,9 @@ function nodeClick(index) {
           <el-tab-pane>
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon><Search /></el-icon>
+                <el-icon>
+                  <Search />
+                </el-icon>
                 <span>{{ $t('sao-miao') }}</span>
               </span>
             </template>
@@ -1337,52 +1239,33 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('hu-lve-wen-jian-jia') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="
-                      $t(
-                        'hu-lve-bu-xu-yao-sao-miao-de-wen-jian-jia-ti-gao-sao-miao-xiao-shuai-ke-xin-zeng-xu-yao-guo-lv-de-wen-jian-jia-li-ru-macos-xia-wei-builddistwindows-xia-wei-builddist'
-                      )
-                    "
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t(
+                    'hu-lve-bu-xu-yao-sao-miao-de-wen-jian-jia-ti-gao-sao-miao-xiao-shuai-ke-xin-zeng-xu-yao-guo-lv-de-wen-jian-jia-li-ru-macos-xia-wei-builddistwindows-xia-wei-builddist'
+                  )
+                    " placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value">
-                  <el-select
-                    v-model="ignoreFolderList"
-                    :placeholder="$t('qing-xuan-ze-xu-yao-hu-lve-de-wen-jian-jia')"
-                    style="width: 325px"
-                    multiple
-                    collapse-tags
-                    :max-collapse-tags="3"
-                    filterable
-                    default-first-option
-                    allow-create
-                  >
-                    <el-option
-                      v-for="item in folderList.filter((i) => i)"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    />
+                  <el-select v-model="ignoreFolderList" :placeholder="$t('qing-xuan-ze-xu-yao-hu-lve-de-wen-jian-jia')"
+                    style="width: 325px" multiple collapse-tags :max-collapse-tags="3" filterable default-first-option
+                    allow-create>
+                    <el-option v-for="item in folderList.filter((i) => i)" :key="item" :label="item" :value="item" />
                   </el-select>
                 </div>
               </div>
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('hu-lve-yi-kai-tou-de-wen-jian-jia') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="
-                      $t(
-                        'zhe-lei-wen-jian-jia-zai-macos-he-linux-shang-shi-mo-ren-yin-cang-de-wen-jian-jia'
-                      )
-                    "
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t(
+                    'zhe-lei-wen-jian-jia-zai-macos-he-linux-shang-shi-mo-ren-yin-cang-de-wen-jian-jia'
+                  )
+                    " placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value">
@@ -1393,12 +1276,11 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('zhi-sao-miao-wen-jian-jia') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="$t('hu-lve-suo-you-wen-jian-zhi-sao-miao-wen-jian-jia')"
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t('hu-lve-suo-you-wen-jian-zhi-sao-miao-wen-jian-jia')"
+                    placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value"><el-switch v-model="onlyScanFolder"></el-switch></div>
@@ -1407,16 +1289,13 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('hu-lve-yi-kai-tou-de-wen-jian') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="
-                      $t(
-                        'zhe-lei-wen-jian-zai-macos-he-linux-shang-shi-mo-ren-yin-cang-de-wen-jian'
-                      )
-                    "
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t(
+                    'zhe-lei-wen-jian-zai-macos-he-linux-shang-shi-mo-ren-yin-cang-de-wen-jian'
+                  )
+                    " placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value"><el-switch v-model="ignoreDotFile"></el-switch></div>
@@ -1425,41 +1304,21 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('hu-lve-wen-jian-lei-xing') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="
-                      $t(
-                        'xuan-ze-hu-lve-bu-xu-yao-de-wen-jian-lei-xing-yi-ti-gao-sao-miao-xiao-shuai-ke-xin-zeng-xu-yao-guo-lv-de-wen-jian-lei-xing'
-                      )
-                    "
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t(
+                    'xuan-ze-hu-lve-bu-xu-yao-de-wen-jian-lei-xing-yi-ti-gao-sao-miao-xiao-shuai-ke-xin-zeng-xu-yao-guo-lv-de-wen-jian-lei-xing'
+                  )
+                    " placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value">
-                  <el-select
-                    v-model="ignoreFileList"
-                    :placeholder="$t('qing-xuan-ze-xu-yao-hu-lve-de-wen-jian-lei-xing')"
-                    filterable
-                    style="width: 325px"
-                    multiple
-                    collapse-tags
-                    default-first-option
-                    allow-create
-                    :max-collapse-tags="3"
-                  >
-                    <el-option-group
-                      v-for="group in extList"
-                      :key="group.label"
-                      :label="group.label"
-                    >
-                      <el-option
-                        v-for="item in group.options"
-                        :key="item"
-                        :label="item"
-                        :value="item"
-                      />
+                  <el-select v-model="ignoreFileList"
+                    :placeholder="$t('qing-xuan-ze-xu-yao-hu-lve-de-wen-jian-lei-xing')" filterable style="width: 325px"
+                    multiple collapse-tags default-first-option allow-create :max-collapse-tags="3">
+                    <el-option-group v-for="group in extList" :key="group.label" :label="group.label">
+                      <el-option v-for="item in group.options" :key="item" :label="item" :value="item" />
                     </el-option-group>
                   </el-select>
                 </div>
@@ -1468,16 +1327,13 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">
                   {{ $t('sao-miao-shen-du') }}
-                  <el-tooltip
-                    effect="dark"
-                    :content="
-                      $t(
-                        'she-zhi-sao-miao-mu-lu-de-shen-du-0-wei-suo-you-shen-du-mei-di-zeng-yi-ge-shu-zi-ze-dai-biao-sao-miao-shen-du-1'
-                      )
-                    "
-                    placement="top"
-                  >
-                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  <el-tooltip effect="dark" :content="$t(
+                    'she-zhi-sao-miao-mu-lu-de-shen-du-0-wei-suo-you-shen-du-mei-di-zeng-yi-ge-shu-zi-ze-dai-biao-sao-miao-shen-du-1'
+                  )
+                    " placement="top">
+                    <el-icon size="16" style="margin-left: 3px">
+                      <Warning />
+                    </el-icon>
                   </el-tooltip>
                 </div>
                 <div class="tab-item-value">
@@ -1490,7 +1346,9 @@ function nodeClick(index) {
           <el-tab-pane>
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon><Download /></el-icon>
+                <el-icon>
+                  <Download />
+                </el-icon>
                 <span>{{ $t('dao-chu-wen-ben') }}</span>
               </span>
             </template>
@@ -1498,11 +1356,8 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div style="width: 100px">{{ $t('mo-ren-ming-cheng') }}</div>
                 <div>
-                  <el-input
-                    style="width: 380px; font-size: 12px"
-                    v-model="defaultFileName"
-                    :placeholder="$t('qing-shu-ru-mo-ren-ming-cheng')"
-                  >
+                  <el-input style="width: 380px; font-size: 12px" v-model="defaultFileName"
+                    :placeholder="$t('qing-shu-ru-mo-ren-ming-cheng')">
                     <template #append>.txt</template>
                   </el-input>
                 </div>
@@ -1513,7 +1368,9 @@ function nodeClick(index) {
           <el-tab-pane>
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon><WarningFilled /></el-icon>
+                <el-icon>
+                  <WarningFilled />
+                </el-icon>
                 <span>{{ $t('guan-yu') }}</span>
               </span>
             </template>
@@ -1521,9 +1378,7 @@ function nodeClick(index) {
               <div class="tab-item">
                 <div class="tab-item-label">{{ $t('kai-fa-zhe') }}</div>
                 <div class="tab-item-value">
-                  <el-link type="primary" href="https://github.com/itchaox" target="_blank"
-                    >itchaox</el-link
-                  >
+                  <el-link type="primary" href="https://github.com/itchaox" target="_blank">itchaox</el-link>
                 </div>
               </div>
               <div class="tab-item">
@@ -1531,12 +1386,9 @@ function nodeClick(index) {
                 <div class="tab-item-value">
                   {{ $t('kai-yuan') }}
 
-                  <el-link
-                    type="primary"
-                    href="https://github.com/itchaox/annotree"
-                    target="_blank"
-                    >{{ $t('github-di-zhi') }}</el-link
-                  >{{ $t('gan-xie-star') }}
+                  <el-link type="primary" href="https://github.com/itchaox/annotree" target="_blank">{{
+                    $t('github-di-zhi')
+                    }}</el-link>{{ $t('gan-xie-star') }}
                 </div>
               </div>
               <div class="tab-item">
@@ -1544,7 +1396,7 @@ function nodeClick(index) {
                 <div class="tab-item-value">
                   <el-link type="primary" href="https://www.annotree.com" target="_blank">{{
                     $t('dian-wo-cha-kan')
-                  }}</el-link>
+                    }}</el-link>
                 </div>
               </div>
 
@@ -1566,11 +1418,15 @@ function nodeClick(index) {
       <div>
         <div>{{ $t('zong-ji-treedatalength', [treeData?.length]) }}</div>
         <div v-if="folderNumber > 0">
-          <el-icon><FolderChecked /></el-icon>
+          <el-icon>
+            <FolderChecked />
+          </el-icon>
           <span>{{ $t('wen-jian-jia-foldernumber', [folderNumber]) }}</span>
         </div>
         <div v-if="fileNumber > 0">
-          <el-icon><DocumentChecked /></el-icon>
+          <el-icon>
+            <DocumentChecked />
+          </el-icon>
           <span>{{ $t('wen-jian-filenumber', [fileNumber]) }}</span>
         </div>
       </div>
@@ -1581,6 +1437,7 @@ function nodeClick(index) {
 <style lang="scss" scoped>
 .main-page {
   padding: 14px;
+
   .operation {
     display: flex;
     justify-content: space-between;
@@ -1603,6 +1460,7 @@ function nodeClick(index) {
     height: 88vh;
     border-radius: 4px;
     font-size: 18px;
+
     img {
       width: 35%;
     }
@@ -1669,6 +1527,7 @@ function nodeClick(index) {
       padding: 0 10px 0 10px;
       height: calc(100% - 100px);
       overflow: auto;
+
       // 溢出滚动样式
       &::-webkit-scrollbar {
         width: 4px;
@@ -1740,10 +1599,12 @@ function nodeClick(index) {
     align-items: center;
     margin-top: 14px;
     font-size: 14px;
+
     div {
       margin-right: 14px;
       display: flex;
       align-items: center;
+
       span {
         margin-left: 3px;
       }
@@ -1753,6 +1614,7 @@ function nodeClick(index) {
 
 .tools-icon {
   margin-right: 24px;
+
   &:hover {
     color: #5a9cf8;
     cursor: pointer;
@@ -1763,10 +1625,12 @@ function nodeClick(index) {
   .custom-tabs-label {
     display: flex;
     align-items: center;
+
     span {
       margin-left: 5px;
     }
   }
+
   .tab-item {
     display: flex;
     align-items: center;
