@@ -33,6 +33,14 @@ export default defineConfig({
         '@': resolve('./')
       }
     },
+    // 优化打包的代码体积
+    build: {
+      terserOptions: {
+        compress: true,
+        ie8: false,
+        sourceMap: false
+      }
+    },
     plugins: [
       vue(),
       AutoImport({
