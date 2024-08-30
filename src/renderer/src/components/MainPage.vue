@@ -26,7 +26,7 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 const emojiIndex = ref(new EmojiIndex(data))
 
 import { set } from 'lodash'
-import { extList } from '@renderer/constants/constants.js'
+import { extList,languageList} from '@renderer/constants/constants.js'
 
 import packageJson from '@/package.json'
 
@@ -127,7 +127,7 @@ async function resetCache() {
     // 如果当前语言支持，则展示选中语言，否则默认展示英文
     languageId.value =
       common?.languageId ??
-      (languageList.value.find((item) => item.id === _languageId) ? _languageId : 'en')
+      (languageList.find((item) => item.id === _languageId) ? _languageId : 'en')
 
     i18n.global.locale = languageId.value
   }
@@ -171,53 +171,6 @@ function clearNotes() {
 // 中文: zh
 // 英文: en
 
-// 语言列表
-const languageList = ref([
-  // {
-  //   id: 'system',
-  //   name: t('gen-sui-xi-tong')
-  // },
-  {
-    id: 'en',
-    name: 'English'
-  },
-  {
-    id: 'zh',
-    name: '简体中文'
-  }
-  // {
-  //   id: 'es',
-  //   name: 'Español'
-  // },
-  // {
-  //   id: 'fr',
-  //   name: 'Français'
-  // },
-  // {
-  //   id: 'de',
-  //   name: 'Deutsch'
-  // },
-  // {
-  //   id: 'ko',
-  //   name: '한국인'
-  // },
-  // {
-  //   id: 'ru',
-  //   name: 'Русский'
-  // },
-  // {
-  //   id: 'pt',
-  //   name: 'Português'
-  // },
-  // {
-  //   id: 'it',
-  //   name: 'Italiano'
-  // },
-  // {
-  //   id: 'ja',
-  //   name: '日本語'
-  // }
-])
 
 // 默认展示系统语言
 const languageId = ref('en')
@@ -240,7 +193,7 @@ onMounted(async () => {
   if (!languageToUse) {
     if (zhLanguages.includes(_languageId)) {
       languageToUse = 'zh'
-    } else if (languageList.value.some((item) => item.id === _languageId)) {
+    } else if (languageList.some((item) => item.id === _languageId)) {
       languageToUse = _languageId
     } else {
       languageToUse = defaultLanguage
