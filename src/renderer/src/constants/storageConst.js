@@ -1,0 +1,5 @@
+export const ANNOTREE_COMMON = 'annotree-common'
+export const ANNOTREE_SCAN = 'annotree-scan'
+export const ANNOTREE_EXPORT_CONFIG = 'annotree-exportConfig'
+export const ANNOTREE_EXPORT_PREVIEW = 'annotree-preview'
+export const ANNOTREE_NOTES = 'annotree-notes'

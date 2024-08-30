@@ -20,6 +20,12 @@ import { replace as elementReplace } from '@renderer/utils/replace.element.js'
 import { replace as noteReplace } from '@renderer/utils/replace.note.js'
 import translateFlat from '@renderer/utils/translate.flat.js'
 import data from 'emoji-mart-vue-fast/data/all.json'
+import { 
+  ANNOTREE_COMMON, 
+  ANNOTREE_SCAN, 
+  ANNOTREE_NOTES, 
+  ANNOTREE_EXPORT_CONFIG, 
+  ANNOTREE_EXPORT_PREVIEW } from '@renderer/constants/storageConst.js'
 
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
@@ -115,14 +121,14 @@ const folderSuffix = ref(true)
 async function resetCache() {
   // 重置配置
   if (isConfig.value) {
-    localStorage.removeItem('annotree-common')
-    localStorage.removeItem('annotree-scan')
-    localStorage.removeItem('annotree-exportConfig')
-    localStorage.removeItem('annotree-preview')
+    localStorage.removeItem(ANNOTREE_COMMON)
+    localStorage.removeItem(ANNOTREE_SCAN)
+    localStorage.removeItem(ANNOTREE_EXPORT_CONFIG)
+    localStorage.removeItem(ANNOTREE_EXPORT_PREVIEW)
     // 获取系统语言
     const _languageId = await getSystemLanguage()
 
-    const common = JSON.parse(localStorage.getItem('annotree-common'))
+    const common = JSON.parse(localStorage.getItem(ANNOTREE_COMMON))
 
     // 如果当前语言支持，则展示选中语言，否则默认展示英文
     languageId.value =
@@ -134,7 +140,7 @@ async function resetCache() {
 
   // 重置注释
   if (isCache.value) {
-    localStorage.removeItem('annotree-notes')
+    localStorage.removeItem(ANNOTREE_NOTES)
     treeData.value = []
     previewList.value = []
     folderPath.value = ''
@@ -152,12 +158,12 @@ async function resetCache() {
 
 // 清除当前文件夹缓存的 note
 function clearNotes() {
-  const annotreeNotes = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
+  const annotreeNotes = JSON.parse(localStorage.getItem(ANNOTREE_NOTES) || '{}')
   for (const item of treeData.value) {
     delete annotreeNotes[item.id]
   }
 
-  localStorage.setItem('annotree-notes', JSON.stringify(annotreeNotes))
+  localStorage.setItem(ANNOTREE_NOTES, JSON.stringify(annotreeNotes))
 }
 
 // 日语: ja
@@ -176,7 +182,7 @@ function clearNotes() {
 const languageId = ref('en')
 
 onMounted(async () => {
-  const common = JSON.parse(localStorage.getItem('annotree-common'))
+  const common = JSON.parse(localStorage.getItem(ANNOTREE_COMMON))
 
   // 获取系统语言
   const _languageId = await getSystemLanguage()
@@ -214,7 +220,7 @@ watch([languageId], async () => {
 // 加载本地存储的数据
 const loadLocalStorage = () => {
   // 通用
-  const common = JSON.parse(localStorage.getItem('annotree-common'))
+  const common = JSON.parse(localStorage.getItem(ANNOTREE_COMMON))
   languageId.value = common?.languageId ?? 'en'
   autoOpenFile.value = common?.autoOpenFile ?? true
   isEggshell.value = common?.isEggshell ?? true
@@ -223,7 +229,7 @@ const loadLocalStorage = () => {
   folderSuffix.value = common?.folderSuffix ?? true
 
   // 扫描
-  const scan = JSON.parse(localStorage.getItem('annotree-scan'))
+  const scan = JSON.parse(localStorage.getItem(ANNOTREE_SCAN))
   ignoreDotFile.value = scan?.ignoreDotFile ?? false
   ignoreDotFolder.value = scan?.ignoreDotFolder ?? false
   onlyScanFolder.value = scan?.onlyScanFolder ?? false
@@ -232,12 +238,12 @@ const loadLocalStorage = () => {
   ignoreFileList.value = scan?.ignoreFileList ?? []
 
   // 导出
-  const exportConfig = JSON.parse(localStorage.getItem('annotree-exportConfig'))
+  const exportConfig = JSON.parse(localStorage.getItem(ANNOTREE_EXPORT_CONFIG))
   defaultFileName.value =
     exportConfig?.defaultFileName ?? 'Annotree_{YYYY}-{MM}-{DD}_{HH}-{mm}-{ss}'
 
   // 预览区
-  const preview = JSON.parse(localStorage.getItem('annotree-preview'))
+  const preview = JSON.parse(localStorage.getItem(ANNOTREE_EXPORT_PREVIEW))
   bridgeChar.value = preview?.bridgeChar ?? '-'
   minBridge.value = preview?.minBridge ?? 4
   noteFormat.value = preview?.noteFormat ?? ' # {note}'
@@ -298,7 +304,7 @@ async function scan() {
     fileNumber.value = treeData?.value.filter((item) => item?.isFile).length
 
     // 读取缓存
-    const annotreeNotes = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
+    const annotreeNotes = JSON.parse(localStorage.getItem(ANNOTREE_NOTES) || '{}')
 
     // 读取缓存的 note
     treeData.value = treeData.value.map((item) => {
@@ -608,12 +614,12 @@ const handleInputChange = (item) => {
   // 设置新的定时器
   typingTimer = setTimeout(() => {
     // 此处缓存 note
-    const obj = JSON.parse(localStorage.getItem('annotree-notes') || '{}')
+    const obj = JSON.parse(localStorage.getItem(ANNOTREE_NOTES) || '{}')
     const id = item.id
     const note = item.note
 
     localStorage.setItem(
-      'annotree-notes',
+      ANNOTREE_NOTES,
       JSON.stringify({
         ...obj,
         [id]: note
@@ -631,7 +637,7 @@ const showIcon = ref(true)
 watch([autoOpenFile, isEggshell, syncScroll, showIcon, languageId, folderSuffix], () => {
   //  存储数据
   localStorage.setItem(
-    'annotree-common',
+    ANNOTREE_COMMON,
     JSON.stringify({
       autoOpenFile: autoOpenFile.value,
       isEggshell: isEggshell.value,
@@ -681,7 +687,7 @@ watch(
   () => {
     //  存储数据
     localStorage.setItem(
-      'annotree-scan',
+      ANNOTREE_SCAN,
       JSON.stringify({
         ignoreDotFile: ignoreDotFile.value,
         ignoreDotFolder: ignoreDotFolder.value,
@@ -699,7 +705,7 @@ watch(
 watch([defaultFileName], () => {
   //  存储数据
   localStorage.setItem(
-    'annotree-exportConfig',
+    ANNOTREE_EXPORT_CONFIG,
     JSON.stringify({
       defaultFileName: defaultFileName.value
     })
@@ -710,7 +716,7 @@ watch([defaultFileName], () => {
 watch([bridgeChar, minBridge, noteFormat, showBridge, isRight, showIcon], () => {
   //  存储数据
   localStorage.setItem(
-    'annotree-preview',
+    ANNOTREE_EXPORT_PREVIEW,
     JSON.stringify({
       bridgeChar: bridgeChar.value,
       minBridge: minBridge.value,
