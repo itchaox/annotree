@@ -2,8 +2,8 @@
  * @Version    : v1.00
  * @Author     : itchaox
  * @Date       : 2024-08-10 00:10
- * @LastAuthor : itchaox
- * @LastTime   : 2024-08-10 00:20
+ * @LastAuthor : Wang Chao
+ * @LastTime   : 2024-09-19 16:21
  * @desc       :
  */
 
@@ -28,7 +28,7 @@ export function copyImg(id) {
           showClose: true
         })
       } catch (err) {
-        console.error('无法复制图片到剪贴板', err)
+        console.error('无法复制图片到剪贴板!', err)
       }
     }, 'image/png')
   })
