@@ -108,7 +108,7 @@ Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设
 - 如果暂时无法赞助，给个 Star ⭐ 也是对我莫大的支持！
 
 <h3>赞助方式 🎉</h3>
-<img src="/resources/love.png" width="200" alt="爱发电">
+<img src="/resources/love.png" width="400" alt="爱发电">
 
 ## Star 历史图表 ⭐️
 
