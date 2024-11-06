@@ -76,6 +76,15 @@ The project is currently in the MVP (Minimum Viable Product) stage. If you have 
 - Always show bridges: configure whether to show bridges where there are no comments.
 - Export: set the relevant configuration, write the comments, and export the annotation file tree structure.
 
+## 💗 Sponsor
+
+- If Annotree is helpful to you, welcome to support us! ☕️
+- Every bit of your support will motivate me to continuously improve Annotree and provide you with a better Annotree. Thank you very much! 🙏🏻
+- If you are unable to support us for the time being, giving a Star ⭐ is also a great support to me!
+
+<h3>Sponsorship 🎉</h3>
+<img src="/resources/love.png" width="400" alt="afdian qrcode">
+
 ## Star History Chart ⭐️
 
 [![Star History Chart](https://api.star-history.com/svg?repos=itchaox/annotree&type=Date)](https://star-history.com/#itchaox/annotree&Date)
