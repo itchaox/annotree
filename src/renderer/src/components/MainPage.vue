@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-28 15:56
+ * @LastTime   : 2024-11-12 16:55
  * @desc       :
 -->
 <!--
@@ -20,19 +20,20 @@ import { replace as elementReplace } from '@renderer/utils/replace.element.js'
 import { replace as noteReplace } from '@renderer/utils/replace.note.js'
 import translateFlat from '@renderer/utils/translate.flat.js'
 import data from 'emoji-mart-vue-fast/data/all.json'
-import { 
-  ANNOTREE_COMMON, 
-  ANNOTREE_SCAN, 
-  ANNOTREE_NOTES, 
-  ANNOTREE_EXPORT_CONFIG, 
-  ANNOTREE_EXPORT_PREVIEW } from '@renderer/constants/storageConst.js'
+import {
+  ANNOTREE_COMMON,
+  ANNOTREE_SCAN,
+  ANNOTREE_NOTES,
+  ANNOTREE_EXPORT_CONFIG,
+  ANNOTREE_EXPORT_PREVIEW
+} from '@renderer/constants/storageConst.js'
 
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 const emojiIndex = ref(new EmojiIndex(data))
 
 import { set } from 'lodash'
-import { extList,languageList} from '@renderer/constants/constants.js'
+import { extList, languageList } from '@renderer/constants/constants.js'
 
 import packageJson from '@/package.json'
 
@@ -117,6 +118,9 @@ const isConfig = ref(false)
 // 文件夹显示 /
 const folderSuffix = ref(true)
 
+// 输出自带代码块符号
+const showCodeBlock = ref(true)
+
 // 确定重置配置
 async function resetCache() {
   // 重置配置
@@ -177,7 +181,6 @@ function clearNotes() {
 // 中文: zh
 // 英文: en
 
-
 // 默认展示系统语言
 const languageId = ref('en')
 
@@ -227,6 +230,7 @@ const loadLocalStorage = () => {
   syncScroll.value = common?.syncScroll ?? true
   showIcon.value = common?.showIcon ?? true
   folderSuffix.value = common?.folderSuffix ?? true
+  showCodeBlock.value = common?.showCodeBlock ?? true
 
   // 扫描
   const scan = JSON.parse(localStorage.getItem(ANNOTREE_SCAN))
@@ -371,7 +375,8 @@ function exportFile() {
     autoOpenFile: autoOpenFile.value,
     autoOpenFolder: autoOpenFolder.value,
     defaultFileName: defaultFileName.value,
-    isEggshell: isEggshell.value
+    isEggshell: isEggshell.value,
+    showCodeBlock: showCodeBlock.value
   }
 
   // 临时的数组，增加文件夹和文件的图标显示
@@ -634,20 +639,24 @@ const handleInputChange = (item) => {
 const showIcon = ref(true)
 
 // 全局配置-通用
-watch([autoOpenFile, isEggshell, syncScroll, showIcon, languageId, folderSuffix], () => {
-  //  存储数据
-  localStorage.setItem(
-    ANNOTREE_COMMON,
-    JSON.stringify({
-      autoOpenFile: autoOpenFile.value,
-      isEggshell: isEggshell.value,
-      syncScroll: syncScroll.value,
-      showIcon: showIcon.value,
-      languageId: languageId.value,
-      folderSuffix: folderSuffix.value
-    })
-  )
-})
+watch(
+  [autoOpenFile, isEggshell, syncScroll, showIcon, languageId, folderSuffix, showCodeBlock],
+  () => {
+    //  存储数据
+    localStorage.setItem(
+      ANNOTREE_COMMON,
+      JSON.stringify({
+        autoOpenFile: autoOpenFile.value,
+        isEggshell: isEggshell.value,
+        syncScroll: syncScroll.value,
+        showIcon: showIcon.value,
+        languageId: languageId.value,
+        folderSuffix: folderSuffix.value,
+        showCodeBlock: showCodeBlock.value
+      })
+    )
+  }
+)
 
 // 控制文件夹结尾显示 /
 watch([folderSuffix], () => {
@@ -846,7 +855,12 @@ async function copyTree() {
   const result = previewList.value.map((item) => item?.value)
 
   // 换行分割数组至字符串
-  const data = result.join('\n')
+  let data = result.join('\n')
+
+  if (showCodeBlock.value) {
+    data = '```\n' + data + '\n```'
+  } else {
+  }
 
   try {
     // 复制
@@ -1496,6 +1510,12 @@ function handleSpecialIcon() {
                 <div class="tab-item-label">{{ $t('wen-jian-jia-jie-wei-xian-shi') }}</div>
                 <div class="tab-item-value"><el-switch v-model="folderSuffix"></el-switch></div>
               </div>
+
+              <div class="tab-item">
+                <div class="tab-item-label">显示代码块</div>
+                <div class="tab-item-value"><el-switch v-model="showCodeBlock"></el-switch></div>
+              </div>
+
               <div class="tab-item">
                 <div class="tab-item-label">{{ $t('zhong-zhi-fan-wei') }}</div>
                 <div class="tab-item-value" style="display: flex; align-items: center">
@@ -1522,14 +1542,14 @@ function handleSpecialIcon() {
                   </div>
                 </div>
               </div>
-              <!-- FIXME 不生效，暂时注释 -->
+              <!-- TODO 不生效，暂时注释 -->
               <!-- <div class="tab-item">
                   <div class="tab-item-label">自动打开文件夹</div>
                   <div class="tab-item-value"><el-switch v-model="autoOpenFolder"></el-switch></div>
                 </div> -->
             </div>
           </el-tab-pane>
-          <!-- FIXME 扫描 -->
+          <!-- TODO 扫描 -->
           <el-tab-pane>
             <template #label>
               <span class="custom-tabs-label">
