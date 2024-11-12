@@ -3,7 +3,7 @@
  * @Author     : itchaox
  * @Date       : 2024-07-06 11:28
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-08-25 18:22
+ * @LastTime   : 2024-11-12 17:14
  * @desc       :
  */
 
@@ -196,10 +196,16 @@ function EXPORT_TREE_TEXT(data, params) {
   // 转换为字符串
   result = result.map((e) => `${e.element}${e.bridge}${e.note}`)
 
+  let value = result.join('\n')
+  // FIXME 是否显示代码块
+  if (params?.showCodeBlock) {
+    value = '```\n' + value + '\n```'
+  }
+
   // 导出
   ipcRenderer.send('IPC_EXPORT', {
     name: `${nameReplace(params.defaultFileName)}.txt`,
-    value: result.join('\n'),
+    value,
     openAfterExport: params.autoOpenFile,
     isEggshell: params?.isEggshell
     // openFolderAfterExport: params.autoOpenFolder
