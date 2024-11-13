@@ -98,5 +98,7 @@
   "bian-cheng-tu-biao": "编程图标",
   "hui-fu-mo-ren": "恢复默认",
   "jin-bian-ji-qu": "仅编辑区",
-  "jin-yu-lan-qu": "仅预览区"
+  "jin-yu-lan-qu": "仅预览区",
+  "xian-shi-dai-ma-kuai": "显示代码块",
+  "fu-zhi-he-dao-chu-wen-ben-shi-fou-xian-shi-dai-ma-kuai": "复制和导出文本是否显示代码块"
 }

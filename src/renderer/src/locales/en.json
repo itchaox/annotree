@@ -98,5 +98,7 @@
   "bian-cheng-tu-biao": "Programming Icons",
   "hui-fu-mo-ren": "Restore Defaults",
   "jin-bian-ji-qu": "Edit area only",
-  "jin-yu-lan-qu": "Preview area only"
+  "jin-yu-lan-qu": "Preview area only",
+  "xian-shi-dai-ma-kuai": "Show Code Block",
+  "fu-zhi-he-dao-chu-wen-ben-shi-fou-xian-shi-dai-ma-kuai": "Whether to display code blocks when copying and exporting text"
 }

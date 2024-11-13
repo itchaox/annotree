@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-11-12 16:55
+ * @LastTime   : 2024-11-13 14:41
  * @desc       :
 -->
 <!--
@@ -1512,7 +1512,17 @@ function handleSpecialIcon() {
               </div>
 
               <div class="tab-item">
-                <div class="tab-item-label">显示代码块</div>
+                <div class="tab-item-label">
+                  {{ $t('xian-shi-dai-ma-kuai') }}
+
+                  <el-tooltip
+                    effect="dark"
+                    :content="$t('fu-zhi-he-dao-chu-wen-ben-shi-fou-xian-shi-dai-ma-kuai')"
+                    placement="top"
+                  >
+                    <el-icon size="16" style="margin-left: 3px"><Warning /></el-icon>
+                  </el-tooltip>
+                </div>
                 <div class="tab-item-value"><el-switch v-model="showCodeBlock"></el-switch></div>
               </div>
 

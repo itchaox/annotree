@@ -2,8 +2,8 @@
  * @Version    : v1.00
  * @Author     : itchaox
  * @Date       : 2024-07-27 13:20
- * @LastAuthor : itchaox
- * @LastTime   : 2024-07-29 00:15
+ * @LastAuthor : Wang Chao
+ * @LastTime   : 2024-11-13 14:38
  * @desc       :
  */
 import { createI18n } from 'vue-i18n'
