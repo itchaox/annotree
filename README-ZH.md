@@ -44,6 +44,7 @@ Annotree（Annotate + Tree）是一款专为生成文件夹目录注释树而设
 > 第 1 期视频：https://www.bilibili.com/video/BV1fS421R7UM<br>
 > 第 2 期视频：https://www.bilibili.com/video/BV1Tz421B7AY<br>
 > 第 3 期视频：https://www.bilibili.com/video/BV1bXvoe4EUT<br>
+> 第 4 期视频：https://www.bilibili.com/video/BV1fGHjesENs<br>
 > 我还是 B 站的一位小 up，欢迎大家多多支持！如果这些视频对你有帮助，感谢你的一键三连和关注~ 🤩
 
 ## 效果预览 🎉
