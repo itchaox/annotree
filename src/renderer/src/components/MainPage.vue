@@ -859,7 +859,6 @@ async function copyTree() {
 
   if (showCodeBlock.value) {
     data = '```\n' + data + '\n```'
-  } else {
   }
 
   try {
