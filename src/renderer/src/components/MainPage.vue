@@ -3,7 +3,7 @@
  * @Author     : Wang Chao
  * @Date       : 2024-08-21 22:29
  * @LastAuthor : Wang Chao
- * @LastTime   : 2024-11-13 14:41
+ * @LastTime   : 2024-11-27 16:16
  * @desc       :
 -->
 <!--
@@ -1836,14 +1836,14 @@ function handleSpecialIcon() {
     border: 1px solid #dee2e6;
     height: 88vh;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 20px;
     img {
       width: 35%;
     }
 
     .no-data-btn {
       color: #5a9cf8;
-      font-size: 22px;
+      font-size: 24px;
 
       &:hover {
         cursor: pointer;
